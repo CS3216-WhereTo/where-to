@@ -7,7 +7,8 @@
 | Liu Shuyang          |            |      |
 | Ong Ying Gao         | A0201924N  |      |
 | Tan Wei Liang        |            |      |
-| Wong Wen Wei Esmanda |            |      |
+| Teo Jun Xiong        |            |      |
+| Wong Wen Wei Esmanda | A0206353M  |      |
 
 ## Website
 
