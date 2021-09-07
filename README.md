@@ -4,7 +4,7 @@
 
 | Member               | Matric No. | Role |
 | -------------------- | ---------- | ---- |
-| Liu Shuyang          |            |      |
+| Liu Shuyang          | A0206325N  |      |
 | Ong Ying Gao         | A0201924N  |      |
 | Tan Wei Liang        | A0135448B  |      |
 | Teo Jun Xiong        | A0183852X  |      |
