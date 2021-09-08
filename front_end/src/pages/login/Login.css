@@ -1,0 +1,66 @@
+.login {
+}
+.login__row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login__row--top {
+  height: 60%;
+}
+.login__row--bottom {
+  height: 40%;
+}
+
+.app-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.app-info__img {
+  width: 60%;
+  /* margin: auto; */
+}
+.app-info__text {
+  text-align: center;
+}
+
+.auth {
+}
+
+.sns-login {
+}
+.sns-login__text {
+  text-align: center;
+}
+.sns-login__grid {
+}
+.sns-login__row {
+  width: 320px;
+  margin: auto;
+}
+.sns-login__col {
+}
+.sns-login__button {
+  height: 60px;
+}
+
+.auth {
+  width: 100%;
+}
+.auth-divider {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+}
+.auth-divider .line {
+  flex: 1;
+  height: 3px;
+  background-color: #000;
+  margin: 8px;
+}
+
+.sns-guest-login {
+  text-align: center;
+}
