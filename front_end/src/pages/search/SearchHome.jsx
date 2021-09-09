@@ -1,13 +1,11 @@
-import { IonPage, IonImg, IonText, IonButton, IonGrid, IonRow, IonCol, IonIcon, IonSelect, IonSelectOption } from "@ionic/react";
-import { useEffect, useState } from "react";
+import { IonPage, IonIcon } from "@ionic/react";
 import { withRouter } from "react-router-dom";
 import "./SearchHome.css";
 import Select from "react-select";
-import Fuse from "fuse.js";
-import { ellipseOutline, locateSharp, swapVertical } from "ionicons/icons";
+import { ellipseOutline, swapVertical } from "ionicons/icons";
 import { locationSharp } from "ionicons/icons";
 
-const SearchHome: React.FC = (props) => {
+const SearchHome = (props) => {
   const options = [
     { label: "Swedish", value: "sv" },
     { label: "English", value: "en" },
@@ -21,7 +19,7 @@ const SearchHome: React.FC = (props) => {
             <IonIcon slot="start" icon={ellipseOutline} size="large"></IonIcon>
             <Select
               value={options[0]}
-              onChange={(e: any) => console.log(e)}
+              onChange={ console.log }
               options={options}
               styles={{
                 container: (provided, state) => ({
@@ -41,7 +39,7 @@ const SearchHome: React.FC = (props) => {
             <IonIcon slot="start" icon={locationSharp} size="large"></IonIcon>
             <Select
               value={options[0]}
-              onChange={(e: any) => console.log(e)}
+              onChange={ console.log }
               options={options}
               styles={{
                 container: (provided, state) => ({

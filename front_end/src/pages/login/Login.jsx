@@ -1,5 +1,4 @@
 import { IonPage, IonImg, IonText, IonButton, IonGrid, IonRow, IonCol, IonIcon } from "@ionic/react";
-import { useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import "./Login.css";
 import { logoApple } from "ionicons/icons";
@@ -9,7 +8,7 @@ import { arrowForward } from "ionicons/icons";
 
 import Logo from "../../assets/logo.png";
 
-const Login: React.FC = (props) => {
+const Login = (props) => {
   return (
     <IonPage>
       <IonGrid className="login">
