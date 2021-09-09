@@ -8,6 +8,7 @@ import { mapOutline, starOutline, settingsOutline } from "ionicons/icons";
 import Login from "./pages/login/Login";
 import Home from "./pages/home/Home";
 import SearchHome from "./pages/search/SearchHome";
+import Settings from "./pages/settings/Settings";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -41,6 +42,10 @@ const App: React.FC = (props) => (
             <SearchHome />
           </Route>
 
+          <Route exact path="/settings">
+            <Settings />
+          </Route>
+
           {/* if logged in redirect */}
           <Route exact path="/">
             <Login />
@@ -51,10 +56,10 @@ const App: React.FC = (props) => (
           <IonTabButton tab="search" href="/search">
             <IonIcon icon={mapOutline} />
           </IonTabButton>
-          <IonTabButton tab="home" href="/home">
+          <IonTabButton tab="favourites" href="/home">
             <IonIcon icon={starOutline} />
           </IonTabButton>
-          <IonTabButton tab="home" href="/home">
+          <IonTabButton tab="settings" href="/settings">
             <IonIcon icon={settingsOutline} />
           </IonTabButton>
         </IonTabBar>
