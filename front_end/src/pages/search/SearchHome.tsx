@@ -1,7 +1,7 @@
 import { IonPage, IonImg, IonText, IonButton, IonGrid, IonRow, IonCol, IonIcon } from "@ionic/react";
 import { useEffect } from "react";
 import { withRouter } from "react-router-dom";
-import "./Login.css";
+import "./SearchHome.css";
 import { logoApple } from "ionicons/icons";
 import { logoFacebook } from "ionicons/icons";
 import { logoGoogle } from "ionicons/icons";
@@ -9,7 +9,7 @@ import { arrowForward } from "ionicons/icons";
 
 import Logo from "../../assets/logo.png";
 
-const Login: React.FC = (props) => {
+const SearchHome: React.FC = (props) => {
   return (
     <IonPage>
       <IonGrid className="login">
@@ -18,7 +18,7 @@ const Login: React.FC = (props) => {
             <IonImg src={Logo} className="app-info__img" />
             <IonText className="app-info__text">
               <h2>
-                <b>Travel around NUS</b>
+                <b>Travel around ff NUS</b>
               </h2>
             </IonText>
           </div>
@@ -60,7 +60,7 @@ const Login: React.FC = (props) => {
             </div>
 
             <div className="sns-guest-login">
-              <IonButton shape="round" fill="outline" className="sns-login__button" href="/search">
+              <IonButton shape="round" fill="outline" className="sns-login__button">
                 <IonText>Continue as a guest</IonText>
                 <IonIcon slot="end" icon={arrowForward} size="large"></IonIcon>
               </IonButton>
@@ -72,4 +72,4 @@ const Login: React.FC = (props) => {
   );
 };
 
-export default withRouter(Login);
+export default withRouter(SearchHome);

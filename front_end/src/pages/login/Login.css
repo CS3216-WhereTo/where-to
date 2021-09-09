@@ -54,7 +54,7 @@
   align-items: center;
   padding: 12px;
 }
-.auth-divider .line {
+.auth-divider__div {
   flex: 1;
   height: 3px;
   background-color: #000;
