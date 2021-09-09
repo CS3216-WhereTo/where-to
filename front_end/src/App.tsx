@@ -6,6 +6,7 @@ import { IonReactRouter } from "@ionic/react-router";
 import { mapOutline, starOutline, settingsOutline } from "ionicons/icons";
 
 import Login from "./pages/login/Login";
+import MapView from "./pages/map/MapView";
 import Home from "./pages/home/Home";
 import SearchHome from "./pages/search/SearchHome";
 
@@ -44,6 +45,10 @@ const App: React.FC = (props) => (
           {/* if logged in redirect */}
           <Route exact path="/">
             <Login />
+          </Route>
+
+          <Route exact path="/map">
+            <MapView />
           </Route>
         </IonRouterOutlet>
   
