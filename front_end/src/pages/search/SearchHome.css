@@ -1,0 +1,30 @@
+.search {
+  display: flex;
+  /* flex-direction: column; */
+}
+.search-container {
+  flex: 1;
+}
+.start-search {
+  display: flex;
+  flex-direction: row;
+}
+.end-search {
+  display: flex;
+  flex-direction: row;
+}
+.swap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.map {
+}
+.map--fixed {
+    position: fixed;
+}
+.map--fullscreen {
+    height: 100%;
+    width: 100%;
+}
