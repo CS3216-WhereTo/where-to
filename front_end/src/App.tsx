@@ -1,10 +1,15 @@
 import { Redirect, Route } from "react-router-dom";
-import { IonApp, IonRouterOutlet } from "@ionic/react";
+
+import { IonApp, IonRouterOutlet, IonTabBar, IonTabs, IonTabButton, IonIcon } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
+
+import { mapOutline, starOutline, settingsOutline } from "ionicons/icons";
 
 import Login from "./pages/login/Login";
 import Home from "./pages/home/Home";
+import SearchHome from "./pages/search/SearchHome";
 import Favourites from "./pages/favourites/Favourites";
+
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -25,26 +30,41 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 
-const App: React.FC = () => (
+const App: React.FC = (props) => (
   <IonApp>
     <IonReactRouter>
-      <IonRouterOutlet>
-        <Route exact path="/home">
-          <Home />
-        </Route>
+      <IonTabs>
+        <IonRouterOutlet>
+          <Route exact path="/home">
+            <Home />
+          </Route>
 
-        <Route exact path="/login">
-          <Login />
-        </Route>
+          <Route exact path="/search">
+            <SearchHome />
+          </Route>
 
-        <Route exact path="/favourites">
-          <Favourites />
-        </Route>
+          <Route exact path="/favourites">
+            <Favourites />
+          </Route>
 
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-      </IonRouterOutlet>
+          {/* if logged in redirect */}
+          <Route exact path="/">
+            <Login />
+          </Route>
+        </IonRouterOutlet>
+  
+        <IonTabBar slot="bottom">
+          <IonTabButton tab="search" href="/search">
+            <IonIcon icon={mapOutline} />
+          </IonTabButton>
+          <IonTabButton tab="favourites" href="/favourites">
+            <IonIcon icon={starOutline} />
+          </IonTabButton>
+          <IonTabButton tab="settings" href="/home">
+            <IonIcon icon={settingsOutline} />
+          </IonTabButton>
+        </IonTabBar>
+      </IonTabs>
     </IonReactRouter>
   </IonApp>
 );

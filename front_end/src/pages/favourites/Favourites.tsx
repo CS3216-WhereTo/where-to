@@ -55,23 +55,6 @@ const Favourites: React.FC = () => {
           }
         </IonList>
       </IonContent>
-
-      {/* -- Tab Bar -- */}
-      <IonTabBar slot="bottom">
-        <IonTabButton tab="home" href="/home">
-          <IonIcon icon={home} />
-          <IonLabel>Home</IonLabel>
-        </IonTabButton>
-        <IonTabButton tab="favourites" href="/favourites">
-          <IonIcon icon={star} />
-          <IonLabel>Favourites</IonLabel>
-        </IonTabButton>
-        <IonTabButton tab="settings" href="/home">
-          <IonIcon icon={settings} />
-          <IonLabel>Settings</IonLabel>
-        </IonTabButton>
-      </IonTabBar>
-        
     </IonPage>
   );
 };
