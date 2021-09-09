@@ -4,6 +4,7 @@ import { IonReactRouter } from "@ionic/react-router";
 
 import Login from "./pages/login/Login";
 import Home from "./pages/home/Home";
+import Favourites from "./pages/favourites/Favourites";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -34,6 +35,10 @@ const App: React.FC = () => (
 
         <Route exact path="/login">
           <Login />
+        </Route>
+
+        <Route exact path="/favourites">
+          <Favourites />
         </Route>
 
         <Route exact path="/">
