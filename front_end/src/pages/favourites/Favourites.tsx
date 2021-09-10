@@ -3,12 +3,12 @@ import React, { useState } from 'react';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, 
   IonSegment, IonSegmentButton, IonLabel,
   IonList, IonItem,
-  IonTabBar, IonTabButton, IonIcon } from "@ionic/react";
-import { star, home, settings } from 'ionicons/icons';
+  IonTabBar, IonTabButton, IonIcon, IonButton } from "@ionic/react";
+import { star, starOutline } from 'ionicons/icons';
 
 const Favourites: React.FC = () => {
   // TODO: some function to fetch favs & recents from server
-  
+  const [favi, setFav] = useState(star);
   const tempFavs = ["fav1", "fav2", "fav3", "fav4", "fav5"];
   const tempRecents = ["rec1"];
 
@@ -22,6 +22,16 @@ const Favourites: React.FC = () => {
       setView(tempRecents);
     }
   };
+
+  const toggleStar = (e: any) => {
+    console.log(e);
+    if (favi === star) {
+      setFav(starOutline);
+    } else if (favi === starOutline) {
+      setFav(star);
+    }
+    
+  }
 
   return (
     <IonPage>
@@ -49,6 +59,9 @@ const Favourites: React.FC = () => {
                 return (
                     <IonItem key={i}> 
                       <IonLabel>{fav}</IonLabel>
+                      {/* <IonButton slot="end"> */}
+                        <IonIcon slot="end" onClick={e => toggleStar(e)} icon={favi}></IonIcon>
+                      {/* </IonButton> */}
                     </IonItem>
                 );
             })
