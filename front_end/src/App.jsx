@@ -6,6 +6,7 @@ import { IonReactRouter } from "@ionic/react-router";
 import { mapOutline, starOutline, settingsOutline } from "ionicons/icons";
 
 import Login from "./pages/login/Login";
+// import MapView from "./pages/map/MapView";
 import Home from "./pages/home/Home";
 import SearchHome from "./pages/search/SearchHome";
 import Favourites from "./pages/favourites/Favourites";
@@ -30,7 +31,7 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 
-const App: React.FC = (props) => (
+const App = (props) => (
   <IonApp>
     <IonReactRouter>
       <IonTabs>
@@ -51,6 +52,7 @@ const App: React.FC = (props) => (
           <Route exact path="/">
             <Login />
           </Route>
+
         </IonRouterOutlet>
   
         <IonTabBar slot="bottom">
