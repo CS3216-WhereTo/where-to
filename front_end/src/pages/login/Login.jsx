@@ -11,7 +11,7 @@ import Logo from "../../assets/logo.png";
 
 const Login: React.FC = (props) => {
   return (
-    <IonPage>
+    <IonPage className="page login-page">
       <IonGrid className="login">
         <IonRow className="login__row login__row--top">
           <div className="app-info">
@@ -60,7 +60,7 @@ const Login: React.FC = (props) => {
             </div>
 
             <div className="sns-guest-login">
-              <IonButton shape="round" fill="outline" className="sns-login__button" href="/search">
+              <IonButton shape="round" fill="outline" className="sns-login__button" routerLink="/search">
                 <IonText>Continue as a guest</IonText>
                 <IonIcon slot="end" icon={arrowForward} size="large"></IonIcon>
               </IonButton>

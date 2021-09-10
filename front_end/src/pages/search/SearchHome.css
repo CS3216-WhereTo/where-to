@@ -1,6 +1,16 @@
+.search-home-page {
+  padding: 12px;
+}
+
+.search-header {
+  background-color: grey;
+  margin: -12px;
+  padding: 12px;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
 .search {
   display: flex;
-  /* flex-direction: column; */
 }
 .search-container {
   flex: 1;
@@ -8,13 +18,27 @@
 .start-search {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
 .end-search {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 8px;
+  margin-bottom: 8px;
 }
+.search-button {
+  flex: 1;
+text-align: right;
+}
+
 .swap {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-evenly;
   align-items: center;
 }
