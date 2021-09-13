@@ -29,6 +29,7 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 const App = (props) => (
   <IonApp>
