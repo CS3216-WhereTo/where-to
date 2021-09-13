@@ -1,42 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, 
-  IonSegment, IonSegmentButton, IonLabel,
-  IonList, IonItem, IonIcon, IonButton} from "@ionic/react";
-import { star, starOutline, mapOutline } from 'ionicons/icons';
+  IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";
 
+import FavList from './FavList';
 import "./Favourites.css";
 
 const Favourites = (props) => {
-  // // TODO: some function to fetch favs & recents from server
-  const tempFavs = [
-    {isFav:true, location:"fav1"}, 
-    {isFav:true, location:"fav2"}, 
-    {isFav:true, location:"fav3"}, 
-    {isFav:true, location:"fav4"}, 
-    {isFav:true, location:"fav5"}
+  const favs = [
+    {nodeId:"1", location:"fav1", isFav:true}, 
+    {nodeId:"2", location:"fav2", isFav:true}, 
+    {nodeId:"3", location:"fav3", isFav:true}, 
+    {nodeId:"4", location:"fav4", isFav:true}, 
+    {nodeId:"5", location:"fav5", isFav:true}
   ];
-  const tempRecents = [{isFav:false, location:"rec1"}];
 
-  const [view, setView] = useState(tempFavs);
+  const recents = [
+    {nodeId:"6", location:"rec1", isFav:false}
+  ];
+
+  const [view, setView] = useState(favs);
+
+  useEffect(() => {
+    // TODO: some function to fetch favs & recents from server
+  })
+
 
   // a function to handle the segment changes
   const handleSegmentChange = (e) => {
     if (e.detail.value === "favourites") {
-      setView(tempFavs);
+      setView(favs);
     } else if (e.detail.value === "recents") {
-      setView(tempRecents);
+      setView(recents);
     }
   };
-
-  const toggleStar = () => {
-    // TODO: somehow pass index in and change 0 to i
-    // also need to trigger some change to the server
-
-    const clonedArray = view.map(a => {return {...a}})
-    clonedArray[0].isFav = !view[0].isFav;
-    setView(clonedArray);
-  }
 
   return (
     <IonPage>
@@ -58,23 +55,7 @@ const Favourites = (props) => {
       
       <IonContent>
         {/* -- List -- */}
-        <IonList>
-          {
-            view.map((elem, i) => {
-                return (
-                    <IonItem key={i}> 
-                      <IonLabel>{elem.location}</IonLabel>
-                      <div className="directions-button">
-                        <IonButton class="directions-button" colour="transparent" slot="end" href="/search">
-                          <IonIcon icon={mapOutline}></IonIcon>
-                        </IonButton>
-                      </div>
-                        <IonIcon slot="end" onClick={() => toggleStar()} icon={elem.isFav ? star : starOutline}></IonIcon>
-                    </IonItem>
-                );
-            })
-          }
-        </IonList>
+        <FavList view={view} setView={setView}></FavList>
       </IonContent>
     </IonPage>
   );
