@@ -1,12 +1,13 @@
 import { IonPage, IonIcon, IonButton } from "@ionic/react";
 import React, { useState, useEffect, useRef } from "react";
-import GoogleMapReact from "google-map-react";
+
 import "./SearchHome.css";
 import Select from "react-select";
 import { ellipseOutline, swapVertical } from "ionicons/icons";
 import { locationSharp } from "ionicons/icons";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import { geolocated } from "react-geolocated";
+import Option from "../../components/option/Option";
 
 mapboxgl.accessToken = "pk.eyJ1IjoidGVvanVueGlvbmciLCJhIjoiY2t0aTl0OGp6MHp3bjJ1cGlsdHhzODAwdSJ9.rujr8ESzMSG6u7pFL6OQ6A";
 
@@ -23,7 +24,7 @@ const SearchHome = (props) => {
 
   useEffect(() => {
     if (map.current) return;
-    
+
     // Initialises new Map
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -57,7 +58,7 @@ const SearchHome = (props) => {
     if (centeredAtCurrent) return;
     if (!props.coords) return;
 
-    // Center the Map at user's current location, will only be done once 
+    // Center the Map at user's current location, will only be done once
     map.current.flyTo({
       center: [props.coords.longitude, props.coords.latitude],
       essential: true,
@@ -77,9 +78,10 @@ const SearchHome = (props) => {
     });
   });
 
+  // Dummy data
   const options = [
     { label: "Swedish", value: "sv" },
-    { label: "English", value: "en" },
+    { label: "EnglishEnglishEnglish EnglishEnglishEnglishEnglishEnglish ", value: "en" },
   ];
 
   return (
@@ -89,11 +91,13 @@ const SearchHome = (props) => {
           <div className="search-container">
             <div className="start-search">
               <IonIcon slot="start" icon={ellipseOutline} size="medium"></IonIcon>
+
               <Select
                 value={start}
                 onChange={setStart}
                 options={options}
                 isClearable={true}
+                components={{ Option }}
                 placeholder="Select a starting point"
                 styles={{
                   container: (provided, state) => ({
@@ -118,6 +122,7 @@ const SearchHome = (props) => {
                 onChange={setEnd}
                 options={options}
                 isClearable={true}
+                components={{ Option }}
                 placeholder="Select a destination"
                 styles={{
                   container: (provided, state) => ({
@@ -138,9 +143,11 @@ const SearchHome = (props) => {
           </div>
 
           <div className="swap">
-            <IonIcon slot="start" icon={swapVertical} size="medium"></IonIcon>
+            <IonButton size="small" fill="clear">
+              <IonIcon slot="icon-only" icon={swapVertical} />
+            </IonButton>
             <IonButton color="light" size="small">
-              Go
+              <b>GO</b>
             </IonButton>
           </div>
         </div>
