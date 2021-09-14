@@ -4,17 +4,16 @@ import { IonList } from "@ionic/react";
 
 import FavItem from './FavItem';
 
-const FavList = ({view, setView}) => {
+const FavList = ({currentList, onClick}) => {
     return (
         <IonList>
           {
-            view.map((elem, i) => {
+            currentList.map((elem, i) => {
                 return (
                     <FavItem 
                     key={i}
-                    index={i}
-                    view={view}
-                    setView={setView}
+                    listItem={elem}
+                    onClick={() => onClick(i)}
                     />
                 );
             })
