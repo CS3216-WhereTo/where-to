@@ -30,6 +30,10 @@ const SearchHome = (props) => {
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/outdoors-v11",
       center: [lng, lat],
+      maxBounds: [
+        [103.59168954859202, 1.2059100797737556], // Southwest coordinates
+        [104.04150066935574, 1.4850806496446494], // Northeast coordinates
+      ],
       zoom: zoom,
     });
 
