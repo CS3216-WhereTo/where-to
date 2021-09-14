@@ -2,12 +2,12 @@ export default function FavouritesGateway() {
 
     const url = '{insert URL here}/favourites';
 
+    let token = '';
+
     /**
      * Sends a GET request for the user's favourited locations.
-     * 
-     * @param {string} token 
      */
-    async function get(token) {
+    async function get() {
         const response = await fetch(`${url}/list_favourites`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -17,10 +17,9 @@ export default function FavouritesGateway() {
     /**
      * Sends a POST request to add a location to the user's favourites.
      * 
-     * @param {string} token
      * @param {number} nodeId
      */
-    async function add(token, nodeId) {
+    async function add(nodeId) {
         const response = await fetch(`${url}/add_favourite`, {
             method: 'POST',
             headers: {
@@ -35,10 +34,9 @@ export default function FavouritesGateway() {
     /**
      * Sends a POST request to remove a location from the user's favourites.
      * 
-     * @param {string} token
      * @param {number} nodeId
      */
-    async function remove(token, nodeId) {
+    async function remove(nodeId) {
         const response = await fetch(`${url}/remove_favourite`, {
             method: 'POST',
             headers: {
@@ -50,10 +48,20 @@ export default function FavouritesGateway() {
         return response.json();
     }
 
+    /**
+     * Sets the user token
+     * 
+     * @param {string} userToken 
+     */
+     function setToken(userToken) {
+        token = userToken;
+    }
+
     return Object.freeze({
         get,
         add,
-        remove
+        remove,
+        setToken
     });
 
 }

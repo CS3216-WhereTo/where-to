@@ -1,13 +1,13 @@
 export default function NodesGateway() {
 
     const url = '{insert URL}/node';
+    
+    let token = '';
 
     /**
      * Sends a GET request for all nodes.
-     * 
-     * @param {string} token 
      */
-    async function get(token) {
+    async function get() {
         const response = await fetch(`${url}/list_nodes`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -17,10 +17,9 @@ export default function NodesGateway() {
     /**
      * Sends a GET request for the nearest node from the given coordinates.
      * 
-     * @param {string} token 
      * @param {{lat: number, lon: number}} coords 
      */
-     async function findNearest(token, coords) {
+    async function findNearest(coords) {
         const response = await fetch(`${url}/find_nearest_node`, {
             headers: { 
                 'Authorization': `Bearer ${token}`,
@@ -31,9 +30,19 @@ export default function NodesGateway() {
         return response.json();
     }
 
+    /**
+     * Sets the user token
+     * 
+     * @param {string} userToken 
+     */
+    function setToken(userToken) {
+        token = userToken;
+    }
+
     return Object.freeze({
         get,
-        findNearest
+        findNearest,
+        setToken
     });
 
 }

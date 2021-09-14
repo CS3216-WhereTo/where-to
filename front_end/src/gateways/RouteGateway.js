@@ -1,16 +1,15 @@
-import internal from "stream";
-
 export default function RouteGateway() {
 
     const url = '{insert url}/route'
 
+    let token = '';
+
     /**
      * Sends a GET request for both walking and bus routes.
      * 
-     * @param {string} token 
      * @param {{start_id: number, end_id: number}} locations 
      */
-    async function getRoutes(token, locations) {
+    async function getRoutes(locations) {
         const response = await fetch(`${url}/find_routes`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -24,10 +23,9 @@ export default function RouteGateway() {
     /**
      * Sends a GET request for only walking routes.
      * 
-     * @param {string} token 
      * @param {{start_id: number, end_id: number}} locations  
      */
-    async function getWalking(token, locations) {
+    async function getWalking(locations) {
         const response = fetch(`${url}/find_walk_route`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -41,10 +39,9 @@ export default function RouteGateway() {
     /**
      * Sends a GET request for only bus routes.
      * 
-     * @param {string} token 
      * @param {{start_id: number, end_id: number}} locations
      */
-    async function getBus(token, locations) {
+    async function getBus(locations) {
         const response = fetch(`${url}/find_bus_route`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -54,11 +51,21 @@ export default function RouteGateway() {
         });
         return response.json();
     }
+
+    /**
+     * Sets the user token
+     * 
+     * @param {string} userToken 
+     */
+     function setToken(userToken) {
+        token = userToken;
+    }
     
     return Object.freeze({
         getRoutes,
         getWalking,
-        getBus
+        getBus,
+        setToken
     });
 
 }
