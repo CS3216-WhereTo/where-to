@@ -7,8 +7,9 @@ import { ellipseOutline, swapVertical } from "ionicons/icons";
 import { locationSharp } from "ionicons/icons";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import { geolocated } from "react-geolocated";
-import Option from "../../components/option/Option";
+import CustomSelect from "../../components/custom-select/CustomSelect";
 
+// store in process.env
 mapboxgl.accessToken = "pk.eyJ1IjoidGVvanVueGlvbmciLCJhIjoiY2t0aTl0OGp6MHp3bjJ1cGlsdHhzODAwdSJ9.rujr8ESzMSG6u7pFL6OQ6A";
 
 const SearchHome = (props) => {
@@ -88,6 +89,12 @@ const SearchHome = (props) => {
     { label: "EnglishEnglishEnglish EnglishEnglishEnglishEnglishEnglish ", value: "en" },
   ];
 
+  const swapStartEnd = () => {
+    const temp = start;
+    setStart(end);
+    setEnd(temp);
+  }
+
   return (
     <IonPage className="page search-home-page">
       <div className="search-header">
@@ -96,58 +103,16 @@ const SearchHome = (props) => {
             <div className="start-search">
               <IonIcon slot="start" icon={ellipseOutline} size="medium"></IonIcon>
 
-              <Select
-                value={start}
-                onChange={setStart}
-                options={options}
-                isClearable={true}
-                components={{ Option }}
-                placeholder="Select a starting point"
-                styles={{
-                  container: (provided, state) => ({
-                    ...provided,
-                    display: "flex",
-                    flex: 1,
-                    marginLeft: "8px",
-                    marginRight: "8px",
-                  }),
-                  control: (provided, state) => ({
-                    ...provided,
-                    display: "flex",
-                    flex: 1,
-                  }),
-                }}
-              />
+              <CustomSelect value={start} onChange={setStart} options={options} placeholder="Select a starting point" />
             </div>
             <div className="end-search">
               <IonIcon slot="start" icon={locationSharp} size="medium"></IonIcon>
-              <Select
-                value={end}
-                onChange={setEnd}
-                options={options}
-                isClearable={true}
-                components={{ Option }}
-                placeholder="Select a destination"
-                styles={{
-                  container: (provided, state) => ({
-                    ...provided,
-                    display: "flex",
-                    flex: 1,
-                    marginLeft: "8px",
-                    marginRight: "8px",
-                  }),
-                  control: (provided, state) => ({
-                    ...provided,
-                    display: "flex",
-                    flex: 1,
-                  }),
-                }}
-              />
+              <CustomSelect value={end} onChange={setEnd} options={options} placeholder="Select a destination" />
             </div>
           </div>
 
           <div className="swap">
-            <IonButton size="small" fill="clear">
+            <IonButton size="small" fill="clear" onClick={swapStartEnd}>
               <IonIcon slot="icon-only" icon={swapVertical} />
             </IonButton>
             <IonButton color="light" size="small">
