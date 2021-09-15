@@ -2,15 +2,15 @@ import React from 'react';
 
 import { IonList } from "@ionic/react";
 
-import FavItem from './FavItem';
+import FavouritesItem from './FavouritesItem';
 
-const FavList = ({currentList, onClick}) => {
+const FavouritesList = ({currentList, onClick}) => {
     return (
         <IonList>
           {
             currentList.map((elem, i) => {
                 return (
-                    <FavItem 
+                    <FavouritesItem 
                     key={i}
                     listItem={elem}
                     onClick={() => onClick(i)}
@@ -22,4 +22,4 @@ const FavList = ({currentList, onClick}) => {
     );
 }
 
-export default FavList;
+export default FavouritesList;

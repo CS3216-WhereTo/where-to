@@ -7,6 +7,8 @@ import { ellipseOutline, swapVertical } from "ionicons/icons";
 import { locationSharp } from "ionicons/icons";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import { geolocated } from "react-geolocated";
+import { BrowserRouter as Router, Switch, Route, Link, useLocation } from "react-router-dom";
+
 import CustomSelect from "../../components/custom-select/CustomSelect";
 
 // store in process.env
@@ -16,6 +18,12 @@ const SearchHome = (props) => {
   const [start, setStart] = useState(null);
   const [end, setEnd] = useState(null);
   const [centeredAtCurrent, setCenteredAtCurrent] = useState(false);
+
+  // Sets Node passed from FavouritesItem as end point
+  let redirectProps = useLocation();
+  useEffect(() => {
+    setEnd(redirectProps?.state?.destination);
+  }, [redirectProps]);
 
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -86,6 +94,7 @@ const SearchHome = (props) => {
   // Dummy data
   const options = [
     { label: "Swedish", value: "sv" },
+    { label: "NUS", value: "nus" },
     { label: "EnglishEnglishEnglish EnglishEnglishEnglishEnglishEnglish ", value: "en" },
   ];
 
@@ -93,7 +102,7 @@ const SearchHome = (props) => {
     const temp = start;
     setStart(end);
     setEnd(temp);
-  }
+  };
 
   return (
     <IonPage className="page search-home-page">
@@ -135,3 +144,5 @@ export default geolocated({
   },
   userDecisionTimeout: 5000,
 })(SearchHome);
+
+// export default SearchHome;

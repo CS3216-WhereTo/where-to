@@ -3,8 +3,7 @@ import Select from "react-select";
 
 import "./CustomSelect.css";
 
-const CustomSelect = ({value, onChange, placeholder, options}) => {
-  console.log(options,placeholder)
+const CustomSelect = ({ value, onChange, placeholder, options }) => {
   return (
     <Select
       value={value}

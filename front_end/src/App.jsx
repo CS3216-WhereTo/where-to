@@ -30,7 +30,7 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
-import 'mapbox-gl/dist/mapbox-gl.css';
+import "mapbox-gl/dist/mapbox-gl.css";
 
 const App = (props) => (
   <IonApp>
@@ -41,10 +41,10 @@ const App = (props) => (
             <Home />
           </Route>
 
-          <Route exact path="/search">
+          <Route path="/search">
             <SearchHome />
           </Route>
-          
+
           <Route exact path="/favourites">
             <Favourites />
           </Route>
@@ -57,9 +57,8 @@ const App = (props) => (
           <Route exact path="/">
             <Login />
           </Route>
-
         </IonRouterOutlet>
-  
+
         <IonTabBar slot="bottom">
           <IonTabButton tab="search" href="/search">
             <IonIcon icon={mapOutline} />

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, 
   IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";
 
-import FavList from './FavList';
+import FavouritesList from './FavouritesList';
 import "./Favourites.css";
 
 const Favourites = (props) => {
@@ -54,7 +54,7 @@ const Favourites = (props) => {
       </IonHeader>
       
        {/* -- Segment -- */}
-       <IonSegment onIonChange={e => handleSegmentChange(e)}>
+       <IonSegment value={segment} onIonChange={e => handleSegmentChange(e)}>
           <IonSegmentButton value="favourites">
             <IonLabel>Favourites</IonLabel>
           </IonSegmentButton>
@@ -65,7 +65,7 @@ const Favourites = (props) => {
       
       <IonContent>
         {/* -- List -- */}
-        <FavList 
+        <FavouritesList 
           currentList={segment === "favourites" ? favourites : recents} 
           onClick={(i) => toggleStar(i)}
         />
