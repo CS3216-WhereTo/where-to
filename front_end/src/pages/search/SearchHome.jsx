@@ -27,6 +27,8 @@ const SearchHome = (props) => {
 
   const mapContainer = useRef(null);
   const map = useRef(null);
+
+  // Defaults to NUS location if Geolocation permission not given
   const [lng, setLng] = useState(103.7764);
   const [lat, setLat] = useState(1.2956);
   const [zoom, setZoom] = useState(17);
