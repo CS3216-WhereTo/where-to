@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
-from django.db.models.fields import IntegerField, TextField, FloatField
+from django.db.models.fields import CharField, IntegerField, TextField, FloatField
 from django.db.models.fields.related import ForeignKey
 
 # Create your models here.
@@ -39,3 +39,7 @@ class BusEdge(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['start_id', 'end_id'], name='bus edges are unique')
         ]
+
+class BusService(models.Model):
+    edge_id = ForeignKey('BusEdge', on_delete=CASCADE, primary_key=True)
+    service = CharField(max_length=5)
