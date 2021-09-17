@@ -1,0 +1,36 @@
+.speed {
+    display: flex;
+    flex-direction: column;
+    padding: 2em;
+}
+
+.speed__label {
+    padding: 2em 0em;
+}
+
+.speed__select {
+    display: flex;
+    flex-direction: row;
+}
+
+.speed__button {
+    margin-left: 1.5em;
+}
+
+.sign-out {
+     /* unsure how to add space w/o hardcoding */
+    margin-top: 12em;
+    text-align: center;
+}
+
+.sign-in {
+    position: absolute;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.sign-in__button {
+    margin-top: 1em;
+}

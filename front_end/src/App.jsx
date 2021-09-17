@@ -9,6 +9,8 @@ import Login from "./pages/login/Login";
 // import MapView from "./pages/map/MapView";
 import Home from "./pages/home/Home";
 import SearchHome from "./pages/search/SearchHome";
+import Favourites from "./pages/favourites/Favourites";
+import Settings from "./pages/settings/Settings";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -28,35 +30,39 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 const App = (props) => (
   <IonApp>
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
-          <Route exact path="/home">
-            <Home />
+          <Route path="/search">
+            <SearchHome />
           </Route>
 
-          <Route exact path="/search">
-            <SearchHome />
+          <Route exact path="/favourites">
+            <Favourites />
+          </Route>
+
+          <Route exact path="/settings">
+            <Settings />
           </Route>
 
           {/* if logged in redirect */}
           <Route exact path="/">
             <Login />
           </Route>
-
         </IonRouterOutlet>
-  
+
         <IonTabBar slot="bottom">
           <IonTabButton tab="search" href="/search">
             <IonIcon icon={mapOutline} />
           </IonTabButton>
-          <IonTabButton tab="home" href="/home">
+          <IonTabButton tab="favourites" href="/favourites">
             <IonIcon icon={starOutline} />
           </IonTabButton>
-          <IonTabButton tab="home" href="/home">
+          <IonTabButton tab="settings" href="/settings">
             <IonIcon icon={settingsOutline} />
           </IonTabButton>
         </IonTabBar>
