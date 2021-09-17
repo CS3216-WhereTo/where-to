@@ -2,12 +2,12 @@ import { IonPage, IonIcon, IonButton } from "@ionic/react";
 import React, { useState, useEffect, useRef } from "react";
 
 import "./SearchHome.css";
-import Select from "react-select";
 import { ellipseOutline, swapVertical } from "ionicons/icons";
 import { locationSharp } from "ionicons/icons";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import { geolocated } from "react-geolocated";
 import { BrowserRouter as Router, Switch, Route, Link, useLocation } from "react-router-dom";
+import polyline from "@mapbox/polyline";
 
 import CustomSelect from "../../components/custom-select/CustomSelect";
 
@@ -69,19 +69,6 @@ const SearchHome = (props) => {
   });
 
   useEffect(() => {
-    // State to ensure that Map does not fly everytime user's location changes
-    if (centeredAtCurrent) return;
-    if (!props.coords) return;
-
-    // Center the Map at user's current location, will only be done once
-    map.current.flyTo({
-      center: [props.coords.longitude, props.coords.latitude],
-      essential: true,
-    });
-    setCenteredAtCurrent(true);
-  }, [centeredAtCurrent, props.coords]);
-
-  useEffect(() => {
     // Wait for the Map to initialise
     if (!map.current) return;
 
@@ -126,7 +113,59 @@ const SearchHome = (props) => {
             <IonButton size="small" fill="clear" onClick={swapStartEnd}>
               <IonIcon slot="icon-only" icon={swapVertical} />
             </IonButton>
-            <IonButton color="light" size="small">
+            <IonButton
+              color="light"
+              size="small"
+              onClick={() => {
+                try {
+                  map.current.removeLayer("route");
+                  map.current.removeSource("route");
+                } catch (e) {
+                  // Map currently has no result plotted
+                } finally {
+                  // Polyline should be decoded before being received here, e.g. in gateway or store
+                  map.current.addSource("route", {
+                    type: "geojson",
+                    data: {
+                      type: "Feature",
+                      properties: {},
+                      geometry: {
+                        type: "LineString",
+                        coordinates: [
+                          [1.29431, 103.7846],
+                          [1.29442, 103.784],
+                          [1.29444, 103.783],
+                          [1.29525, 103.7827],
+                          [1.29532, 103.7824],
+                          [1.29614, 103.7823],
+                          [1.29642, 103.7822],
+                          [1.29654, 103.7818],
+                        ].map((c) => [c[1], c[0]]),
+                      },
+                    },
+                  });
+
+                  // Different colours for walking and bus
+                  // Maybe bus is dotted?
+                  map.current.addLayer({
+                    id: "route",
+                    type: "line",
+                    source: "route",
+                    layout: {
+                      "line-join": "round",
+                      "line-cap": "round",
+                    },
+                    paint: {
+                      "line-color": "#888",
+                      "line-width": 8,
+                    },
+                  });
+
+                  // Centers on start location
+                  map.current.flyTo({ center: [103.7846, 1.29431] });
+                }
+              }}
+            >
               <b>GO</b>
             </IonButton>
           </div>

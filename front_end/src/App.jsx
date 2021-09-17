@@ -37,10 +37,6 @@ const App = (props) => (
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
-          <Route exact path="/home">
-            <Home />
-          </Route>
-
           <Route path="/search">
             <SearchHome />
           </Route>
