@@ -5,6 +5,7 @@ from google.auth.transport import requests
 from WhereTo.secrets import GOOGLE_CLIENT_ID
 import json
 
+# decorator for custom authentication middleware
 def authenticated(handler):
     def wrapped_handler(request):
         body = json.loads(request.body)
@@ -30,3 +31,7 @@ def update_speed(request, user_id):
 
     # placeholders to try out authentication
     return JsonResponse({'client': GOOGLE_CLIENT_ID, 'req': body, 'result': user_id}, content_type='application/json')
+
+@authenticated
+def list_recents(request, user_id):
+    return JsonResponse({}, content_type='application/json')
