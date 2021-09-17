@@ -1,8 +1,5 @@
 from django.http import JsonResponse
 
 # Create your views here.
-def list_nodes(request):
-    return JsonResponse({}, content_type='application/json')
-
-def find_nearest_node(request):
+def update_speed(request):
     return JsonResponse({}, content_type='application/json')
