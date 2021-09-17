@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
 from django.db.models.fields import CharField, IntegerField, TextField, FloatField
-from django.db.models.fields.related import ForeignKey
+from django.db.models.fields.related import ForeignKey, OneToOneField
 
 # Create your models here.
 
@@ -41,5 +41,5 @@ class BusEdge(models.Model):
         ]
 
 class BusService(models.Model):
-    edge_id = ForeignKey('BusEdge', on_delete=CASCADE, primary_key=True)
+    edge_id = OneToOneField(BusEdge, on_delete=CASCADE, primary_key=True)
     service = CharField(max_length=5)
