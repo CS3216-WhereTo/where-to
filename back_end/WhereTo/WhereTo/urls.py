@@ -21,4 +21,5 @@ urlpatterns = [
     path('nodes/', include('nodes.urls')),
     path('user/', include('users.urls')),
     path('favourites/', include('favourites.urls')),
+    path('route/', include('routes.urls')),
 ]

@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'nodes',
     'users',
     'favourites',
+    'routes',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
