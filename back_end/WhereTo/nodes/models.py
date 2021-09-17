@@ -21,8 +21,8 @@ class Road(Node):
     pass
 
 class WalkEdge(models.Model):
-    start_id = ForeignKey('Landmark', on_delete=CASCADE, related_name='walk_start')
-    end_id = ForeignKey('BusStop', on_delete=CASCADE, related_name='walk_end')
+    start_id = ForeignKey(Node, on_delete=CASCADE, related_name='walk_start')
+    end_id = ForeignKey(Node, on_delete=CASCADE, related_name='walk_end')
 
     class Meta:
         constraints = [
@@ -30,8 +30,8 @@ class WalkEdge(models.Model):
         ]
 
 class BusEdge(models.Model):
-    start_id = ForeignKey('Node', on_delete=CASCADE, related_name='bus_start')
-    end_id = ForeignKey('Node', on_delete=CASCADE, related_name='bus_end')
+    start_id = ForeignKey(Node, on_delete=CASCADE, related_name='bus_start')
+    end_id = ForeignKey(Node, on_delete=CASCADE, related_name='bus_end')
     duration = IntegerField()
     polyline = TextField()
 
