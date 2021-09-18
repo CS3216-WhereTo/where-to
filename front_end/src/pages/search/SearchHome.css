@@ -3,11 +3,11 @@
 }
 
 .search-header {
-  background-color: rgba(255, 255, 255, 0);
+  background-color: rgba(255, 132, 132, 0.52);
   /* margin: -12px; */
   padding: 12px;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
   z-index: 100;
 }
 .search {
