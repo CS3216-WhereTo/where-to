@@ -24,6 +24,7 @@ const CustomSelect = ({ value, onChange, placeholder, options }) => {
           ...provided,
           display: "flex",
           flex: 1,
+          borderRadius: "8px",
         }),
       }}
     />

@@ -49,6 +49,7 @@ const SearchHome = (props) => {
     });
 
     // Adds Geolocate control to Map, will be disabled if user blocks location service
+    // Hide if not in bounds?
     map.current.addControl(
       new mapboxgl.GeolocateControl({
         positionOptions: {

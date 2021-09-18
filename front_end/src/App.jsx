@@ -1,6 +1,6 @@
 import { Redirect, Route } from "react-router-dom";
 
-import { IonApp, IonRouterOutlet, IonTabBar, IonTabs, IonTabButton, IonIcon } from "@ionic/react";
+import { IonApp, IonRouterOutlet, IonTabBar, IonTabs, IonTabButton, IonIcon, IonText } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 
 import { mapOutline, starOutline, settingsOutline } from "ionicons/icons";
@@ -58,12 +58,15 @@ const App = (props) => (
         <IonTabBar slot="bottom">
           <IonTabButton tab="search" href="/search">
             <IonIcon icon={mapOutline} />
+            <IonText>Map</IonText>
           </IonTabButton>
           <IonTabButton tab="favourites" href="/favourites">
             <IonIcon icon={starOutline} />
+            <IonText>Favourites</IonText>
           </IonTabButton>
           <IonTabButton tab="settings" href="/settings">
             <IonIcon icon={settingsOutline} />
+            <IonText>Settings</IonText>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>
