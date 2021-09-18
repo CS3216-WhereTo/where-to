@@ -1,3 +1,3 @@
 /WhereTo/WhereTo/secrets.py
 *.pyc
-/WhereTo/WhereTo/test_data
+/WhereTo/routes/test_data
