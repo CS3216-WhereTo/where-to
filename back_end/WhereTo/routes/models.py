@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models.deletion import CASCADE
-from django.db.models.fields import CharField, IntegerField, TextField, FloatField
+from django.db.models.fields import CharField, IntegerField, TextField
 from django.db.models.fields.related import ForeignKey, OneToOneField
 from nodes.models import Node, BusStop
 

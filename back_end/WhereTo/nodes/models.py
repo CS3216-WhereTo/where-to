@@ -1,7 +1,5 @@
 from django.db import models
-from django.db.models.deletion import CASCADE
-from django.db.models.fields import CharField, IntegerField, TextField, FloatField
-from django.db.models.fields.related import ForeignKey, OneToOneField
+from django.db.models.fields import IntegerField, TextField, FloatField
 
 # Create your models here.
 
