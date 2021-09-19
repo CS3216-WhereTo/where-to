@@ -1,9 +1,8 @@
-from back_end.WhereTo.utils.decorators import extract_body
 from django.views.decorators.http import require_GET, require_POST
 from django.http import JsonResponse
 
-from utils.decorators import authenticated
-import controller
+from utils.decorators import authenticated, extract_body
+from users import controller
 
 # Create your views here.
 @require_GET
