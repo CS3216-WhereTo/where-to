@@ -9,6 +9,7 @@ import Login from "./pages/login/Login";
 // import MapView from "./pages/map/MapView";
 import Home from "./pages/home/Home";
 import SearchHome from "./pages/search/SearchHome";
+import SearchResult from "./pages/search/SearchResult";
 import Favourites from "./pages/favourites/Favourites";
 import Settings from "./pages/settings/Settings";
 
@@ -39,6 +40,10 @@ const App = (props) => (
         <IonRouterOutlet>
           <Route path="/search">
             <SearchHome />
+          </Route>
+
+          <Route path="/search-result">
+            <SearchResult />
           </Route>
 
           <Route exact path="/favourites">

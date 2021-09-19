@@ -11,9 +11,7 @@ const FavouritesItem = ({ listItem, onClick }) => {
       <div className="directions-button">
         {/* Passes Node data to SearchHome */}
         <Link to={{ pathname: "search", state: { destination: { label: "NUS", value: "nus" } } }}>
-          <IonButton class="directions-button" slot="end">
             <IonIcon icon={mapOutline}></IonIcon>
-          </IonButton>
         </Link>
       </div>
       <IonIcon slot="end" onClick={onClick} icon={isFav ? star : starOutline}></IonIcon>
