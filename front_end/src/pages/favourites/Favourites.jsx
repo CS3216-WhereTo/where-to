@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, 
+import { IonPage, IonContent, 
   IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";
 
 import FavouritesList from './FavouritesList';
@@ -16,7 +16,7 @@ const Favourites = (props) => {
     {nodeId:"2", location:"fav2", isFav:true}, 
     {nodeId:"3", location:"fav3", isFav:true}, 
     {nodeId:"4", location:"fav4", isFav:true}, 
-    {nodeId:"5", location:"fav5", isFav:true}
+    {nodeId:"5", location:"fav5", isFav:true},
   ];
 
   const recs = [
@@ -46,26 +46,23 @@ const Favourites = (props) => {
   }
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Favourites</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+    <IonPage className="page favourites-page">
+      <p className="page-header">Favourites</p>
       
        {/* -- Segment -- */}
-       <IonSegment value={segment} onIonChange={e => handleSegmentChange(e)}>
-          <IonSegmentButton value="favourites">
-            <IonLabel>Favourites</IonLabel>
+       <IonSegment className="segment" value={segment} onIonChange={e => handleSegmentChange(e)}>
+          <IonSegmentButton className="segment__button" value="favourites">
+            <IonLabel className="segment__text">Favourites</IonLabel>
           </IonSegmentButton>
-          <IonSegmentButton value="recents">
-            <IonLabel>Recents</IonLabel>
+          <IonSegmentButton className="segment__button" value="recents">
+            <IonLabel className="segment__text">Recents</IonLabel>
           </IonSegmentButton>
         </IonSegment>
       
       <IonContent>
         {/* -- List -- */}
         <FavouritesList 
+          className="favourites-list"
           currentList={segment === "favourites" ? favourites : recents} 
           onClick={(i) => toggleStar(i)}
         />

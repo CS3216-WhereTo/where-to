@@ -29,7 +29,7 @@ const Settings = (props) => {
         
         <IonContent>
           <div className="speed">
-            <IonLabel className="speed__label">Walking Speed</IonLabel>
+            <IonLabel className="speed__text">Walking Speed</IonLabel>
             <div className="speed__select">
               <Select
                   value={speed}
@@ -69,7 +69,7 @@ const Settings = (props) => {
 
           <IonContent>
             <div className="sign-in">
-                <div className="sign-in__label">
+                <div className="sign-in__text">
                       <IonLabel>You are not signed in.</IonLabel>
                 </div>
 
