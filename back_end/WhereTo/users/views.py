@@ -2,7 +2,7 @@ from django.views.decorators.http import require_GET, require_POST
 from django.http import JsonResponse
 import json
 
-from .auth import authenticated
+from utils.decorators import authenticated
 from WhereTo.secrets import GOOGLE_CLIENT_ID
 
 # Create your views here.

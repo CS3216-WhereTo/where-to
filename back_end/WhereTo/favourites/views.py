@@ -1,7 +1,7 @@
 from django.http.response import JsonResponse
 from django.views.decorators.http import require_GET, require_POST
 
-from users.auth import authenticated
+from utils.decorators import authenticated
 
 # Create your views here.
 @require_GET
