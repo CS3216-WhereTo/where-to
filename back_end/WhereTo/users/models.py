@@ -1,7 +1,7 @@
 from django.db.models.deletion import CASCADE
 from nodes.models import Node
 from django.db import models
-from django.db.models.fields import DateTimeField, DecimalField, IntegerField
+from django.db.models.fields import DateTimeField, DecimalField, IntegerField, TextField
 from django.db.models.fields.related import ForeignKey
 
 # Create your models here.
@@ -11,7 +11,7 @@ class User(models.Model):
 
 class Recent(models.Model):
     user_id = ForeignKey(User, on_delete=CASCADE)
-    node_id = ForeignKey(Node, on_delete=CASCADE)
+    route = TextField()
     access_time = DateTimeField(auto_now_add=True)
 
     class Meta:

@@ -5,6 +5,10 @@ import json
 
 # Create your views here.
 @authenticated
+def get_speed(request, user_id):
+    return JsonResponse({}, content_type='application/json')
+
+@authenticated
 def update_speed(request, user_id):
     body = json.loads(request.body)
 
