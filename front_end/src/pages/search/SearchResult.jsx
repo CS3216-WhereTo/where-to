@@ -6,7 +6,7 @@ import Draggable from "react-draggable";
 import { IonPage, IonChip, IonIcon, IonLabel, 
   IonList, IonItem } from "@ionic/react";
 import { ellipseOutline, locationSharp, 
-  arrowBack, bus, walk } from "ionicons/icons";
+  arrowBack, bus, walk, chevronDownOutline, chevronUpOutline } from "ionicons/icons";
 
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 
@@ -83,6 +83,30 @@ const SearchResult = ({ start, end }) => {
   const [busDir, setBusDir] = useState(tempBus);
   const [dirType, setDirType] = useState("bus");
 
+  const [isDragging, setIsDragging] = useState(true);
+  const [showDropDown, setShowDropDown] = useState(false);
+
+  const toggleDropDown = () => {
+    console.log(showDropDown);
+    setShowDropDown(!showDropDown);
+  }
+
+  const onDrop = () => {}
+  
+  const onDrag = () => {
+    setIsDragging(true);
+  }
+  
+  const onStop = () => {
+    const dragging = isDragging;
+    setIsDragging(false);
+    if (dragging) {
+      onDrop();
+    } else {
+      toggleDropDown();
+    }
+  }
+
   // To get rid of warning
   const nodeRef = React.useRef(null);
 
@@ -127,32 +151,50 @@ const SearchResult = ({ start, end }) => {
         </div>
       </div>
       </div>
-
+      
       <Draggable 
+        onDrag={onDrag}
+        onStop={onStop}
         axis="y"
         nodeRef={nodeRef}
       >
-        <div ref={nodeRef} className="directions__modal">
-          <hr className="directions__line" />
-          <IonList className="directions__list">
+        <div ref={nodeRef} className="modal">
+          <hr className="modal__line" />
+          <IonList lines="full" className="modal__content">
             <IonItem>
-              <p className="directions__header">15 mins (1.5 km)</p>
+              <p className="modal__header">15 mins (1.5 km)</p>
             </IonItem>
-            <div className="directions__list--scroll">
+            <div className="modal__list--scroll">
             {
             dirType === "bus"
               ? busDir.map((elem, i) => {
                 if (elem.type === "bus") {
                   return (
-                    <IonItem key={i}>
-                      <IonIcon className="directions__icon" icon={bus}></IonIcon>
-                      <p className="directions__text">Take bus to {elem.location}</p>
-                      <IonLabel className="directions__time" slot="end">{parseInt(elem.duration)} min</IonLabel>
+                    <div key={i}>
+                    <IonItem className="directions" lines={showDropDown ? "none" : "full"}>
+                        <IonIcon className="directions__icon" icon={bus} />
+                        <div className="directions__bus-text">
+                          <p className="directions__text">Take bus to {elem.location}</p>
+                          <div className="directions__dropdown">
+                            <p className="directions__dropdown-text">Ride XXX stops</p>
+                            <IonIcon className="directions__dropdown-icon" icon={showDropDown ? chevronUpOutline : chevronDownOutline} />
+                          </div>
+                        </div>
+                        <IonLabel className="directions__time" slot="end">{parseInt(elem.duration)} min</IonLabel>
                     </IonItem>
+                    <IonItem className={"dropdown " + (showDropDown ? "dropdown--visible" : "dropdown--hidden")}>
+                        <div className="dropdown__list">
+                          <p className="dropdown__text">Test</p>
+                          <p className="dropdown__text">Test</p>
+                          <p className="dropdown__text">Test</p>
+                          <p className="dropdown__text">Test</p>
+                        </div>
+                    </IonItem>
+                    </div>
                   );
                 } else {
                   return (
-                    <IonItem key={i}>
+                    <IonItem className="directions" key={i}>
                       <IonIcon className="directions__icon" icon={walk}></IonIcon>
                       <p className="directions__text">Walk to {elem.location}</p>
                       <IonLabel className="directions__time" slot="end">{parseInt(elem.duration)} min</IonLabel>
@@ -163,14 +205,14 @@ const SearchResult = ({ start, end }) => {
               : walkDir.map((elem, i) => {
                 return (
                   <IonItem key={i}>
-                    <IonIcon className="directions__icon directions__icon-walk" icon={walk}></IonIcon>
+                    <IonIcon className="directions__icon" icon={walk}></IonIcon>
                     <p className="directions__text">Walk to {elem.location}</p>
                     <IonLabel className="directions__time" slot="end">{parseInt(elem.duration)} min</IonLabel>
                   </IonItem>
                 )
               })
             } 
-            </div>
+            </div> 
           </IonList>
         </div>
       </Draggable>
