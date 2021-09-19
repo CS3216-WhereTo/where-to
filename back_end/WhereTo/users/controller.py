@@ -28,5 +28,6 @@ MAX_RECENTS = 10
 
 @get_user
 def list_recents(user):
-    recents = Recent.objects.filter(user_id=user).order_by('-access_time')[:10].all()
-    return [i.route for i in recents]
+    recents = Recent.objects.filter(user_id=user).order_by('-access_time')
+    recents = recents[:MAX_RECENTS].values_list('route', flat=True).all()
+    return recents
