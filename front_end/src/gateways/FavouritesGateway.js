@@ -1,15 +1,16 @@
-export default function FavouritesGateway() {
+export default class FavouritesGateway {
 
-    const url = '{insert URL here}/favourites';
-
-    let token = '';
+    constructor() {
+        this.token = '';
+        this.url = '{insert URL here}/favourites';
+    }
 
     /**
      * Sends a GET request for the user's favourited locations.
      */
-    async function get() {
-        const response = await fetch(`${url}/list_favourites`, {
-            headers: { 'Authorization': `Bearer ${token}` }
+    async get() {
+        const response = await fetch(`${this.url}/list_favourites`, {
+            headers: { 'Authorization': `Bearer ${this.token}` }
         });
         return response.json;
     }
@@ -19,11 +20,11 @@ export default function FavouritesGateway() {
      * 
      * @param {number} nodeId
      */
-    async function add(nodeId) {
-        const response = await fetch(`${url}/add_favourite`, {
+    async add(nodeId) {
+        const response = await fetch(`${this.url}/add_favourite`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${this.token}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ node_id: nodeId })
@@ -36,11 +37,11 @@ export default function FavouritesGateway() {
      * 
      * @param {number} nodeId
      */
-    async function remove(nodeId) {
-        const response = await fetch(`${url}/remove_favourite`, {
+    async remove(nodeId) {
+        const response = await fetch(`${this.url}/remove_favourite`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${this.token}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ node_id: nodeId })
@@ -53,15 +54,8 @@ export default function FavouritesGateway() {
      * 
      * @param {string} userToken 
      */
-     function setToken(userToken) {
+    setToken(userToken) {
         token = userToken;
     }
-
-    return Object.freeze({
-        get,
-        add,
-        remove,
-        setToken
-    });
 
 }

@@ -1,17 +1,22 @@
-export default function NodesGateway() {
+export default class NodesGateway {
 
-    const url = '{insert URL}/node';
-    
-    let token = '';
+    constructor() {
+        this.token = '';
+        this.url = '{insert URL}/node';
+    }
 
     /**
      * Sends a GET request for all nodes.
      */
-    async function get() {
-        const response = await fetch(`${url}/list_nodes`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        return response.json;
+    async get() {
+        try {
+            const response = await fetch(`${this.url}/list_nodes`, {
+                headers: { 'Authorization': `Bearer ${this.token}` }
+            });
+            return response.json();
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     /**
@@ -19,15 +24,19 @@ export default function NodesGateway() {
      * 
      * @param {{lat: number, lon: number}} coords 
      */
-    async function findNearest(coords) {
-        const response = await fetch(`${url}/find_nearest_node`, {
-            headers: { 
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(coords)
-        })
-        return response.json();
+    async findNearest(coords) {
+        try {
+            const response = await fetch(`${this.url}/find_nearest_node`, {
+                headers: { 
+                    'Authorization': `Bearer ${this.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(coords)
+            });
+            return response.json();
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     /**
@@ -35,14 +44,8 @@ export default function NodesGateway() {
      * 
      * @param {string} userToken 
      */
-    function setToken(userToken) {
+    setToken(userToken) {
         token = userToken;
     }
-
-    return Object.freeze({
-        get,
-        findNearest,
-        setToken
-    });
 
 }
