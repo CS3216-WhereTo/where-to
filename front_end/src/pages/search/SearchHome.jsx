@@ -42,13 +42,14 @@ const SearchHome = (props) => {
       style: "mapbox://styles/mapbox/outdoors-v11",
       center: [lng, lat],
       maxBounds: [
-        [103.59168954859202, 1.2059100797737556], // Southwest coordinates
-        [104.04150066935574, 1.4850806496446494], // Northeast coordinates
+        [103.76543863073609, 1.287192070753754], // Southwest coordinates
+        [103.78704066069248, 1.30695591620379], // Northeast coordinates
       ],
       zoom: zoom,
     });
 
     // Adds Geolocate control to Map, will be disabled if user blocks location service
+    // Hide if not in bounds?
     map.current.addControl(
       new mapboxgl.GeolocateControl({
         positionOptions: {
@@ -116,6 +117,7 @@ const SearchHome = (props) => {
             <IonButton
               color="light"
               size="small"
+              shape="round"
               onClick={() => {
                 try {
                   map.current.removeLayer("route");
