@@ -1,5 +1,4 @@
 from django.db.models.deletion import CASCADE
-from nodes.models import Node
 from django.db import models
 from django.db.models.fields import DateTimeField, DecimalField, IntegerField, TextField
 from django.db.models.fields.related import ForeignKey
