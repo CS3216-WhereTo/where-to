@@ -22,11 +22,17 @@ def find_combined_route(request, body, user_id):
     return JsonResponse(json.dumps(result), content_type='application/json')
 
 @require_GET
+@extract_body
 @authenticated
-def find_walk_route(request, user_id):
-    return JsonResponse({}, content_type='application/json')
+def find_walk_route(request, body, user_id):
+    node_ids = extract_node_ids(body)
+    result = get_walk_route(*node_ids)
+    return JsonResponse(json.dumps(result), content_type='application/json')
 
 @require_GET
+@extract_body
 @authenticated
-def find_bus_route(request, user_id):
-    return JsonResponse({}, content_type='application/json')
+def find_bus_route(request, body, user_id):
+    node_ids = extract_node_ids(body)
+    result = get_bus_route(*node_ids)
+    return JsonResponse(json.dumps(result), content_type='application/json')
