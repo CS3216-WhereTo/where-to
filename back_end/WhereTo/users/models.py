@@ -6,7 +6,7 @@ from django.db.models.fields.related import ForeignKey
 
 # Create your models here.
 class User(models.Model):
-    google_id = DecimalField(max_digits=21, decimal_places=0, unique=True) # unique imples indexed
+    google_id = DecimalField(max_digits=21, decimal_places=0, unique=True) # unique implies indexed
     walking_speed = IntegerField()
 
 class Recent(models.Model):
