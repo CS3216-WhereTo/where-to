@@ -1,4 +1,4 @@
-from routing_helper import *
+from .routing_helper import *
 import polyline
 import json
 
@@ -45,7 +45,7 @@ def get_walk_route(origin_id, destination_id):
         "path": path
     }
 
-    return json.dumps(result)
+    return result
     
 
 def get_bus_route(origin_id, destination_id):
@@ -85,8 +85,11 @@ def read_test_data():
             curr = {"duration": duration, "services": services, "polyline": polyline.encode(plot_coordinates)}
             bus_route_edges[(start_id, end_id)] = curr
 
-read_test_data()
+def get_combined_route(origin_id, destination_id):
+    return get_walk_route(origin_id, destination_id), get_bus_route(origin_id, destination_id)
+
+#read_test_data()
 #print(node_graph)
 #print(bus_stop_graph)
 #print(bus_route_edges)
-print(get_walk_route(100, 616))
+#print(get_walk_route(100, 616))
