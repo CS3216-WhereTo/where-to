@@ -17,3 +17,6 @@ def list_recents(user):
     recents = Recent.objects.filter(user_id=user).order_by('-access_time')
     recents = recents[:MAX_RECENTS].values_list('route', flat=True).all()
     return recents
+
+def add_recent(user, route):
+    Recent(user_id=user.id, route=route).save()
