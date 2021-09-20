@@ -33,8 +33,8 @@ export default class NodeGateway {
                 data: coords
             });
             return response.json();
-        } catch (error) {
-            console.log(error);
+        } catch (e) {
+            console.log(e);
             throw e;
         }
     }
@@ -45,7 +45,7 @@ export default class NodeGateway {
      * @param {string} userToken 
      */
     setToken(userToken) {
-        token = userToken;
+        this.token = userToken;
     }
 
 }

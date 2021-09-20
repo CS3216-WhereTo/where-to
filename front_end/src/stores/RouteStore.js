@@ -1,5 +1,4 @@
 import MicroEmitter from 'micro-emitter';
-import RouteGateway from '../gateways/RouteGateway'
 
 export const ERR_MSG = "Start ID should not be the same as the destination ID";
 
@@ -33,7 +32,7 @@ export default class RouteStore {
      * @param {number} endId 
      */
     fetchRoutes(startId, endId) {
-        if (startId == endId) throw new Error(ERR_MSG);
+        if (startId === endId) throw new Error(ERR_MSG);
         return this.gateway
             .getRoutes('', { start_id: startId, end_id: endId })
             .then(res => this._setRoutes(res))

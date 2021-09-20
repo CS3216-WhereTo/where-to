@@ -75,7 +75,7 @@ export default class RouteGateway {
      * @param {string} userToken 
      */
     setToken(userToken) {
-        token = userToken;
+        this.token = userToken;
     }
 
 }

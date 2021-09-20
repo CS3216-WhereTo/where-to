@@ -1,6 +1,4 @@
 import MicroEmitter from 'micro-emitter';
-import NodeGateway from '../gateways/NodeGateway'
-import FavouritesGateway from '../gateways/FavouritesGateway'
 
 export const ERR_FAV = "This node is not in the favourites!";
 export const ERR_UNFAV = "This node is not in the non favourites!";
@@ -49,13 +47,13 @@ export default class NodeStore {
     }
 
     removeFavourite(nodeId) {
-        const idx = this.favourites.findIndex(node => node.node_id == nodeId);
+        const idx = this.favourites.findIndex(node => node.node_id === nodeId);
         if (idx < 0) throw new Error(ERR_FAV);
 
         return this.favGateway
             .remove(nodeId)
             .then(res => {
-                if (res.error != 0) throw new Error(ERR_INVALID_FAV_ARG);
+                if (res.error !== 0) throw new Error(ERR_INVALID_FAV_ARG);
 
                 const node = this.favourites[idx];
                 this.favourites.splice(idx, 1);
@@ -66,13 +64,13 @@ export default class NodeStore {
     }
 
     addFavourite(nodeId) {
-        const idx = this.nonFavourites.findIndex(node => node.node_id == nodeId);
+        const idx = this.nonFavourites.findIndex(node => node.node_id === nodeId);
         if (idx < 0) throw new Error(ERR_UNFAV);
     
         return this.favGateway
             .add(nodeId)
             .then(res => {
-                if (res.error != 0) throw new Error(ERR_INVALID_FAV_ARG);
+                if (res.error !== 0) throw new Error(ERR_INVALID_FAV_ARG);
 
                 const node = this.nonFavourites[idx];
                 this.nonFavourites.splice(idx, 1);
