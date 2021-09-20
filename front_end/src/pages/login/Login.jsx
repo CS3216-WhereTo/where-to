@@ -7,11 +7,14 @@ import { arrowForward } from "ionicons/icons";
 
 import Logo from "../../assets/logo.svg";
 import SplashAnimation from "../../assets/splash-animation.gif";
+import { trackPageView } from "../../utils/ReactGa";
 
 const Login = (props) => {
-const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
+    trackPageView(window.location.pathname);
+
     setTimeout(() => {
       setShowSplash(false);
     }, 1500);
