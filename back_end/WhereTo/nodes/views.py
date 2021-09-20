@@ -17,7 +17,6 @@ def list_nodes(request, user):
 
 @require_POST
 @extract_body
-@authenticated
 def find_nearest_node(request, body):
     coordinates = body["coordinates"]
     result = controller.find_nearest_node(coordinates)

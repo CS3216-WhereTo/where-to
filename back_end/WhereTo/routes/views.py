@@ -8,10 +8,10 @@ def extract_node_ids(body):
     return body['start_id'], body['end_id']
 
 # Create your views here.
-@require_GET
+@require_POST
 @extract_body
 @authenticated
-def find_combined_route(request, body, user_id):
+def find_combined_route(request, body, user):
     node_ids = extract_node_ids(body)
     walk, bus = get_combined_route(*node_ids)
     result = {
@@ -20,18 +20,16 @@ def find_combined_route(request, body, user_id):
     }
     return JsonResponse(result, content_type='application/json')
 
-@require_GET
+@require_POST
 @extract_body
-@authenticated
-def find_walk_route(request, body, user_id):
+def find_walk_route(request, body):
     node_ids = extract_node_ids(body)
     result = get_walk_route(*node_ids)
     return JsonResponse(result, content_type='application/json')
 
 @require_GET
 @extract_body
-@authenticated
-def find_bus_route(request, body, user_id):
+def find_bus_route(request, body):
     node_ids = extract_node_ids(body)
     result = get_bus_route(*node_ids)
     return JsonResponse(result, content_type='application/json')

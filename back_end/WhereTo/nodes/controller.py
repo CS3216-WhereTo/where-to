@@ -1,14 +1,10 @@
-from django.contrib.sessions.backends.db import SessionStore
 from favourites.controller import list_favourites
 from routes.controller import get_node_graph
 from routes.routing_helper import get_distance
 
 def list_nodes(user):
 
-    session = SessionStore()
-    if "node_graph" not in session:
-        session["node_graph"] = get_node_graph()
-    node_graph = session["node_graph"]
+    node_graph = get_node_graph()
 
     if user:
         favourites = list_favourites(user)
@@ -26,10 +22,7 @@ def list_nodes(user):
 
 def find_nearest_node(coordinates):
 
-    session = SessionStore()
-    if "node_graph" not in session:
-        session["node_graph"] = get_node_graph()
-    node_graph = session["node_graph"]
+    node_graph = get_node_graph()
 
     min_dist_node_id = None
     min_dist = float("inf")

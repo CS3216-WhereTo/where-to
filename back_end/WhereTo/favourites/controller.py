@@ -4,10 +4,7 @@ from django.contrib.sessions.backends.db import SessionStore
 
 def list_favourites(user):
 
-    session = SessionStore()
-    if "node_graph" not in session:
-        session["node_graph"] = get_node_graph()
-    node_graph = session["node_graph"]
+    node_graph = get_node_graph()
 
     result = []
     favourites = list(Favourite.objects.filter(user_id=user.id).values_list('node_id', flat=True))
@@ -17,10 +14,7 @@ def list_favourites(user):
 
 def add_favourite(user, node_id):
 
-    session = SessionStore()
-    if "node_graph" not in session:
-        session["node_graph"] = get_node_graph()
-    node_graph = session["node_graph"]
+    node_graph = get_node_graph()
 
     if node_id not in node_graph or node_graph[node_id]["type"] == "Road":
         return 1
@@ -33,10 +27,7 @@ def add_favourite(user, node_id):
 
 def remove_favourite(user, node_id):
 
-    session = SessionStore()
-    if "node_graph" not in session:
-        session["node_graph"] = get_node_graph()
-    node_graph = session["node_graph"]
+    node_graph = get_node_graph()
 
     if int(node_id) not in node_graph:
         return 1
