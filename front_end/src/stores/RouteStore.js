@@ -1,4 +1,7 @@
 import MicroEmitter from 'micro-emitter';
+import RouteGateway from '../gateways/RouteGateway'
+
+export const ERR_MSG = "Start ID should not be the same as the destination ID";
 
 /**
  * Exposes three functions:
@@ -6,14 +9,22 @@ import MicroEmitter from 'micro-emitter';
  * - `onChange(handler)` - sets a handler function that is called upon any change in data
  * - `getRoutes()` - retrieve walking and bus routes
  */
-export default function RouteStore(gateway) {
+export default class RouteStore {
     
-    let walkRoute;
-    let busRoute;
+    /**
+     * @param {RouteGateway} routeGateway 
+     */
+    constructor(routeGateway) {
+        this.walkRoute = null;
+        this.busRoute = null;
+        this.gateway = routeGateway;
 
-    const UPDATE = 'UPDATE'
+        const eventType = 'UPDATE';
+        const emitter = new MicroEmitter();
 
-    const eventEmitter = new MicroEmitter();
+        this.getEventType = () => eventType;
+        this.getEmitter = () => emitter;
+    }
 
     /**
      * Gets the routes from `startId` to `endId` and stores it.
@@ -21,16 +32,18 @@ export default function RouteStore(gateway) {
      * @param {number} startId 
      * @param {number} endId 
      */
-    function fetchRoutes(startId, endId) {
-        return gateway
+    fetchRoutes(startId, endId) {
+        if (startId == endId) throw new Error(ERR_MSG);
+        return this.gateway
             .getRoutes('', { start_id: startId, end_id: endId })
-            .then(setRoutes);
+            .then(res => this._setRoutes(res))
+            .catch(console.error);
     }
 
-    function setRoutes(result) {
-        walkRoute = result.walk;
-        busRoute = result.bus;
-        eventEmitter.emit(UPDATE);
+    _setRoutes(result) {
+        this.walkRoute = result.walk;
+        this.busRoute = result.bus;
+        this.getEmitter().emit(this.getEventType());
     }
 
     /**
@@ -38,22 +51,16 @@ export default function RouteStore(gateway) {
      * 
      * @param {Function} handler 
      */
-    function onChange(handler) {
-        eventEmitter.on(UPDATE, handler);
+    onChange(handler) {
+        this.getEmitter().on(this.getEventType(), handler);
     }
 
     /**
      * Returns the walking and 
      * @returns {{walk: any, bus: any}} routes
      */
-    function getRoutes() {
-        return { walk: walkRoute, bus: busRoute };
+    getRoutes() {
+        return { walk: this.walkRoute, bus: this.busRoute };
     }
-
-    return Object.freeze({
-        fetchRoutes,
-        onChange,
-        getRoutes
-    })
 
 }

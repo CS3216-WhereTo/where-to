@@ -45,6 +45,7 @@
   margin: auto;
 }
 .sns-login__col {
+  text-align: center;
 }
 .sns-login__button {
   height: 60px;

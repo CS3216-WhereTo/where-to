@@ -31,11 +31,11 @@ const Login = (props) => {
 
               <IonGrid className="sns-login__grid">
                 <IonRow className="sns-login__row">
-                  <IonCol className="sns-login__col">
+                  {/* <IonCol className="sns-login__col">
                     <IonButton shape="round" fill="solid" color="dark" className="sns-login__button">
                       <IonIcon slot="icon-only" icon={logoFacebook} size="large"></IonIcon>
                     </IonButton>
-                  </IonCol>
+                  </IonCol> */}
 
                   <IonCol className="sns-login__col">
                     <IonButton shape="round" fill="solid" color="dark" className="sns-login__button">
@@ -43,11 +43,11 @@ const Login = (props) => {
                     </IonButton>
                   </IonCol>
 
-                  <IonCol className="sns-login__col">
+                  {/* <IonCol className="sns-login__col">
                     <IonButton shape="round" fill="solid" color="dark" className="sns-login__button">
                       <IonIcon slot="icon-only" icon={logoApple} size="large"></IonIcon>
                     </IonButton>
-                  </IonCol>
+                  </IonCol> */}
                 </IonRow>
               </IonGrid>
             </div>
