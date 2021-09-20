@@ -9,6 +9,7 @@ import { ellipseOutline, locationSharp, arrowBack, bus, walk, chevronDownOutline
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 
 import "./SearchResult.css";
+mapboxgl.accessToken = "pk.eyJ1IjoidGVvanVueGlvbmciLCJhIjoiY2t0aTl0OGp6MHp3bjJ1cGlsdHhzODAwdSJ9.rujr8ESzMSG6u7pFL6OQ6A";
 
 // Receive in start and end location
 const SearchResult = ({ start, end }) => {
@@ -53,6 +54,9 @@ const SearchResult = ({ start, end }) => {
         showCompass: false,
       })
     );
+    map.current.once("load", () => {
+      map.current.resize();
+    });
   });
 
   const tempWalk = [
