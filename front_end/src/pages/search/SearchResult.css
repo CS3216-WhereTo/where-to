@@ -1,7 +1,15 @@
 .search-back {
   padding-top: 14px;
-  padding-right: 3px;
+  padding-right: 5px;
   font-size: 25px;
+}
+
+.search-back__icon {
+  background-color: #f6f6f6;
+  border-radius: 100%;
+  color: #003062;
+  padding: 2px;
+  font-size: 21px;
 }
 
 .search__box {
@@ -32,6 +40,21 @@
   white-space: nowrap;
 }
 
-.directions__button {
+.search-option--selected, .search-option__icon--selected {
+  background-color: #002f62e0;
+  color: #f6f6f6;
+}
+
+.search-option--unselected {
+  background-color: #f6f6f6;
+}
+
+.directions__button--center {
+  text-align: center;
   z-index: 20001;
+  margin-bottom: 20px;
+}
+
+.directions__button {
+  max-width: fit-content;
 }
