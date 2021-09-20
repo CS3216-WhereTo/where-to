@@ -1,12 +1,12 @@
 from django.db.models.deletion import CASCADE
 from django.db import models
-from django.db.models.fields import DateTimeField, DecimalField, IntegerField, TextField
+from django.db.models.fields import DateTimeField, DecimalField, FloatField, IntegerField, TextField
 from django.db.models.fields.related import ForeignKey
 
 # Create your models here.
 class User(models.Model):
     google_id = DecimalField(max_digits=21, decimal_places=0, unique=True) # unique implies indexed
-    walking_speed = IntegerField()
+    walking_speed = FloatField()
 
 class Recent(models.Model):
     user_id = ForeignKey(User, on_delete=CASCADE)
