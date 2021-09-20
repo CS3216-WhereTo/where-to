@@ -1,8 +1,8 @@
 from django.http.response import JsonResponse
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST
 
 from utils.decorators import authenticated, extract_body
-from .routing import get_combined_route, get_walk_route, get_bus_route
+from .controller import get_combined_route, get_walk_route, get_bus_route
 
 def extract_node_ids(body):
     return body['start_id'], body['end_id']
