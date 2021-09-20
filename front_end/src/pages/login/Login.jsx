@@ -1,8 +1,6 @@
 import { IonPage, IonImg, IonText, IonButton, IonGrid, IonRow, IonCol, IonIcon } from "@ionic/react";
 import { withRouter } from "react-router-dom";
 import "./Login.css";
-import { logoApple } from "ionicons/icons";
-import { logoFacebook } from "ionicons/icons";
 import { logoGoogle } from "ionicons/icons";
 import { arrowForward } from "ionicons/icons";
 

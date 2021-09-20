@@ -70,7 +70,7 @@ export default class FavouritesGateway {
      * @param {string} userToken 
      */
     setToken(userToken) {
-        token = userToken;
+        this.token = userToken;
     }
 
 }

@@ -10,7 +10,7 @@
   justify-content: center;
 }
 .login__row--top {
-  height: 60%;
+  height: 50%;
 }
 .login__row--bottom {
   height: 40%;
@@ -23,7 +23,7 @@
   justify-content: center;
 }
 .app-info__img {
-  width: 60%;
+  width: 80%;
   /* margin: auto; */
 }
 .app-info__text {
@@ -41,7 +41,7 @@
 .sns-login__grid {
 }
 .sns-login__row {
-  width: 320px;
+  width: 80%;
   margin: auto;
 }
 .sns-login__col {
@@ -57,7 +57,7 @@
 .auth-divider {
   display: flex;
   align-items: center;
-  padding: 12px;
+  padding: 10px;
 }
 .auth-divider__div {
   flex: 1;
