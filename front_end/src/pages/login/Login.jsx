@@ -1,13 +1,12 @@
-import { IonPage, IonImg, IonText, IonButton, IonGrid, IonRow, IonCol, IonIcon } from "@ionic/react";
+import { IonPage, IonImg, IonText, IonButton, IonGrid, IonRow, IonIcon } from "@ionic/react";
 import { withRouter } from "react-router-dom";
 import { useState, useEffect } from "react";
-import "./Login.css";
-import { logoGoogle } from "ionicons/icons";
 import { arrowForward } from "ionicons/icons";
+import "./Login.css";
 
 import Logo from "../../assets/logo.svg";
 import SplashAnimation from "../../assets/splash-animation.gif";
-import { trackPageView, trackGoogleSignInEvent, trackGuestSignInEvent } from "../../utils/ReactGa";
+import { trackPageView, trackGuestSignInEvent } from "../../utils/ReactGa";
 
 const Login = (props) => {
   const [showSplash, setShowSplash] = useState(true);
