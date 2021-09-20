@@ -35,14 +35,14 @@
 .modal {
   background-color: white;
   position: absolute;
-  width:100%;
-  top: 91%;
+  width: 100%;
+  bottom: 50px;
   border-radius: 30px 30px 0px 0px;
   z-index: 20001;
 }
 
 .modal__line {
-  background-color: rgb(180, 180, 180); 
+  background-color: rgb(180, 180, 180);
   height: 5px;
   border-radius: 50px;
   max-width: 50px;
@@ -56,7 +56,7 @@
 }
 
 .modal__list--scroll {
-  overflow-y: scroll; 
+  overflow-y: scroll;
   height: 50vh;
 }
 
@@ -112,4 +112,11 @@
   margin-left: 42px;
   padding-top: 8px;
   padding-bottom: 8px;
+}
+.draggable-parent {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  bottom: -50%;
+  overflow: hidden;
 }
