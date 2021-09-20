@@ -23,31 +23,53 @@
     <meta name="apple-mobile-web-app-title" content="WhereTo?" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
-    <script>
+    <meta name="google-signin-client_id" content="28436641618-2lj6kueceg3fh12or970itop8mhfc636.apps.googleusercontent.com" />
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <!-- <script>
       // Offline functionality
-      // if (navigator.onLine) {
-      //   alert("Online");
-      // } else {
-      //   alert("Offline");
-      // }
-      // window.addEventListener(
-      //   "online",
-      //   function (event) {
-      //     alert("Online");
-      //   },
-      //   false
-      // );
-      // window.addEventListener(
-      //   "offline",
-      //   function (event) {
-      //     alert("Offline");
-      //   },
-      //   false
-      // );
-    </script>
+      if (navigator.onLine) {
+        console.log("Online");
+      } else {
+        console.log("Offline");
+      }
+      window.addEventListener(
+        "online",
+        function (event) {
+          console.log("Online");
+        },
+        false
+      );
+      window.addEventListener(
+        "offline",
+        function (event) {
+          console.log("Offline");
+        },
+        false
+      );
+    </script> -->
   </head>
 
   <body>
+    <script>
+      function handleCredentialResponse(response) {
+        localStorage.setItem("jwtIdToken", response.credential);
+      }
+
+      window.onload = function () {
+        google.accounts.id.initialize({
+          client_id: "28436641618-2lj6kueceg3fh12or970itop8mhfc636.apps.googleusercontent.com",
+          callback: handleCredentialResponse,
+        });
+        google.accounts.id.renderButton(
+          document.getElementById("buttonDiv"),
+          { theme: "filled_blue", size: "large", shape: "pill" } // customization attributes
+        );
+        google.accounts.id.prompt(); // also display the One Tap dialog
+      };
+    </script>
+
     <div id="root"></div>
   </body>
 </html>

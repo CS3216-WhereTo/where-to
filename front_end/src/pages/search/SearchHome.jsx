@@ -9,14 +9,18 @@ import { geolocated } from "react-geolocated";
 import { useLocation } from "react-router-dom";
 
 import CustomSelect from "../../components/custom-select/CustomSelect";
+import { trackPageView } from "../../utils/ReactGa";
 
-// store in process.env
 mapboxgl.accessToken = "pk.eyJ1IjoidGVvanVueGlvbmciLCJhIjoiY2t0aTl0OGp6MHp3bjJ1cGlsdHhzODAwdSJ9.rujr8ESzMSG6u7pFL6OQ6A";
 
 const SearchHome = (props) => {
   const [start, setStart] = useState(null);
   const [end, setEnd] = useState(null);
   const [centeredAtCurrent, setCenteredAtCurrent] = useState(false);
+
+  useEffect(() => {
+    trackPageView(window.location.pathname);
+  }, []);
 
   // Sets Node passed from FavouritesItem as end point
   let redirectProps = useLocation();
@@ -185,11 +189,11 @@ const SearchHome = (props) => {
 };
 
 // Wrapper for Geolocation API, related attributes can be accessed via props
-export default geolocated({
-  positionOptions: {
-    enableHighAccuracy: false,
-  },
-  userDecisionTimeout: 5000,
-})(SearchHome);
+// export default geolocated({
+//   positionOptions: {
+//     enableHighAccuracy: false,
+//   },
+//   userDecisionTimeout: 5000,
+// })(SearchHome);
 
-// export default SearchHome;
+export default SearchHome;

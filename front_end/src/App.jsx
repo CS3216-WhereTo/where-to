@@ -1,5 +1,5 @@
 import { Route } from "react-router-dom";
-
+import { useEffect } from "react";
 import { IonApp, IonRouterOutlet, IonTabBar, IonTabs, IonTabButton, IonIcon, IonText } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 
@@ -30,51 +30,57 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { initialiseGoogleAnalytics } from "./utils/ReactGa";
 
-const App = (props) => (
-  <IonApp>
-    <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Route path="/search">
-            <SearchHome />
-          </Route>
+const App = (props) => {
+  useEffect(() => {
+    initialiseGoogleAnalytics();
+  }, []);
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <IonTabs>
+          <IonRouterOutlet>
+            <Route path="/search">
+              <SearchHome />
+            </Route>
 
-          <Route path="/search-result">
-            <SearchResult />
-          </Route>
+            <Route path="/search-result">
+              <SearchResult />
+            </Route>
 
-          <Route exact path="/favourites">
-            <Favourites />
-          </Route>
+            <Route exact path="/favourites">
+              <Favourites />
+            </Route>
 
-          <Route exact path="/settings">
-            <Settings />
-          </Route>
+            <Route exact path="/settings">
+              <Settings />
+            </Route>
 
-          {/* if logged in redirect */}
-          <Route exact path="/">
-            <Login />
-          </Route>
-        </IonRouterOutlet>
+            {/* if logged in redirect */}
+            <Route exact path="/">
+              <Login />
+            </Route>
+          </IonRouterOutlet>
 
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="search" href="/search">
-            <IonIcon icon={mapOutline} />
-            <IonText>Map</IonText>
-          </IonTabButton>
-          <IonTabButton tab="favourites" href="/favourites">
-            <IonIcon icon={starOutline} />
-            <IonText>Favourites</IonText>
-          </IonTabButton>
-          <IonTabButton tab="settings" href="/settings">
-            <IonIcon icon={settingsOutline} />
-            <IonText>Settings</IonText>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
-  </IonApp>
-);
+          <IonTabBar slot="bottom">
+            <IonTabButton tab="search" href="/search">
+              <IonIcon icon={mapOutline} />
+              <IonText>Map</IonText>
+            </IonTabButton>
+            <IonTabButton tab="favourites" href="/favourites">
+              <IonIcon icon={starOutline} />
+              <IonText>Favourites</IonText>
+            </IonTabButton>
+            <IonTabButton tab="settings" href="/settings">
+              <IonIcon icon={settingsOutline} />
+              <IonText>Settings</IonText>
+            </IonTabButton>
+          </IonTabBar>
+        </IonTabs>
+      </IonReactRouter>
+    </IonApp>
+  );
+};
 
 export default App;
