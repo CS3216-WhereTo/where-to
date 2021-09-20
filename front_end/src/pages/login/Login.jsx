@@ -1,5 +1,6 @@
 import { IonPage, IonImg, IonText, IonButton, IonGrid, IonRow, IonCol, IonIcon } from "@ionic/react";
 import { withRouter } from "react-router-dom";
+import { useState, useEffect } from "react";
 import "./Login.css";
 import { logoApple } from "ionicons/icons";
 import { logoFacebook } from "ionicons/icons";
@@ -7,14 +8,29 @@ import { logoGoogle } from "ionicons/icons";
 import { arrowForward } from "ionicons/icons";
 
 import Logo from "../../assets/logo.png";
+import SplashAnimation from "../../assets/splash-animation.gif";
 
+const google = window.google;
+console.log(window.google);
 const Login = (props) => {
+  const [showSplash, setShowSplash] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowSplash(false);
+    }, 1500);
+  }, []);
+
   return (
     <IonPage className="page login-page">
+      <div className={"splash " + (!showSplash ? "splash--hide" : "")}>
+        <img src={SplashAnimation} alt="splash-animation" className="splash__img" />
+      </div>
+
       <IonGrid className="login">
         <IonRow className="login__row login__row--top">
           <div className="app-info">
-            <IonImg src={Logo} className="app-info__img" alt='logo' />
+            <IonImg src={Logo} className="app-info__img" alt="logo" />
             <IonText className="app-info__text">
               <h2>
                 <b>Travel around NUS</b>
@@ -29,27 +45,7 @@ const Login = (props) => {
                 <h3>Continue with</h3>
               </IonText>
 
-              <IonGrid className="sns-login__grid">
-                <IonRow className="sns-login__row">
-                  {/* <IonCol className="sns-login__col">
-                    <IonButton shape="round" fill="solid" color="dark" className="sns-login__button">
-                      <IonIcon slot="icon-only" icon={logoFacebook} size="large"></IonIcon>
-                    </IonButton>
-                  </IonCol> */}
-
-                  <IonCol className="sns-login__col">
-                    <IonButton shape="round" fill="solid" color="dark" className="sns-login__button">
-                      <IonIcon slot="icon-only" icon={logoGoogle} size="large"></IonIcon>
-                    </IonButton>
-                  </IonCol>
-
-                  {/* <IonCol className="sns-login__col">
-                    <IonButton shape="round" fill="solid" color="dark" className="sns-login__button">
-                      <IonIcon slot="icon-only" icon={logoApple} size="large"></IonIcon>
-                    </IonButton>
-                  </IonCol> */}
-                </IonRow>
-              </IonGrid>
+              <div id="buttonDiv"></div>
             </div>
 
             <div className="auth-divider">

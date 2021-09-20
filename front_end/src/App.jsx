@@ -30,6 +30,10 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 
+import ReactGA from 'react-ga';
+
+// ReactGA.initialize('ID', [options]);
+
 const App = (props) => (
   <IonApp>
     <IonReactRouter>

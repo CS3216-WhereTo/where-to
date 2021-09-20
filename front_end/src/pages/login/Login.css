@@ -1,6 +1,26 @@
 .login-page {
   padding: 12px;
 }
+.splash {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: #ffffff;
+  z-index: 200;
+}
+.splash--hide {
+  display: none;
+}
+.splash__img {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
 
 .login {
 }
@@ -49,6 +69,18 @@
 }
 .sns-login__button {
   height: 60px;
+}
+
+#buttonDiv {
+  margin: auto;
+}
+#buttonDiv iframe {
+  width: 270px !important;
+  height: 48px !important;
+  margin: auto !important;
+}
+#buttonDiv iframe #container {
+  margin: auto !important;
 }
 
 .auth {
