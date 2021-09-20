@@ -1,8 +1,10 @@
 import MicroEmitter from 'micro-emitter';
-import NodeGateway from '../gateways/NodesGateway'
+import NodeGateway from '../gateways/NodeGateway'
+import FavouritesGateway from '../gateways/FavouritesGateway'
 
-const ERR_FAV = "This node is not in the favourites!";
-const ERR_UNFAV = "This node is not in the non favourites!";
+export const ERR_FAV = "This node is not in the favourites!";
+export const ERR_UNFAV = "This node is not in the non favourites!";
+export const ERR_INVALID_FAV_ARG = "Invalid input was given!";
 
 /**
  * Exposes the following functions:
@@ -14,12 +16,14 @@ const ERR_UNFAV = "This node is not in the non favourites!";
 export default class NodeStore {
 
     /**
-     * @param {NodeGateway} gateway 
+     * @param {NodeGateway} nodeGateway 
+     * @param {FavouritesGateway} favGateway
      */
-    constructor(gateway) {
+    constructor(nodeGateway, favGateway) {
         this.nonFavourites = [];
         this.favourites = [];
-        this.gateway = gateway;
+        this.nodeGateway = nodeGateway;
+        this.favGateway = favGateway;
 
         const update = 'UPDATE';
         const emitter = new MicroEmitter();
@@ -32,7 +36,7 @@ export default class NodeStore {
      * Fetches and updates the list of nodes.
      */
     fetchNodes() {
-        return this.gateway
+        return this.nodeGateway
             .get()
             .then(res => this._setNodes(res))
             .catch(e => console.error(e));
@@ -47,19 +51,36 @@ export default class NodeStore {
     removeFavourite(nodeId) {
         const idx = this.favourites.findIndex(node => node.node_id == nodeId);
         if (idx < 0) throw new Error(ERR_FAV);
-        const node = this.favourites[idx];
-        this.favourites.splice(idx, 1);
-        this.nonFavourites.push(node);
-        this.getEmitter().emit(this.getEventType());
+
+        return this.favGateway
+            .remove(nodeId)
+            .then(res => {
+                if (res.error != 0) throw new Error(ERR_INVALID_FAV_ARG);
+
+                const node = this.favourites[idx];
+                this.favourites.splice(idx, 1);
+                this.nonFavourites.push(node);
+                this.getEmitter().emit(this.getEventType());
+            })
+            .catch(err => alert(err));
     }
 
     addFavourite(nodeId) {
         const idx = this.nonFavourites.findIndex(node => node.node_id == nodeId);
         if (idx < 0) throw new Error(ERR_UNFAV);
-        const node = this.nonFavourites[idx];
-        this.nonFavourites.splice(idx, 1);
-        this.favourites.push(node);
-        this.getEmitter().emit(this.getEventType());
+    
+        return this.favGateway
+            .add(nodeId)
+            .then(res => {
+                if (res.error != 0) throw new Error(ERR_INVALID_FAV_ARG);
+
+                const node = this.nonFavourites[idx];
+                this.nonFavourites.splice(idx, 1);
+                this.favourites.push(node);
+                this.getEmitter().emit(this.getEventType());
+            })
+            .catch(err => alert(err));
+        
     }
 
     /**
@@ -97,7 +118,7 @@ export default class NodeStore {
      * @returns {number}
      */
     getNearestNode(coord) {
-        return this.gateway
+        return this.nodeGateway
             .findNearest(coord)
             .then(res => res.node_id)
             .catch(console.error);

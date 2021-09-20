@@ -4,6 +4,9 @@ import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 
+const axios = require('axios').default;
+axios.defaults.baseURL = '{insert URL here}/api/v1';
+
 ReactDOM.render(
   <React.StrictMode>
     <App />
