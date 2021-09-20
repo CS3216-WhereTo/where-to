@@ -1,17 +1,24 @@
-export default function FavouritesGateway() {
+const axios = require('axios').default;
 
-    const url = '{insert URL here}/favourites';
+export default class FavouritesGateway {
 
-    let token = '';
+    constructor() {
+        this.token = '';
+    }
 
     /**
      * Sends a GET request for the user's favourited locations.
      */
-    async function get() {
-        const response = await fetch(`${url}/list_favourites`, {
-            headers: { 'Authorization': `Bearer ${token}` }
-        });
-        return response.json;
+    async get() {
+        try {
+            const response = await axios.get('favourites/list_favourites', {
+                headers: { 'Authorization': `Bearer ${this.token}` }
+            });
+            return response.data;
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
     }
 
     /**
@@ -19,16 +26,20 @@ export default function FavouritesGateway() {
      * 
      * @param {number} nodeId
      */
-    async function add(nodeId) {
-        const response = await fetch(`${url}/add_favourite`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ node_id: nodeId })
-        });
-        return response.json();
+    async add(nodeId) {
+        try {
+            const response = await axios.post('favourites/add_favourite', {
+                headers: { 
+                    'Authorization': `Bearer ${this.token}`,
+                    'Content-Type': 'application/json' 
+                },
+                data: { node_id: nodeId }
+            })
+            return response.data;
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
     }
 
     /**
@@ -36,16 +47,21 @@ export default function FavouritesGateway() {
      * 
      * @param {number} nodeId
      */
-    async function remove(nodeId) {
-        const response = await fetch(`${url}/remove_favourite`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ node_id: nodeId })
-        });
-        return response.json();
+    async remove(nodeId) {
+        try {
+            const response = await axios.post('favourites/remove_favourite', {
+                headers: { 
+                    'Authorization': `Bearer ${this.token}`,
+                    'Content-Type': 'application/json' 
+                },
+                data: { node_id: nodeId }
+            });
+            return response.data;
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
+        
     }
 
     /**
@@ -53,15 +69,8 @@ export default function FavouritesGateway() {
      * 
      * @param {string} userToken 
      */
-     function setToken(userToken) {
-        token = userToken;
+    setToken(userToken) {
+        this.token = userToken;
     }
-
-    return Object.freeze({
-        get,
-        add,
-        remove,
-        setToken
-    });
 
 }

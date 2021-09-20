@@ -1,23 +1,30 @@
-export default function RouteGateway() {
+const axios = require('axios').default;
 
-    const url = '{insert url}/route'
+export default class RouteGateway {
 
-    let token = '';
+    constructor() {
+        this.token = '';
+    }
 
     /**
      * Sends a GET request for both walking and bus routes.
      * 
      * @param {{start_id: number, end_id: number}} locations 
      */
-    async function getRoutes(locations) {
-        const response = await fetch(`${url}/find_routes`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(locations)
-        });
-        return response.json();
+    async getRoutes(locations) {
+        try {
+            const response = await axios.get('route/find_routes', {
+                headers: {
+                    'Authorization': `Bearer ${this.token}`,
+                    'Content-Type': 'application/json'
+                },
+                data: locations
+            });
+            return response.data;
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
     }
 
     /**
@@ -25,15 +32,20 @@ export default function RouteGateway() {
      * 
      * @param {{start_id: number, end_id: number}} locations  
      */
-    async function getWalking(locations) {
-        const response = fetch(`${url}/find_walk_route`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(locations)
-        });
-        return response.json();
+    async getWalking(locations) {
+        try {
+            const response = axios.get('route/find_walk_route', {
+                headers: {
+                    'Authorization': `Bearer ${this.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: locations
+            });
+            return response.data;
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
     }
 
     /**
@@ -41,15 +53,20 @@ export default function RouteGateway() {
      * 
      * @param {{start_id: number, end_id: number}} locations
      */
-    async function getBus(locations) {
-        const response = fetch(`${url}/find_bus_route`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(locations)
-        });
-        return response.json();
+    async getBus(locations) {
+        try {
+            const response = await axios.get('route/find_bus_route', {
+                headers: {
+                    'Authorization': `Bearer ${this.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: locations
+            });
+            return response.data;
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
     }
 
     /**
@@ -57,15 +74,8 @@ export default function RouteGateway() {
      * 
      * @param {string} userToken 
      */
-     function setToken(userToken) {
-        token = userToken;
+    setToken(userToken) {
+        this.token = userToken;
     }
-    
-    return Object.freeze({
-        getRoutes,
-        getWalking,
-        getBus,
-        setToken
-    });
 
 }

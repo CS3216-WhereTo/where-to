@@ -1,14 +1,13 @@
-import { Redirect, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 
-import { IonApp, IonRouterOutlet, IonTabBar, IonTabs, IonTabButton, IonIcon } from "@ionic/react";
+import { IonApp, IonRouterOutlet, IonTabBar, IonTabs, IonTabButton, IonIcon, IonText } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 
 import { mapOutline, starOutline, settingsOutline } from "ionicons/icons";
 
 import Login from "./pages/login/Login";
-// import MapView from "./pages/map/MapView";
-import Home from "./pages/home/Home";
 import SearchHome from "./pages/search/SearchHome";
+import SearchResult from "./pages/search/SearchResult";
 import Favourites from "./pages/favourites/Favourites";
 import Settings from "./pages/settings/Settings";
 
@@ -32,6 +31,11 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 
+import ReactGA from 'react-ga';
+
+// Test 
+// ReactGA.initialize('ID', [options]);
+
 const App = (props) => (
   <IonApp>
     <IonReactRouter>
@@ -39,6 +43,10 @@ const App = (props) => (
         <IonRouterOutlet>
           <Route path="/search">
             <SearchHome />
+          </Route>
+
+          <Route path="/search-result">
+            <SearchResult />
           </Route>
 
           <Route exact path="/favourites">
@@ -58,12 +66,15 @@ const App = (props) => (
         <IonTabBar slot="bottom">
           <IonTabButton tab="search" href="/search">
             <IonIcon icon={mapOutline} />
+            <IonText>Map</IonText>
           </IonTabButton>
           <IonTabButton tab="favourites" href="/favourites">
             <IonIcon icon={starOutline} />
+            <IonText>Favourites</IonText>
           </IonTabButton>
           <IonTabButton tab="settings" href="/settings">
             <IonIcon icon={settingsOutline} />
+            <IonText>Settings</IonText>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>
