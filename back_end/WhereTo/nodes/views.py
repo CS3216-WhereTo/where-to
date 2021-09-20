@@ -1,11 +1,24 @@
 from django.http.response import JsonResponse
-from django.views.decorators.http import require_GET
+from django.views.decorators.http import require_GET, require_POST
+from google import auth
+from utils.decorators import authenticated, extract_body
+from . import controller
 
 # Create your views here.
 @require_GET
-def list_nodes(request):
-    return JsonResponse({}, content_type='application/json')
+@authenticated
+def list_nodes(request, user):
+    favourites, non_favourites = controller.list_nodes(user)
+    result = {
+        "favourites": favourites,
+        "non_favourites": non_favourites
+    }
+    return JsonResponse(result, content_type='application/json')   
 
-@require_GET
-def find_nearest_node(request):
-    return JsonResponse({}, content_type='application/json')
+@require_POST
+@extract_body
+@authenticated
+def find_nearest_node(request, body):
+    coordinates = body["coordinates"]
+    result = controller.find_nearest_node(coordinates)
+    return JsonResponse(result, content_type='application/json')
