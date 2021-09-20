@@ -7,11 +7,14 @@ import { arrowForward } from "ionicons/icons";
 
 import Logo from "../../assets/logo.svg";
 import SplashAnimation from "../../assets/splash-animation.gif";
+import { trackPageView, trackGoogleSignInEvent, trackGuestSignInEvent } from "../../utils/ReactGa";
 
 const Login = (props) => {
-const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
+    trackPageView(window.location.pathname);
+
     setTimeout(() => {
       setShowSplash(false);
     }, 1500);
@@ -51,7 +54,7 @@ const [showSplash, setShowSplash] = useState(true);
             </div>
 
             <div className="sns-guest-login">
-              <IonButton shape="round" fill="outline" className="sns-login__button" routerLink="/search">
+              <IonButton shape="round" fill="outline" className="sns-login__button" onClick={trackGuestSignInEvent} routerLink="/search">
                 <IonText>Continue as a guest</IonText>
                 <IonIcon slot="end" icon={arrowForward} size="large"></IonIcon>
               </IonButton>
