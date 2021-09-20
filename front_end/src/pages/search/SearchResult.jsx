@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
 
-import Draggable from "react-draggable";
+import { IonPage, IonChip, IonIcon, IonLabel, IonButton } from "@ionic/react";
+import { ellipseOutline, locationSharp, arrowBack, bus, walk } from "ionicons/icons";
 
-import { IonPage, IonChip, IonIcon, IonLabel, IonList, IonItem } from "@ionic/react";
-import { ellipseOutline, locationSharp, arrowBack, bus, walk, chevronDownOutline, chevronUpOutline } from "ionicons/icons";
+import Sheet from 'react-modal-sheet'
 
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 
+import Modal from '../../components/modal/Modal'
 import "./SearchResult.css";
+
 mapboxgl.accessToken = "pk.eyJ1IjoidGVvanVueGlvbmciLCJhIjoiY2t0aTl0OGp6MHp3bjJ1cGlsdHhzODAwdSJ9.rujr8ESzMSG6u7pFL6OQ6A";
 
 // Receive in start and end location
@@ -87,29 +89,11 @@ const SearchResult = ({ start, end }) => {
   const [isDragging, setIsDragging] = useState(true);
   const [showDropDown, setShowDropDown] = useState(false);
 
-  const toggleDropDown = () => {
-    console.log(showDropDown);
+  const toggleDropDown = (event) => {
     setShowDropDown(!showDropDown);
   };
 
-  const onDrop = () => {};
-
-  const onDrag = () => {
-    setIsDragging(true);
-  };
-
-  const onStop = () => {
-    const dragging = isDragging;
-    setIsDragging(false);
-    if (dragging) {
-      onDrop();
-    } else {
-      toggleDropDown();
-    }
-  };
-
-  // To get rid of warning
-  const nodeRef = React.useRef(null);
+  const [isOpen, setOpen] = useState(false);
 
   return (
     <IonPage className="page search-result-page">
@@ -117,19 +101,19 @@ const SearchResult = ({ start, end }) => {
         <div className="search">
           <div className="search-back">
             <Link to={{ pathname: "search", state: { destination: { label: "NUS", value: "nus" } } }}>
-              <IonIcon icon={arrowBack}></IonIcon>
+              <IonIcon icon={arrowBack} />
             </Link>
           </div>
           <div className="search-container">
             <div className="search-box">
               <div className="start-search">
-                <IonIcon slot="start" icon={ellipseOutline} size="medium"></IonIcon>
+                <IonIcon slot="start" icon={ellipseOutline} size="medium" />
                 <div className="search__box">
                   <p className="search__text">Some Start Location</p>
                 </div>
               </div>
               <div className="end-search">
-                <IonIcon slot="start" icon={locationSharp} size="medium"></IonIcon>
+                <IonIcon slot="start" icon={locationSharp} size="medium" />
                 <div className="search__box">
                   <p className="search__text">Some End Location</p>
                 </div>
@@ -149,71 +133,19 @@ const SearchResult = ({ start, end }) => {
         </div>
       </div>
 
-      <div className="draggable-parent">
-        <Draggable onDrag={onDrag} onStop={onStop} axis="y" nodeRef={nodeRef} bounds="parent">
-          <div ref={nodeRef} className="modal">
-            <hr className="modal__line" />
-            <IonList lines="full" className="modal__content">
-              <IonItem>
-                <p className="modal__header">15 mins (1.5 km)</p>
-              </IonItem>
-              <div className="modal__list--scroll">
-                {dirType === "bus"
-                  ? busDir.map((elem, i) => {
-                      if (elem.type === "bus") {
-                        return (
-                          <div key={i}>
-                            <IonItem className="directions" lines={showDropDown ? "none" : "full"}>
-                              <IonIcon className="directions__icon" icon={bus} />
-                              <div className="directions__bus-text">
-                                <p className="directions__text">Take bus to {elem.location}</p>
-                                <div className="directions__dropdown">
-                                  <p className="directions__dropdown-text">Ride XXX stops</p>
-                                  <IonIcon className="directions__dropdown-icon" icon={showDropDown ? chevronUpOutline : chevronDownOutline} />
-                                </div>
-                              </div>
-                              <IonLabel className="directions__time" slot="end">
-                                {parseInt(elem.duration)} min
-                              </IonLabel>
-                            </IonItem>
-                            <IonItem className={"dropdown " + (showDropDown ? "dropdown--visible" : "dropdown--hidden")}>
-                              <div className="dropdown__list">
-                                <p className="dropdown__text">Test</p>
-                                <p className="dropdown__text">Test</p>
-                                <p className="dropdown__text">Test</p>
-                                <p className="dropdown__text">Test</p>
-                              </div>
-                            </IonItem>
-                          </div>
-                        );
-                      } else {
-                        return (
-                          <IonItem className="directions" key={i}>
-                            <IonIcon className="directions__icon" icon={walk}></IonIcon>
-                            <p className="directions__text">Walk to {elem.location}</p>
-                            <IonLabel className="directions__time" slot="end">
-                              {parseInt(elem.duration)} min
-                            </IonLabel>
-                          </IonItem>
-                        );
-                      }
-                    })
-                  : walkDir.map((elem, i) => {
-                      return (
-                        <IonItem key={i}>
-                          <IonIcon className="directions__icon" icon={walk}></IonIcon>
-                          <p className="directions__text">Walk to {elem.location}</p>
-                          <IonLabel className="directions__time" slot="end">
-                            {parseInt(elem.duration)} min
-                          </IonLabel>
-                        </IonItem>
-                      );
-                    })}
-              </div>
-            </IonList>
-          </div>
-        </Draggable>
-      </div>
+        <Sheet 
+          isOpen={isOpen} 
+          onClose={() => setOpen(false)}>
+        <Sheet.Container>
+          <Sheet.Header />
+          <Sheet.Content>
+            <Modal dirType={dirType} busDir={busDir} walkDir={walkDir} />
+          </Sheet.Content>
+          </Sheet.Container>
+        <Sheet.Backdrop />
+      </Sheet>
+
+      <IonButton className="directions__button" onClick={() => setOpen(true)}>Directions (1.5km, 15 mins)</IonButton>
 
       <div ref={mapContainer} className="map map--fixed map--fullscreen" />
     </IonPage>
