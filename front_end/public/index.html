@@ -54,7 +54,7 @@
   <body>
     <script>
       function handleCredentialResponse(response) {
-        console.log("Encoded JWT ID token: " + response.credential);
+        localStorage.setItem("jwtIdToken", response.credential);
       }
 
       window.onload = function () {

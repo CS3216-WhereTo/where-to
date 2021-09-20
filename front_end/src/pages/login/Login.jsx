@@ -5,13 +5,11 @@ import "./Login.css";
 import { logoGoogle } from "ionicons/icons";
 import { arrowForward } from "ionicons/icons";
 
-import Logo from "../../assets/logo.png";
+import Logo from "../../assets/logo.svg";
 import SplashAnimation from "../../assets/splash-animation.gif";
 
-const google = window.google;
-console.log(window.google);
 const Login = (props) => {
-  const [showSplash, setShowSplash] = useState(true);
+const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
     setTimeout(() => {
