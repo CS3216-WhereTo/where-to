@@ -1,0 +1,107 @@
+A1:
+KRBT
+LT13
+AS5
+COM2
+BIZ2
+Opp TCOMS
+PGPT
+KR MRT
+LT27
+UHall
+Opp UHC
+YIH
+CLB
+KRBT
+
+Missing data:
+KRBT -> LT13
+CLB -> KRBT
+
+A2:
+KRBT
+IT
+Opp YIH
+Museum
+UHC
+Opp UHall
+S17
+Opp KR MRT
+PGPR
+TCOMS
+Opp HSSML
+Opp NUSS
+COM2
+Ventus
+KRBT
+
+Missing Data:
+Ventus -> KRBT
+
+D1:
+Opp HSSML
+Opp NUSS
+COM2
+Ventus
+IT
+Opp YIH
+Museum
+UTown
+YIH
+CLB
+LT13
+AS5
+COM2
+BIZ2
+
+D2:
+PGPT
+KR MRT
+LT27
+UHall
+Opp UHC
+Museum
+UTown
+UHC
+Opp UHall
+S17
+Opp KR MRT
+PGPR
+
+K:
+PGPT
+KR MRT
+LT27
+UHall
+Opp UHC
+YIH
+CLB
+Opp SDE3
+Jap Pri Sch
+Kent Vale
+Museum
+UHC
+Opp UHall
+S17
+Opp KR MRT
+PGPR
+
+Missing Data:
+CLB -> Opp SDE3
+Opp SDE3 -> Jap Pri Sch
+
+E: 
+UTown
+RH
+Kent Vale
+EA
+SDE3
+IT
+Opp YIH
+UTown
+
+Missing Data:
+RH -> Kent Vale
+Kent Vale -> EA
+EA -> SDE3
+SDE3 -> IT

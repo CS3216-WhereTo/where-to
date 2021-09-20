@@ -1,13 +1,12 @@
 import { IonPage, IonIcon, IonButton } from "@ionic/react";
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import "./SearchHome.css";
 import { ellipseOutline, swapVertical } from "ionicons/icons";
 import { locationSharp } from "ionicons/icons";
-import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
+import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import { geolocated } from "react-geolocated";
-import { BrowserRouter as Router, Switch, Route, Link, useLocation } from "react-router-dom";
-import polyline from "@mapbox/polyline";
+import { useLocation } from "react-router-dom";
 
 import CustomSelect from "../../components/custom-select/CustomSelect";
 
@@ -67,6 +66,11 @@ const SearchHome = (props) => {
         showCompass: false,
       })
     );
+
+    // Use a splash screen to hide the resize
+    map.current.once("load", () => {
+      map.current.resize();
+    });
   });
 
   useEffect(() => {
@@ -158,8 +162,8 @@ const SearchHome = (props) => {
                       "line-cap": "round",
                     },
                     paint: {
-                      "line-color": "#888",
-                      "line-width": 8,
+                      "line-color": "#3880FF",
+                      "line-width": 4,
                     },
                   });
 

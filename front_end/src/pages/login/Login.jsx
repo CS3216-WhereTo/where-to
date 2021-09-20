@@ -1,8 +1,6 @@
 import { IonPage, IonImg, IonText, IonButton, IonGrid, IonRow, IonCol, IonIcon } from "@ionic/react";
 import { withRouter } from "react-router-dom";
 import "./Login.css";
-import { logoApple } from "ionicons/icons";
-import { logoFacebook } from "ionicons/icons";
 import { logoGoogle } from "ionicons/icons";
 import { arrowForward } from "ionicons/icons";
 
@@ -14,7 +12,7 @@ const Login = (props) => {
       <IonGrid className="login">
         <IonRow className="login__row login__row--top">
           <div className="app-info">
-            <IonImg src={Logo} className="app-info__img" />
+            <IonImg src={Logo} className="app-info__img" alt='logo' />
             <IonText className="app-info__text">
               <h2>
                 <b>Travel around NUS</b>
@@ -31,11 +29,11 @@ const Login = (props) => {
 
               <IonGrid className="sns-login__grid">
                 <IonRow className="sns-login__row">
-                  <IonCol className="sns-login__col">
+                  {/* <IonCol className="sns-login__col">
                     <IonButton shape="round" fill="solid" color="dark" className="sns-login__button">
                       <IonIcon slot="icon-only" icon={logoFacebook} size="large"></IonIcon>
                     </IonButton>
-                  </IonCol>
+                  </IonCol> */}
 
                   <IonCol className="sns-login__col">
                     <IonButton shape="round" fill="solid" color="dark" className="sns-login__button">
@@ -43,11 +41,11 @@ const Login = (props) => {
                     </IonButton>
                   </IonCol>
 
-                  <IonCol className="sns-login__col">
+                  {/* <IonCol className="sns-login__col">
                     <IonButton shape="round" fill="solid" color="dark" className="sns-login__button">
                       <IonIcon slot="icon-only" icon={logoApple} size="large"></IonIcon>
                     </IonButton>
-                  </IonCol>
+                  </IonCol> */}
                 </IonRow>
               </IonGrid>
             </div>

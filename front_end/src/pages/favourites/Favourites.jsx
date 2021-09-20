@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import { IonPage, IonContent, 
   IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";

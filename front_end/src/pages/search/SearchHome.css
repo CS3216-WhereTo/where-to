@@ -57,3 +57,7 @@
   top: auto !important;
   bottom: 40px;
 }
+.mapboxgl-canvas {
+  height: 100% !important;
+  width: 100% !important;
+}
