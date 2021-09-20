@@ -61,7 +61,7 @@ const SearchResult = ({ start, end }) => {
     });
   });
 
-  const tempWalk = [
+  const walkDir = [
     { location: "XXX", type: "walk", duration: 10 },
     { location: "XXX", type: "walk", duration: 10 },
     { location: "XXX", type: "walk", duration: 10 },
@@ -70,7 +70,7 @@ const SearchResult = ({ start, end }) => {
     { location: "XXX", type: "walk", duration: 10 },
   ];
 
-  const tempBus = [
+  const busDir = [
     { location: "XXX", type: "walk", duration: 10 },
     { location: "XXX", type: "bus", duration: 10 },
     { location: "XXX", type: "walk", duration: 10 },
@@ -82,16 +82,7 @@ const SearchResult = ({ start, end }) => {
     { location: "XXX", type: "walk", duration: 10 },
   ];
 
-  const [walkDir, setWalkDir] = useState(tempWalk);
-  const [busDir, setBusDir] = useState(tempBus);
   const [dirType, setDirType] = useState("bus");
-
-  const [isDragging, setIsDragging] = useState(true);
-  const [showDropDown, setShowDropDown] = useState(false);
-
-  const toggleDropDown = (event) => {
-    setShowDropDown(!showDropDown);
-  };
 
   const [isOpen, setOpen] = useState(false);
 

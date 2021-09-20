@@ -48,7 +48,9 @@ const Favourites = (props) => {
 
   return (
     <IonPage className="page favourites-page">
-      <p className="page-header">Favourites</p>
+      <div className="page-header">
+        <p className="page-header__text">Favourites</p>
+      </div>
       
        {/* -- Segment -- */}
        <IonSegment className="segment" value={segment} onIonChange={e => handleSegmentChange(e)}>

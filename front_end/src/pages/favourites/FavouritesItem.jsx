@@ -1,5 +1,5 @@
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
-import { IonItem, IonIcon, IonButton } from "@ionic/react";
+import { Link } from "react-router-dom";
+import { IonItem, IonIcon } from "@ionic/react";
 
 import { star, starOutline, mapOutline } from "ionicons/icons";
 
@@ -10,15 +10,16 @@ const FavouritesItem = ({ listItem, onClick }) => {
   return (
     <IonItem className="favourites-item">
       <p className="favourites-item__text">{location}</p>
-      <div className="favourites-item__directions">
+      <div className="favourites-item__buttons">
         {/* Passes Node data to SearchHome */}
-        <Link to={{ pathname: "search", state: { destination: { label: "NUS", value: "nus" } } }}>
-            <IonIcon icon={mapOutline}></IonIcon>
+        <Link className="favourites-item__link" to={{ pathname: "search", state: { destination: { label: "NUS", value: "nus" } } }}>
+            <IonIcon className="favourites-item__icon" icon={mapOutline}></IonIcon>
         </Link>
+        <IonIcon className="favourites-item__icon" 
+          slot="end" onClick={onClick} 
+          icon={isFav ? star : starOutline} />
       </div>
-      <IonIcon className="favourites-item__star" 
-        slot="end" onClick={onClick} 
-        icon={isFav ? star : starOutline} />
+      
     </IonItem>
   );
 };

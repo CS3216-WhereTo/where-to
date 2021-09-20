@@ -1,36 +1,38 @@
 .speed {
-    display: flex;
-    flex-direction: column;
-    padding: 2em;
+  display: flex;
+  flex-direction: column;
+  padding-left: 25px;
 }
 
 .speed__text {
-    padding: 2em 0em;
+  margin-left: 5px;
+  margin-bottom: 15px;
 }
 
-.speed__select {
-    display: flex;
-    flex-direction: row;
+.speed__options {
+  display: flex;
+  flex-wrap: wrap;
 }
 
-.speed__button {
-    margin-left: 1.5em;
+.speed__option {
+  margin: 5px;
+  padding: 18px;
+}
+
+.speed__option--selected {
+  background-color: #002f62e0;
+  color: #f6f6f6;
+}
+
+.speed__option--unselected {
+  background-color: #f6f6f6;
 }
 
 .sign-out {
-     /* unsure how to add space w/o hardcoding */
-    margin-top: 12em;
-    text-align: center;
+  margin-top: 25em;
+  text-align: center;
 }
 
-.sign-in {
-    position: absolute;
-    text-align: center;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.sign-in__button {
-    margin-top: 1em;
+.sign-out__button {
+  color: #002f62e0;
 }

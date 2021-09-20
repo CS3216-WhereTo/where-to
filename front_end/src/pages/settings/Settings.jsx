@@ -1,87 +1,72 @@
 import { useState } from 'react';
-import Select from "react-select";
 
-import { IonPage, IonHeader, IonToolbar, IonTitle, 
-  IonContent, IonLabel, IonButton } from "@ionic/react";
+import { IonPage, IonContent, IonLabel, IonButton, IonChip } from "@ionic/react";
 
+import SignIn from '../../components/sign-in/SignIn';
 import './Settings.css';
 
 const Settings = (props) => {
   const isSignedIn = true;
-  const [speed, setSpeed] = useState(null);
 
   const options = [
-    { label: "Very Slow (0.8 m/s)", value: "vs" },
-    { label: "Slow (1.1 m/s)", value: "s" },
-    { label: "Average (1.4 m/s)", value: "a" },
-    { label: "Fast (1.6 m/s)", value: "f" },
-    { label: "Very Fast (1.9 m/s)", value: "vf" },
+    "Very Slow (0.8 m/s)", 
+    "Slow (1.1 m/s)", 
+    "Average (1.4 m/s)", 
+    "Fast (1.6 m/s)", 
+    "Very Fast (1.9 m/s)"
   ]
+
+  const [selectedSpeed, setSelectedSpeed] = useState(2);
+
+  const selectSpeed = (i) => {
+    // Trigger api call to set new speed
+    setSelectedSpeed(i);
+  }
   
-  if (isSignedIn) {
+  if (!isSignedIn) {
     return (
       <IonPage className="page settings-page">
-        <IonHeader className="settings-header">
-          <IonToolbar>
-            <IonTitle>Settings</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        
+        <div className="page-header">
+          <p className="page-header__text">Settings</p>
+        </div>
+
         <IonContent>
-          <div className="speed">
-            <IonLabel className="speed__text">Walking Speed</IonLabel>
-            <div className="speed__select">
-              <Select
-                  value={speed}
-                  onChange={setSpeed}
-                  options={options}
-                  placeholder="Select a walking speed"
-                  styles={{
-                    container: (provided, state) => ({
-                      ...provided,
-                      display: "flex",
-                      flex: 1,
-                    }),
-                    control: (provided, state) => ({
-                      ...provided,
-                      display: "flex",
-                      flex: 1,
-                    }),
-                  }}
-                />
-              <IonButton className="speed__button" shape="round">Recalibrate</IonButton>
-            </div>
-          </div>
-          <div className="sign-out">
-            <IonButton className="sign-out__button" shape="round" href="./">Sign Out</IonButton>
-          </div>
-        </IonContent>
-      </IonPage>
-    );
-  } else {
-    return (
-      <IonPage className="page settings-page">
-          <IonHeader className="settings-header">
-            <IonToolbar>
-              <IonTitle>Settings</IonTitle>
-            </IonToolbar>
-          </IonHeader>
-
-          <IonContent>
-            <div className="sign-in">
-                <div className="sign-in__text">
-                      <IonLabel>You are not signed in.</IonLabel>
-                </div>
-
-                <div className="sign-in__button">
-                    <IonButton shape="round" href="./">Sign In</IonButton>
-                </div>
-            </div>
+          <SignIn />
         </IonContent>
       </IonPage>
     );
   }
-
+  return (
+    <IonPage className="page settings-page">
+      <div className="page-header">
+        <p className="page-header__text">Settings</p>
+      </div>
+      
+      <IonContent>
+        <div className="speed">
+          <p className="speed__text">Walking Speed</p>
+          <div className="speed__options">
+          {
+            options.map((speed, i) => {
+              return (
+                <IonChip 
+                  key={i}
+                  onClick={() => selectSpeed(i)}
+                  className={"speed__option " + (i === selectedSpeed ? "speed__option--selected" : "speed__option--unselected")}
+                >
+                  <IonLabel>{speed}</IonLabel>
+                </IonChip>
+              );
+            })
+          }
+          </div>
+        </div>
+        <div className="sign-out">
+          <IonButton className="sign-out__button" shape="round" href="./">Sign Out</IonButton>
+        </div>
+      </IonContent>
+    </IonPage>
+  );
 };
 
 export default Settings;

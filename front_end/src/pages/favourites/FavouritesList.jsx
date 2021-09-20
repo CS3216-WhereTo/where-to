@@ -4,7 +4,7 @@ import FavouritesItem from './FavouritesItem';
 
 const FavouritesList = ({currentList, onClick}) => {
     return (
-        <IonList>
+        <IonList lines="full">
           {
             currentList.map((elem, i) => {
                 return (
