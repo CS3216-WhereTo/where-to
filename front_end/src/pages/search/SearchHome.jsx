@@ -67,6 +67,11 @@ const SearchHome = (props) => {
         showCompass: false,
       })
     );
+
+    // Use a splash screen to hide the resize
+    map.current.once("load", () => {
+      map.current.resize();
+    });
   });
 
   useEffect(() => {
