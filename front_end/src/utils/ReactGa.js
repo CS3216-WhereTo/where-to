@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import ReactGA from "react-ga";
 
 export const initialiseGoogleAnalytics = () => {
-  console.log(ReactGA.initialize("G-X0ZRMN67T6"), [{ siteSpeedSampleRate: 100, debug: true }]);
+  console.log(ReactGA.initialize("UA-207976302-2"), [{ siteSpeedSampleRate: 100, debug: true }]);
 };
 
 export const trackPageView = (pathname) => {
