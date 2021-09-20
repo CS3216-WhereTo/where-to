@@ -33,6 +33,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 import ReactGA from 'react-ga';
 
+// Test 
 // ReactGA.initialize('ID', [options]);
 
 const App = (props) => (
