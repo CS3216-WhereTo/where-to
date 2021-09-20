@@ -1,4 +1,4 @@
-import { BrowserRouter as Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { IonLabel, IonItem, IonIcon, IonButton } from "@ionic/react";
 import { star, starOutline, mapOutline } from "ionicons/icons";
 import {
@@ -6,6 +6,8 @@ import {
   trackFavouritesFavouriteEvent,
   trackRecentsFavouriteEvent,
   trackRecentsUnfavouriteEvent,
+  trackFavouritesMapButtonEvent,
+  trackRecentsMapButtonEvent,
 } from "../../utils/ReactGa";
 
 const FavouritesItem = ({ listItem, isFavouritesTab, toggleFavourite }) => {
@@ -29,10 +31,17 @@ const FavouritesItem = ({ listItem, isFavouritesTab, toggleFavourite }) => {
     toggleFavourite();
   };
 
+  const handleRedirectToMap = () => {
+    if (isFavouritesTab) {
+      trackFavouritesMapButtonEvent();
+    } else {
+      trackRecentsMapButtonEvent();
+    }
+  };
   return (
     <IonItem>
       <IonLabel>{location}</IonLabel>
-      <div className="directions-button">
+      <div className="directions-button" onClick={handleRedirectToMap}>
         {/* Passes Node data to SearchHome */}
         <Link to={{ pathname: "search", state: { destination: { label: "NUS", value: "nus" } } }}>
           <IonButton class="directions-button" slot="end">
