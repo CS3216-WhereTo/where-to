@@ -34,7 +34,9 @@ def find_nearest_node(coordinates):
     min_dist_node_id = None
     min_dist = float("inf")
     for node_id in node_graph:
-        if get_distance(coordinates, node_graph[node_id]["coordinates"] > min_dist):
+        distance = get_distance(coordinates, node_graph[node_id]["coordinates"])
+        if distance < min_dist:
+            min_dist = distance
             min_dist_node_id = node_id
     
     return {"node_id": min_dist_node_id, "name": node_graph[min_dist_node_id]["name"], "coordinates": node_graph[min_dist_node_id]["coordinates"]}
