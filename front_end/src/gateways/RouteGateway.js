@@ -1,18 +1,19 @@
-export default function RouteGateway() {
+export default class RouteGateway {
 
-    const url = '{insert url}/route'
-
-    let token = '';
+    constructor() {
+        this.url = '{insert URL}/route';
+        this.token = '';
+    }
 
     /**
      * Sends a GET request for both walking and bus routes.
      * 
      * @param {{start_id: number, end_id: number}} locations 
      */
-    async function getRoutes(locations) {
-        const response = await fetch(`${url}/find_routes`, {
+    async getRoutes(locations) {
+        const response = await fetch(`${this.url}/find_routes`, {
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${this.token}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(locations)
@@ -25,10 +26,10 @@ export default function RouteGateway() {
      * 
      * @param {{start_id: number, end_id: number}} locations  
      */
-    async function getWalking(locations) {
-        const response = fetch(`${url}/find_walk_route`, {
+    async getWalking(locations) {
+        const response = fetch(`${this.url}/find_walk_route`, {
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${this.token}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(locations)
@@ -41,10 +42,10 @@ export default function RouteGateway() {
      * 
      * @param {{start_id: number, end_id: number}} locations
      */
-    async function getBus(locations) {
-        const response = fetch(`${url}/find_bus_route`, {
+    async getBus(locations) {
+        const response = fetch(`${this.url}/find_bus_route`, {
             headers: {
-                'Authorization': `Bearer ${token}`,
+                'Authorization': `Bearer ${this.token}`,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(locations)
@@ -57,15 +58,8 @@ export default function RouteGateway() {
      * 
      * @param {string} userToken 
      */
-     function setToken(userToken) {
+    setToken(userToken) {
         token = userToken;
     }
-    
-    return Object.freeze({
-        getRoutes,
-        getWalking,
-        getBus,
-        setToken
-    });
 
 }
