@@ -185,11 +185,11 @@ const SearchHome = (props) => {
 };
 
 // Wrapper for Geolocation API, related attributes can be accessed via props
-export default geolocated({
-  positionOptions: {
-    enableHighAccuracy: false,
-  },
-  userDecisionTimeout: 5000,
-})(SearchHome);
+// export default geolocated({
+//   positionOptions: {
+//     enableHighAccuracy: false,
+//   },
+//   userDecisionTimeout: 5000,
+// })(SearchHome);
 
-// export default SearchHome;
+export default SearchHome;

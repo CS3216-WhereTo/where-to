@@ -6,6 +6,7 @@ export const initialiseGoogleAnalytics = () => {
 };
 
 export const trackPageView = (pathname) => {
+    console.log(pathname)
   console.log(ReactGA.pageview(pathname));
 };
 
