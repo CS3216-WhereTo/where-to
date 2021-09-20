@@ -12,7 +12,7 @@
 
 ## Website
 
-Include link to homepage here
+Try out our application [here](https://whereto.d2n3f9x63w4knl.amplifyapp.com/)!
 
 ## Milestones (TODO)
 
