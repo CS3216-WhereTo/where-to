@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { IonList } from "@ionic/react";
 
 import FavouritesItem from './FavouritesItem';

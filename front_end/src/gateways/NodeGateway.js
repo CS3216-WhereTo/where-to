@@ -1,8 +1,9 @@
-export default class NodesGateway {
+const axios = require('axios').default;
+
+export default class NodeGateway {
 
     constructor() {
         this.token = '';
-        this.url = '{insert URL}/node';
     }
 
     /**
@@ -10,12 +11,13 @@ export default class NodesGateway {
      */
     async get() {
         try {
-            const response = await fetch(`${this.url}/list_nodes`, {
+            const response = await axios.get('node/list_nodes', {
                 headers: { 'Authorization': `Bearer ${this.token}` }
             });
-            return response.json();
-        } catch (error) {
-            console.log(error);
+            return response.data();
+        } catch (e) {
+            console.error(e);
+            throw e;
         }
     }
 
@@ -26,16 +28,14 @@ export default class NodesGateway {
      */
     async findNearest(coords) {
         try {
-            const response = await fetch(`${this.url}/find_nearest_node`, {
-                headers: { 
-                    'Authorization': `Bearer ${this.token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(coords)
+            const response = await axios.get('node/find_nearest_node', {
+                headers: { 'Content-Type': 'application/json' },
+                data: coords
             });
             return response.json();
         } catch (error) {
             console.log(error);
+            throw e;
         }
     }
 

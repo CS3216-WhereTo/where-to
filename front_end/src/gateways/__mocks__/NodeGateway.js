@@ -20,7 +20,7 @@ export const infoTech = {
     type: "bus_stop"
 }
 
-export default class NodesGateway {
+export default class NodeGateway {
 
     async get() {
         return {

@@ -1,7 +1,8 @@
+const axios = require('axios').default;
+
 export default class RouteGateway {
 
     constructor() {
-        this.url = '{insert URL}/route';
         this.token = '';
     }
 
@@ -11,14 +12,19 @@ export default class RouteGateway {
      * @param {{start_id: number, end_id: number}} locations 
      */
     async getRoutes(locations) {
-        const response = await fetch(`${this.url}/find_routes`, {
-            headers: {
-                'Authorization': `Bearer ${this.token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(locations)
-        });
-        return response.json();
+        try {
+            const response = await axios.get('route/find_routes', {
+                headers: {
+                    'Authorization': `Bearer ${this.token}`,
+                    'Content-Type': 'application/json'
+                },
+                data: locations
+            });
+            return response.data;
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
     }
 
     /**
@@ -27,14 +33,19 @@ export default class RouteGateway {
      * @param {{start_id: number, end_id: number}} locations  
      */
     async getWalking(locations) {
-        const response = fetch(`${this.url}/find_walk_route`, {
-            headers: {
-                'Authorization': `Bearer ${this.token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(locations)
-        });
-        return response.json();
+        try {
+            const response = axios.get('route/find_walk_route', {
+                headers: {
+                    'Authorization': `Bearer ${this.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: locations
+            });
+            return response.data;
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
     }
 
     /**
@@ -43,14 +54,19 @@ export default class RouteGateway {
      * @param {{start_id: number, end_id: number}} locations
      */
     async getBus(locations) {
-        const response = fetch(`${this.url}/find_bus_route`, {
-            headers: {
-                'Authorization': `Bearer ${this.token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(locations)
-        });
-        return response.json();
+        try {
+            const response = await axios.get('route/find_bus_route', {
+                headers: {
+                    'Authorization': `Bearer ${this.token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: locations
+            });
+            return response.data;
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
     }
 
     /**
