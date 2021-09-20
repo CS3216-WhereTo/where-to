@@ -1,10 +1,9 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
+import { BrowserRouter as Link } from "react-router-dom";
 import { IonLabel, IonItem, IonIcon, IonButton } from "@ionic/react";
 import { star, starOutline, mapOutline } from "ionicons/icons";
 
 const FavouritesItem = ({ listItem, onClick }) => {
-  const { nodeId, location, isFav } = listItem;
+  const { location, isFav } = listItem;
   return (
     <IonItem>
       <IonLabel>{location}</IonLabel>

@@ -1,4 +1,4 @@
-import { Redirect, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 
 import { IonApp, IonRouterOutlet, IonTabBar, IonTabs, IonTabButton, IonIcon, IonText } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
@@ -6,8 +6,6 @@ import { IonReactRouter } from "@ionic/react-router";
 import { mapOutline, starOutline, settingsOutline } from "ionicons/icons";
 
 import Login from "./pages/login/Login";
-// import MapView from "./pages/map/MapView";
-import Home from "./pages/home/Home";
 import SearchHome from "./pages/search/SearchHome";
 import Favourites from "./pages/favourites/Favourites";
 import Settings from "./pages/settings/Settings";

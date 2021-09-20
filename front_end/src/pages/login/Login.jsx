@@ -14,7 +14,7 @@ const Login = (props) => {
       <IonGrid className="login">
         <IonRow className="login__row login__row--top">
           <div className="app-info">
-            <IonImg src={Logo} className="app-info__img" />
+            <IonImg src={Logo} className="app-info__img" alt='logo' />
             <IonText className="app-info__text">
               <h2>
                 <b>Travel around NUS</b>
