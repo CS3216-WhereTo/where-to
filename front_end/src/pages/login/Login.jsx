@@ -45,14 +45,13 @@ const Login = () => {
 
   const guestLoginButton = (
     <IonButton
+      className="sns-login__button"
       shape="round"
       fill="outline"
-      className="sns-login__button"
       onClick={handleGuestLogin}
-      routerLink="/search"
     >
-      <IonText>Continue as a guest</IonText>
-      <IonIcon slot="end" icon={arrowForward} size="large"></IonIcon>
+      <IonText className="sns-login__text">Continue as a guest</IonText>
+      <IonIcon className="sns-login__next" slot="end" icon={arrowForward} size="large"></IonIcon>
     </IonButton>
   );
 
@@ -68,9 +67,9 @@ const Login = () => {
         </div>
 
         <div className="auth-divider">
-          <div className="auth-divider__div" />
+          <div className="auth-divider__line" />
           or
-          <div className="auth-divider__div" />
+          <div className="auth-divider__line" />
         </div>
 
         <div className="sns-guest-login">{guestLoginButton}</div>

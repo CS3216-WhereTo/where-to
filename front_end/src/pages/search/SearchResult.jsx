@@ -89,25 +89,23 @@ const SearchResult = ({ start, end }) => {
   return (
     <IonPage className="page search-result-page">
       <div className="search-header">
-        <div className="search">
-          <div className="search-back">
+        <div className="search-container">
+          <div className="back-button">
             <Link to={{ pathname: "search", state: { destination: { label: "NUS", value: "nus" } } }}>
-              <IonIcon className="search-back__icon" icon={arrowBack} />
+              <IonIcon className="back-button__icon" icon={arrowBack} />
             </Link>
           </div>
-          <div className="search-container">
-            <div className="search-box">
-              <div className="start-search">
-                <IonIcon slot="start" icon={ellipseOutline} size="medium" />
-                <div className="search__box">
-                  <p className="search__text">Some Start Location</p>
-                </div>
+          <div className="search-inner-container">
+            <div className="search-inner-container__content">
+              <IonIcon className="search-inner-container__icon" slot="start" icon={ellipseOutline} size="medium" />
+              <div className="search-box">
+                <p className="search-box__text">Some Start Location</p>
               </div>
-              <div className="end-search">
-                <IonIcon slot="start" icon={locationSharp} size="medium" />
-                <div className="search__box">
-                  <p className="search__text">Some End Location</p>
-                </div>
+            </div>
+            <div className="search-inner-container__content">
+              <IonIcon className="search-inner-container__icon" slot="start" icon={locationSharp} size="medium" />
+              <div className="search-box">
+                <p className="search-box__text">Some End Location</p>
               </div>
             </div>
             <div className="search-options">
@@ -144,9 +142,9 @@ const SearchResult = ({ start, end }) => {
         <Sheet.Backdrop />
       </Sheet>
 
-      <div className="directions__button--center">
+      <div className="directions-button--center">
         <IonButton 
-          className="directions__button" 
+          className="directions-button" 
           shape="round" 
           onClick={() => setOpen(true)}>
             Directions (1.5km, 15 mins)

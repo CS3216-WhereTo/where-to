@@ -1,3 +1,4 @@
+/* ----- SPEED ----- */
 .speed {
   display: flex;
   flex-direction: column;
@@ -29,12 +30,10 @@
   background-color: #f6f6f6;
 }
 
+/* ----- SIGN-OUT ----- */
 .sign-out {
   position: absolute;
   top: 90%;
   left: 50%;
   transform: translate(-50%, -50%);
-}
-
-.sign-out__button {
 }
