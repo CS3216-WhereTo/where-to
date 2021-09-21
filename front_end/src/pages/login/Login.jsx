@@ -14,6 +14,22 @@ const Login = (props) => {
   useEffect(() => {
     trackPageView(window.location.pathname);
 
+    function handleCredentialResponse(response) {
+      localStorage.setItem("jwtIdToken", response.credential);
+    }
+
+    window.onload = function () {
+      window.google.accounts.id.initialize({
+        client_id: "28436641618-2lj6kueceg3fh12or970itop8mhfc636.apps.googleusercontent.com",
+        callback: handleCredentialResponse,
+      });
+      window.google.accounts.id.renderButton(
+        document.getElementById("buttonDiv"),
+        { theme: "filled_blue", size: "large", shape: "pill" } // customization attributes
+      );
+      window.google.accounts.id.prompt(); // also display the One Tap dialog
+    };
+
     setTimeout(() => {
       setShowSplash(false);
     }, 1500);
