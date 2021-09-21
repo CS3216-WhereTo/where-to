@@ -11,7 +11,8 @@ import { useLocation } from "react-router-dom";
 import CustomSelect from "../../components/custom-select/CustomSelect";
 import { trackPageView } from "../../utils/ReactGa";
 
-mapboxgl.accessToken = "pk.eyJ1IjoidGVvanVueGlvbmciLCJhIjoiY2t0aTl0OGp6MHp3bjJ1cGlsdHhzODAwdSJ9.rujr8ESzMSG6u7pFL6OQ6A";
+console.log(process.env.REACT_APP_MAPBOX_KEY);
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
 
 const SearchHome = (props) => {
   const [start, setStart] = useState(null);

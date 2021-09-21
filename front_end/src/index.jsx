@@ -11,7 +11,7 @@ import NodeStore from './stores/NodeStore';
 import RouteStore from './stores/RouteStore';
 
 const axios = require('axios').default;
-axios.defaults.baseURL = '{insert URL here}/api/v1';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 const nodeGateway = new NodeGateway();
 const favGateway = new FavouritesGateway();

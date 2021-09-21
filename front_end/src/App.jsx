@@ -37,24 +37,27 @@ const App = (props) => {
     initialiseGoogleAnalytics();
   }, []);
 
+  const nodes = props.nodes;
+  const routes = props.routes;
+
   return (
     <IonApp>
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route path="/search">
+            <Route path="/search" >
               <SearchHome />
             </Route>
 
-            <Route path="/search-result">
+            <Route path="/search-result" >
               <SearchResult />
             </Route>
 
-            <Route exact path="/favourites">
+            <Route exact path="/favourites" >
               <Favourites />
             </Route>
 
-            <Route exact path="/settings">
+            <Route exact path="/settings" >
               <Settings />
             </Route>
 

@@ -1,12 +1,16 @@
 import { useState } from 'react';
-
+import { useHistory } from 'react-router';
 import { IonPage, IonContent, IonLabel, IonButton, IonChip } from "@ionic/react";
+import { useGoogleLogout } from 'react-google-login';
 
-import SignIn from '../../components/sign-in/SignIn';
+import UnathenticatedUserScreen from '../../components/sign-in/SignIn';
 import './Settings.css';
 
-const Settings = (props) => {
-  const isSignedIn = true;
+const Settings = () => {
+
+  function isSignedIn() {
+    return localStorage.getItem('jwtIdToken') != null
+  };
 
   const options = [
     "Very Slow (0.8 m/s)", 
@@ -16,26 +20,58 @@ const Settings = (props) => {
     "Very Fast (1.9 m/s)"
   ]
 
+  const history = useHistory();
+
+  function handleLogOut() {
+    history.push('/');
+    localStorage.removeItem('jwtIdToken');
+  }
+
+  function handleLogOutFailure() {
+    console.log('Encountered error logging out')
+  }
+
+  const { signOut } = useGoogleLogout({
+    clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+    onLogoutSuccess: handleLogOut,
+    onFailure: handleLogOutFailure
+  });
+
   const [selectedSpeed, setSelectedSpeed] = useState(2);
 
-  const selectSpeed = (i) => {
-    // Trigger api call to set new speed
-    setSelectedSpeed(i);
-  }
-  
-  if (!isSignedIn) {
-    return (
-      <IonPage className="page settings-page">
-        <div className="page-header">
-          <p className="page-header__text">Settings</p>
-        </div>
+  function getSpeedOptions() {
 
-        <IonContent>
-          <SignIn />
-        </IonContent>
-      </IonPage>
-    );
+    function speedOption(speed, key) {
+      const selectionStyle = (key === selectedSpeed)
+        ? "speed__option--selected" 
+        : "speed__option--unselected";
+      return (
+        <IonChip 
+          key={key}
+          onClick={() => setSelectedSpeed(key)}
+          className={"speed__option " + selectionStyle}
+        >
+          <IonLabel>{speed}</IonLabel>
+        </IonChip>
+      );
+    }
+
+    return options.map(speedOption);
   }
+
+  const speedOptions = getSpeedOptions();
+
+  const signOutButton = (
+    <IonButton
+      className="sign-out__button" 
+      shape="round" 
+      onClick={signOut}
+    >
+      Sign Out
+    </IonButton>
+  )
+
+  if (!isSignedIn()) return (<UnathenticatedUserScreen/>);
   return (
     <IonPage className="page settings-page">
       <div className="page-header">
@@ -45,25 +81,9 @@ const Settings = (props) => {
       <IonContent>
         <div className="speed">
           <p className="speed__text">Walking Speed</p>
-          <div className="speed__options">
-          {
-            options.map((speed, i) => {
-              return (
-                <IonChip 
-                  key={i}
-                  onClick={() => selectSpeed(i)}
-                  className={"speed__option " + (i === selectedSpeed ? "speed__option--selected" : "speed__option--unselected")}
-                >
-                  <IonLabel>{speed}</IonLabel>
-                </IonChip>
-              );
-            })
-          }
-          </div>
+          <div className="speed__options">{speedOptions}</div>
         </div>
-        <div className="sign-out">
-          <IonButton className="sign-out__button" shape="round" href="./">Sign Out</IonButton>
-        </div>
+        <div className="sign-out">{signOutButton}</div>
       </IonContent>
     </IonPage>
   );
