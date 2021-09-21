@@ -69,7 +69,7 @@ const Login = (props) => {
             </div>
 
             <div className="sns-guest-login">
-              <IonButton shape="round" fill="outline" className="sns-login__button" onClick={trackGuestSignInEvent} routerLink="/search">
+              <IonButton shape="round" fill="outline" className="sns-login__button" onClick={trackGuestSignInEvent} routerLink="/search-result">
                 <IonText>Continue as a guest</IonText>
                 <IonIcon slot="end" icon={arrowForward} size="large"></IonIcon>
               </IonButton>

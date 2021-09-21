@@ -65,10 +65,10 @@ const App = (props) => {
           </IonRouterOutlet>
 
           <IonTabBar slot="bottom">
-            {/* <IonTabButton tab="search" href="/search">
+            <IonTabButton tab="search" href="/search">
               <IonIcon icon={mapOutline} />
               <IonText>Map</IonText>
-            </IonTabButton> */}
+            </IonTabButton>
             <IonTabButton tab="favourites" href="/favourites">
               <IonIcon icon={starOutline} />
               <IonText>Favourites</IonText>
