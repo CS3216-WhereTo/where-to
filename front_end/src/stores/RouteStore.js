@@ -1,6 +1,10 @@
 import MicroEmitter from 'micro-emitter';
+import RouteGateway from '../gateways/RouteGateway';
 
 export const ERR_MSG = "Start ID should not be the same as the destination ID";
+
+const event = 'UPDATE_ROUTE';
+const emitter = new MicroEmitter();
 
 /**
  * Exposes three functions:
@@ -9,20 +13,17 @@ export const ERR_MSG = "Start ID should not be the same as the destination ID";
  * - `getRoutes()` - retrieve walking and bus routes
  */
 export default class RouteStore {
+
+    #walkRoute;
+    #busRoute;
     
     /**
      * @param {RouteGateway} routeGateway 
      */
     constructor(routeGateway) {
-        this.walkRoute = null;
-        this.busRoute = null;
+        this.#walkRoute = null;
+        this.#busRoute = null;
         this.gateway = routeGateway;
-
-        const eventType = 'UPDATE';
-        const emitter = new MicroEmitter();
-
-        this.getEventType = () => eventType;
-        this.getEmitter = () => emitter;
     }
 
     /**
@@ -34,15 +35,15 @@ export default class RouteStore {
     fetchRoutes(startId, endId) {
         if (startId === endId) throw new Error(ERR_MSG);
         return this.gateway
-            .getRoutes('', { start_id: startId, end_id: endId })
+            .getRoutes({ start_id: startId, end_id: endId })
             .then(res => this._setRoutes(res))
             .catch(console.error);
     }
 
     _setRoutes(result) {
-        this.walkRoute = result.walk;
-        this.busRoute = result.bus;
-        this.getEmitter().emit(this.getEventType());
+        this.#walkRoute = result.walk;
+        this.#busRoute = result.bus;
+        emitter.emit(event);
     }
 
     /**
@@ -51,7 +52,7 @@ export default class RouteStore {
      * @param {Function} handler 
      */
     onChange(handler) {
-        this.getEmitter().on(this.getEventType(), handler);
+        emitter.on(event, handler);
     }
 
     /**
@@ -59,7 +60,15 @@ export default class RouteStore {
      * @returns {{walk: any, bus: any}} routes
      */
     getRoutes() {
-        return { walk: this.walkRoute, bus: this.busRoute };
+        return { walk: this.#walkRoute, bus: this.#busRoute };
+    }
+
+    getWalkRoute() {
+        return (this.#walkRoute == null) ? null : { ...this.#walkRoute };
+    }
+
+    getBusRoute() {
+        return (this.#busRoute == null) ? null :{ ...this.#busRoute };
     }
 
 }

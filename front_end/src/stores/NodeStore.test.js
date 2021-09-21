@@ -16,8 +16,8 @@ beforeEach(async () => {
 
 it('Test contructor', () => {
     const store = new NodeStore(nodeGateway);
-    expect(store.favourites).toHaveLength(0);
-    expect(store.nonFavourites).toHaveLength(0);
+    expect(store.getFavourites()).toHaveLength(0);
+    expect(store.getNonFavourites()).toHaveLength(0);
 });
 
 it('Test fetch', async () => {

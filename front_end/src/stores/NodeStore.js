@@ -4,6 +4,9 @@ export const ERR_FAV = "This node is not in the favourites!";
 export const ERR_UNFAV = "This node is not in the non favourites!";
 export const ERR_INVALID_FAV_ARG = "Invalid input was given!";
 
+const event = 'UPDATE_NODE';
+const emitter = new MicroEmitter();
+
 /**
  * Exposes the following functions:
  * - `fetchNodes()` - fetches all locations from the API
@@ -13,21 +16,18 @@ export const ERR_INVALID_FAV_ARG = "Invalid input was given!";
  */
 export default class NodeStore {
 
+    #nonFavourites;
+    #favourites;
+
     /**
      * @param {NodeGateway} nodeGateway 
      * @param {FavouritesGateway} favGateway
      */
     constructor(nodeGateway, favGateway) {
-        this.nonFavourites = [];
-        this.favourites = [];
+        this.#nonFavourites = [];
+        this.#favourites = [];
         this.nodeGateway = nodeGateway;
         this.favGateway = favGateway;
-
-        const update = 'UPDATE';
-        const emitter = new MicroEmitter();
-
-        this.getEventType = () => update;
-        this.getEmitter = () => emitter;
     }
 
     /**
@@ -41,13 +41,13 @@ export default class NodeStore {
     }
 
     _setNodes(result) {
-        this.favourites.splice(0, this.favourites.length, ...result.favourites);
-        this.nonFavourites.splice(0, this.nonFavourites.length, ...result.non_favourites);
-        this.getEmitter().emit(this.getEventType());
+        this.#favourites.splice(0, this.#favourites.length, ...result.favourites);
+        this.#nonFavourites.splice(0, this.#nonFavourites.length, ...result.non_favourites);
+        emitter.emit(event);
     }
 
     removeFavourite(nodeId) {
-        const idx = this.favourites.findIndex(node => node.node_id === nodeId);
+        const idx = this.#favourites.findIndex(node => node.node_id === nodeId);
         if (idx < 0) throw new Error(ERR_FAV);
 
         return this.favGateway
@@ -55,16 +55,16 @@ export default class NodeStore {
             .then(res => {
                 if (res.error !== 0) throw new Error(ERR_INVALID_FAV_ARG);
 
-                const node = this.favourites[idx];
-                this.favourites.splice(idx, 1);
-                this.nonFavourites.push(node);
-                this.getEmitter().emit(this.getEventType());
+                const node = this.#favourites[idx];
+                this.#favourites.splice(idx, 1);
+                this.#nonFavourites.push(node);
+                emitter.emit(event);
             })
-            .catch(err => alert(err));
+            .catch(console.error);
     }
 
     addFavourite(nodeId) {
-        const idx = this.nonFavourites.findIndex(node => node.node_id === nodeId);
+        const idx = this.#nonFavourites.findIndex(node => node.node_id === nodeId);
         if (idx < 0) throw new Error(ERR_UNFAV);
     
         return this.favGateway
@@ -72,12 +72,12 @@ export default class NodeStore {
             .then(res => {
                 if (res.error !== 0) throw new Error(ERR_INVALID_FAV_ARG);
 
-                const node = this.nonFavourites[idx];
-                this.nonFavourites.splice(idx, 1);
-                this.favourites.push(node);
-                this.getEmitter().emit(this.getEventType());
+                const node = this.#nonFavourites[idx];
+                this.#nonFavourites.splice(idx, 1);
+                this.#favourites.push(node);
+                emitter.emit(event);
             })
-            .catch(err => alert(err));
+            .catch(console.error);
         
     }
 
@@ -87,7 +87,7 @@ export default class NodeStore {
      * @param {Function} handler
      */
     onChange(handler) {
-        this.getEmitter().on(this.getEventType(), handler);
+        emitter.on(event, handler);
     }
 
     /**
@@ -96,7 +96,7 @@ export default class NodeStore {
      * @returns {[{node_id: number, name: string, lat: number, lon: number, type: string}]} nodes
      */
     getFavourites() {
-        return [...this.favourites];
+        return [...this.#favourites];
     }
 
     /**
@@ -105,7 +105,7 @@ export default class NodeStore {
      * @returns {[{node_id: number, name: string, lat: number, lon: number, type: string}]} nodes
      */
     getNonFavourites() {
-        return [...this.nonFavourites];
+        return [...this.#nonFavourites];
     }
 
     /**

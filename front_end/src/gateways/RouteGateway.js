@@ -1,5 +1,5 @@
 import axios from "axios";
-import userIsLoggedIn, { getUserToken } from "../utils/AuthChecker";
+import checkUserLoggedIn, { getUserToken } from "../utils/AuthChecker";
 
 export default class RouteGateway {
 
@@ -10,17 +10,13 @@ export default class RouteGateway {
      */
     async getRoutes(locations) {
         const headers = { 'Content-Type': 'application/json' };
-        if (userIsLoggedIn()) headers['Authorization'] = `Bearer ${getUserToken()}`
-        try {
-            const response = await axios.get('route/find_routes', {
-                headers: headers,
-                params: locations
-            });
-            return response.data;
-        } catch (e) {
-            console.error(e);
-            throw e;
-        }
+        const loggedIn = await checkUserLoggedIn();
+        if (loggedIn) headers['Authorization'] = `Bearer ${getUserToken()}`
+        const response = await axios.get('route/find_routes', {
+            headers: headers,
+            params: locations
+        });
+        return response.data;
     }
 
     /**
@@ -30,17 +26,13 @@ export default class RouteGateway {
      */
     async getWalking(locations) {
         const headers = { 'Content-Type': 'application/json' };
-        if (userIsLoggedIn()) headers['Authorization'] = `Bearer ${getUserToken()}`
-        try {
-            const response = axios.get('route/find_walk_route', {
-                headers: headers,
-                params: locations
-            });
-            return response.data;
-        } catch (e) {
-            console.error(e);
-            throw e;
-        }
+        const loggedIn = await checkUserLoggedIn();
+        if (loggedIn) headers['Authorization'] = `Bearer ${getUserToken()}`
+        const response = axios.get('route/find_walk_route', {
+            headers: headers,
+            params: locations
+        });
+        return response.data;
     }
 
     /**
@@ -50,17 +42,13 @@ export default class RouteGateway {
      */
     async getBus(locations) {
         const headers = { 'Content-Type': 'application/json' };
-        if (userIsLoggedIn()) headers['Authorization'] = `Bearer ${getUserToken()}`
-        try {
-            const response = await axios.get('route/find_bus_route', {
-                headers: headers,
-                params: locations
-            });
-            return response.data;
-        } catch (e) {
-            console.error(e);
-            throw e;
-        }
+        const loggedIn = await checkUserLoggedIn();
+        if (loggedIn) headers['Authorization'] = `Bearer ${getUserToken()}`
+        const response = await axios.get('route/find_bus_route', {
+            headers: headers,
+            params: locations
+        });
+        return response.data;
     }
 
 }

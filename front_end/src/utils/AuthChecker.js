@@ -1,7 +1,13 @@
+import UserGateway from "../gateways/UserGateway";
+
 const STORAGE_KEY = 'jwtIdToken';
 
-export default function userIsLoggedIn() {
-    return localStorage.getItem(STORAGE_KEY) != null;
+const gateway = new UserGateway();
+
+export default async function checkUserLoggedIn() {
+    const token = getUserToken();
+    if (!token) return false;
+    return await gateway.isValidToken();
 }
 
 export function getUserToken() {
@@ -17,6 +23,6 @@ export function signUserIn(token) {
 }
 
 export function signUserOut() {
-    if (!userIsLoggedIn()) throw new Error('No user found!');
+    if (!checkUserLoggedIn()) throw new Error('No user found!');
     localStorage.removeItem(STORAGE_KEY);
 }
