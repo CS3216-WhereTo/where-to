@@ -1,5 +1,3 @@
-import React from "react";
-
 import { IonList, IonItem } from "@ionic/react";
 
 import ModalBusItem from "./ModalBusItem";
@@ -9,7 +7,7 @@ import "./Modal.css";
 const Modal = ({ dirType, busDir, walkDir }) => {
   return (
   <div className="modal">
-    <IonList lines="full" className="modal__content">
+    <IonList className="modal__content" lines="full">
       <IonItem>
         <p className="modal__header">15 mins (1.5 km)</p>
       </IonItem>

@@ -104,16 +104,15 @@ const SearchHome = (props) => {
   return (
     <IonPage className="page search-home-page">
       <div className="search-header">
-        <div className="search">
-          <div className="search-container">
-            <div className="start-search">
-              <IonIcon slot="start" icon={ellipseOutline} size="medium"></IonIcon>
-
-              <CustomSelect value={start} onChange={setStart} options={options} placeholder="Select a starting point" />
+        <div className="search-container">
+          <div className="search-inner-container">
+            <div className="search-inner-container__content">
+              <IonIcon className="search__icon" slot="start" icon={ellipseOutline} size="medium"></IonIcon>
+              <CustomSelect className="search__input" value={start} onChange={setStart} options={options} placeholder="Select a starting point" />
             </div>
-            <div className="end-search">
-              <IonIcon slot="start" icon={locationSharp} size="medium"></IonIcon>
-              <CustomSelect value={end} onChange={setEnd} options={options} placeholder="Select a destination" />
+            <div className="search-inner-container__content">
+              <IonIcon className="search-inner-container__icon" slot="start" icon={locationSharp} size="medium"></IonIcon>
+              <CustomSelect className="search-inner-container__input" value={end} onChange={setEnd} options={options} placeholder="Select a destination" />
             </div>
           </div>
 

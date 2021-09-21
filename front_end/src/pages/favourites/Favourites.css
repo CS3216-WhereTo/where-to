@@ -1,3 +1,4 @@
+/* ----- PAGE-HEADER ----- */
 .page-header {
   box-shadow: 0px 0px 8px 2px rgba( 0, 0, 0, 0.1 );
   margin-bottom: 20px;
@@ -15,11 +16,12 @@
   color: #f6f6f6;
 }
 
+/* ----- SEGMENT ----- */
 .segment {
   margin-bottom: 10px;
 }
 
-/* FAVOURITES ITEM */
+/* ----- FAVOURITES-ITEM ----- */
 .favourites-item__text {
   flex: 1;
 }

@@ -1,10 +1,7 @@
-import React from "react";
-
 import { IonIcon, IonLabel, IonItem } from "@ionic/react";
 import { walk } from "ionicons/icons";
 
-
-import "./ModalItem.css";
+import "./Modal.css";
 
 const ModalWalkItem = ({ location, duration }) => {
   return (
