@@ -86,6 +86,24 @@ const Settings = () => {
     </IonButton>
   )
 
+  const toast = () => {
+    const dismissBtn = {
+      text: "Okay",
+      role: "cancel",
+      handler: trackDismissSettingsToastEvent
+    };
+    return (
+      <IonToast
+        isOpen={showToast}
+        onDidDismiss={() => setShowToast(false)}
+        message="Your walking speed has been updated. 👣👣👣"
+        position="top"
+        duration={2000}
+        buttons={[dismissBtn]}
+      />
+    )
+  };
+
   if (!userIsLoggedIn()) return (<UnathenticatedUserScreen pageName={"Settings"}/>);
   return (
     <IonPage className="page settings-page">
@@ -99,22 +117,7 @@ const Settings = () => {
           <div className="speed__options">{speedOptions}</div>
         </div>
         <div className="sign-out">{signOutButton}</div>
-        <IonToast
-          isOpen={showToast}
-          onDidDismiss={() => setShowToast(false)}
-          message="Your walking speed has been updated. 👣👣👣"
-          position="top"
-          duration={2000}
-          buttons={[
-            {
-              text: "Okay",
-              role: "cancel",
-              handler: () => {
-                trackDismissSettingsToastEvent();
-              },
-            },
-          ]}
-        />
+        {toast()}
       </IonContent>
     </IonPage>
   );
