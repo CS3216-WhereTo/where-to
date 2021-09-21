@@ -4,8 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import "./SearchHome.css";
 import { ellipseOutline, swapVertical } from "ionicons/icons";
 import { locationSharp } from "ionicons/icons";
-import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
-import { geolocated } from "react-geolocated";
+import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import { useLocation } from "react-router-dom";
 
 import CustomSelect from "../../components/custom-select/CustomSelect";
