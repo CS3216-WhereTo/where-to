@@ -29,8 +29,10 @@
 }
 
 .sign-out {
-  margin-top: 25em;
-  text-align: center;
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .sign-out__button {
