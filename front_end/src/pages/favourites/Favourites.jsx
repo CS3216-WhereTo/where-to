@@ -5,6 +5,8 @@ import { IonPage, IonContent, IonSegment, IonSegmentButton, IonLabel } from "@io
 import FavouritesList from "./FavouritesList";
 import "./Favourites.css";
 import { trackPageView, trackFavouritesToRecentsTabEvent, trackRecentsToFavouritesTabEvent } from "../../utils/ReactGa";
+import userIsLoggedIn from "../../utils/AuthChecker";
+import UnathenticatedUserScreen from "../../components/sign-in/SignIn";
 
 // TODO: pull to refresh
 const Favourites = (props) => {
@@ -54,6 +56,8 @@ const Favourites = (props) => {
 
     isSegmentFav ? setFavourites(newList) : setRecents(newList);
   };
+
+  if (!userIsLoggedIn()) return (<UnathenticatedUserScreen pageName={"Favourites"}/>);
 
   return (
     <IonPage className="page favourites-page">

@@ -6,14 +6,14 @@ import "./Login.css";
 
 import Logo from "../../assets/logo.svg";
 import { trackPageView, trackGuestSignInEvent } from "../../utils/ReactGa";
-import userIsLoggedIn, { signUserIn } from "../../utils/AuthChecker";
+import { signUserIn } from "../../utils/AuthChecker";
 
 const Login = () => {
   
   trackPageView(window.location.pathname);
   
   const history = useHistory();
-  const redirectToSearchPage = () => history.push('/search');
+  const redirectToSearchPage = () => history.replace('/search');
 
   /**
    * @param {import("react-google-login").GoogleLoginResponse} googleResponse 

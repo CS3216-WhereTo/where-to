@@ -18,11 +18,11 @@ const SignIn = () => {
   );
 }
 
-const UnathenticatedUserScreen = () => {
+function UnathenticatedUserScreen(props) {
   return (
     <IonPage className="page settings-page">
       <div className="page-header">
-        <p className="page-header__text">Settings</p>
+        <p className="page-header__text">{props.pageName}</p>
       </div>
 
       <IonContent>

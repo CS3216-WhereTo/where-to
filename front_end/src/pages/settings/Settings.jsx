@@ -21,7 +21,7 @@ const Settings = () => {
 
   function handleLogOut() {
     signUserOut();
-    history.push('/');
+    history.replace('/');
   }
 
   function handleLogOutFailure() {
@@ -68,7 +68,7 @@ const Settings = () => {
     </IonButton>
   )
 
-  if (!userIsLoggedIn()) return (<UnathenticatedUserScreen/>);
+  if (!userIsLoggedIn()) return (<UnathenticatedUserScreen pageName={"Settings"}/>);
   return (
     <IonPage className="page settings-page">
       <div className="page-header">
