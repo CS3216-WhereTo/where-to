@@ -36,6 +36,7 @@ const App = (props) => {
   useEffect(() => {
     initialiseGoogleAnalytics();
   }, []);
+
   return (
     <IonApp>
       <IonReactRouter>

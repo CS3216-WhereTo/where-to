@@ -4,12 +4,14 @@ import { IonPage, IonContent, IonSegment, IonSegmentButton, IonLabel } from "@io
 
 import FavouritesList from "./FavouritesList";
 import "./Favourites.css";
-import { trackPageView } from "../../utils/ReactGa";
+import { trackPageView, trackFavouritesToRecentsTabEvent, trackRecentsToFavouritesTabEvent } from "../../utils/ReactGa";
 
+// TODO: pull to refresh
 const Favourites = (props) => {
   useEffect(() => {
     // TODO: some function to fetch favs & recents from server
   });
+
   useEffect(() => {
     trackPageView(window.location.pathname);
   }, []);
@@ -33,10 +35,17 @@ const Favourites = (props) => {
     if (e.detail.value === segment) {
       return;
     }
+
+    if (e.detail.value === "favourites") {
+      trackRecentsToFavouritesTabEvent();
+    } else {
+      trackFavouritesToRecentsTabEvent();
+    }
+
     setSegment(e.detail.value);
   };
 
-  const toggleStar = (i) => {
+  const toggleFavourite = (i) => {
     // TODO: post unfav/fav to server
     const isSegmentFav = segment === "favourites";
     const currentList = isSegmentFav ? favourites : recents;
@@ -64,10 +73,11 @@ const Favourites = (props) => {
       
       <IonContent>
         {/* -- List -- */}
-        <FavouritesList 
+        <FavouritesList
           className="favourites-list"
-          currentList={segment === "favourites" ? favourites : recents} 
-          onClick={(i) => toggleStar(i)}
+          currentList={segment === "favourites" ? favourites : recents}
+          isFavouritesTab={segment === "favourites"}
+          toggleFavourite={(i) => toggleFavourite(i)}
         />
       </IonContent>
     </IonPage>

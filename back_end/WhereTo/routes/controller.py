@@ -10,6 +10,13 @@ import polyline
 # Values - "name": str, "type": str, "coordinates": [lat: float, lon: float] "neighbors": [int, ]
 
 def get_node_graph():
+    session = SessionStore()
+    if "node_graph" not in session:
+        session["node_graph"] = generate_node_graph()
+    return session["node_graph"]
+
+
+def generate_node_graph():
     node_graph = {}
 
     nodes = list(Node.objects.values_list())
@@ -75,11 +82,7 @@ def get_bus_route_edges():
 
 def get_walk_route(origin_id, destination_id):
     
-    session = SessionStore()
-    if "node_graph" not in session:
-        session["node_graph"] = get_node_graph()
-    
-    node_graph = session["node_graph"]
+    node_graph = get_node_graph()
 
     walk_speed = get_walk_speed()
     time_to, pred = dijkstra_walk(origin_id, destination_id, node_graph, walk_speed)
