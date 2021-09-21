@@ -51,8 +51,17 @@ def get_user_model(user_id):
 # decorator for custom authentication middleware. requires extract_body beforehand
 def authenticated(required=True):
     def decorator(handler):
-        def wrapped_handler(request, body, **kwargs):
-            user = get_user(body['token']) if 'token' in body else None
+        def wrapped_handler(request, **kwargs):
+            user = None
+            try:
+                bearer = request.headers.get('Authorization')
+                prefix = "Bearer "
+                
+                if bearer.startswith(prefix):
+                    token = bearer[len(prefix):]
+                    user = get_user(token)
+            except KeyError:
+                pass
 
             if user is None and required:
                 return UNAUTHORIZED

@@ -6,7 +6,6 @@ from . import controller
 
 # Create your views here.
 @require_GET
-@extract_body
 @authenticated
 def get_speed(request, user):
     result = controller.get_speed(user)
@@ -20,7 +19,6 @@ def update_speed(request, body, user):
     return JsonResponse({'error': result}, content_type='application/json')
 
 @require_GET
-@extract_body
 @authenticated
 def list_recents(request, user):
     result = controller.list_recents(user)

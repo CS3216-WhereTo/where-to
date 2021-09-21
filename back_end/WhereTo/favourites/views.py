@@ -7,7 +7,6 @@ from . import controller
 
 # Create your views here.
 @require_GET
-@extract_body
 @authenticated
 def list_favourites(request, user):
     result = controller.list_favorites(user)
