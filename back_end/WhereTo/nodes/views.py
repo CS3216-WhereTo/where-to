@@ -6,7 +6,8 @@ from . import controller
 
 # Create your views here.
 @require_GET
-@authenticated
+@extract_body
+@authenticated(required=False)
 def list_nodes(request, user):
     favourites, non_favourites = controller.list_nodes(user)
     result = {

@@ -14,15 +14,33 @@ def extract_body(handler):
             body = json.loads(request.body)
         except json.JSONDecodeError:
             return BAD_REQUEST
-        
-        kwargs['body'] = body
 
-        return handler(request, **kwargs)
+        return handler(request, body=body, **kwargs)
     
     return wrapped_handler
 
 # helper for authenticated decorator
-def get_user(user_id):
+def get_user(token):
+    user_id = verify_user(token)
+    if user_id is None:
+        return None
+    
+    return get_user_model(user_id)
+
+def verify_user(token):
+    try:
+        # Specify the CLIENT_ID of the app that accesses the backend:
+        id_info = id_token.verify_oauth2_token(token, requests.Request(), GOOGLE_CLIENT_ID)
+
+        # ID token is valid. Get the user's Google Account ID from the decoded token.
+        user_id = id_info['sub']
+    except (KeyError, ValueError):
+        # Invalid/missing token
+        return None
+    
+    return user_id
+
+def get_user_model(user_id):
     try:
         user = User.objects.get(google_id=user_id)
     except User.DoesNotExist:
@@ -31,23 +49,15 @@ def get_user(user_id):
     return user
 
 # decorator for custom authentication middleware. requires extract_body beforehand
-def authenticated(handler):
-    def wrapped_handler(request, **kwargs):
-        try:
-            assert 'body' in kwargs
-            token = kwargs['body']['token']
+def authenticated(required=True):
+    def decorator(handler):
+        def wrapped_handler(request, body, **kwargs):
+            user = get_user(body['token']) if 'token' in body else None
 
-            # Specify the CLIENT_ID of the app that accesses the backend:
-            id_info = id_token.verify_oauth2_token(token, requests.Request(), GOOGLE_CLIENT_ID)
+            if user is None and required:
+                return UNAUTHORIZED
+            
+            return handler(request, user=user, **kwargs)
 
-            # ID token is valid. Get the user's Google Account ID from the decoded token.
-            user_id = id_info['sub']
-        except (KeyError, ValueError):
-            # Invalid/missing token
-            return UNAUTHORIZED
-
-        kwargs['user'] = get_user(user_id)
-        
-        return handler(request, **kwargs)
-
-    return wrapped_handler
+        return wrapped_handler
+    return decorator
