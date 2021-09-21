@@ -53,15 +53,13 @@ def authenticated(required=True):
     def decorator(handler):
         def wrapped_handler(request, **kwargs):
             user = None
-            try:
-                bearer = request.headers.get('Authorization')
-                prefix = "Bearer "
-                
-                if bearer.startswith(prefix):
-                    token = bearer[len(prefix):]
-                    user = get_user(token)
-            except KeyError:
-                pass
+
+            bearer = request.headers.get('Authorization')
+            prefix = "Bearer "
+            
+            if bearer is not None and bearer.startswith(prefix):
+                token = bearer[len(prefix):]
+                user = get_user(token)
 
             if user is None and required:
                 return UNAUTHORIZED
