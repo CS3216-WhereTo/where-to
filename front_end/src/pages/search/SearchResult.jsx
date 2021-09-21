@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 
 import { IonPage, IonChip, IonIcon, IonLabel, IonButton } from "@ionic/react";
 import { ellipseOutline, locationSharp, arrowBack, bus, walk } from "ionicons/icons";
@@ -61,7 +61,7 @@ const SearchResult = ({ start, end }) => {
     });
   });
 
-  const tempWalk = [
+  const walkDir = [
     { location: "XXX", type: "walk", duration: 10 },
     { location: "XXX", type: "walk", duration: 10 },
     { location: "XXX", type: "walk", duration: 10 },
@@ -70,7 +70,7 @@ const SearchResult = ({ start, end }) => {
     { location: "XXX", type: "walk", duration: 10 },
   ];
 
-  const tempBus = [
+  const busDir = [
     { location: "XXX", type: "walk", duration: 10 },
     { location: "XXX", type: "bus", duration: 10 },
     { location: "XXX", type: "walk", duration: 10 },
@@ -82,16 +82,7 @@ const SearchResult = ({ start, end }) => {
     { location: "XXX", type: "walk", duration: 10 },
   ];
 
-  const [walkDir, setWalkDir] = useState(tempWalk);
-  const [busDir, setBusDir] = useState(tempBus);
   const [dirType, setDirType] = useState("bus");
-
-  const [isDragging, setIsDragging] = useState(true);
-  const [showDropDown, setShowDropDown] = useState(false);
-
-  const toggleDropDown = (event) => {
-    setShowDropDown(!showDropDown);
-  };
 
   const [isOpen, setOpen] = useState(false);
 
@@ -101,7 +92,7 @@ const SearchResult = ({ start, end }) => {
         <div className="search">
           <div className="search-back">
             <Link to={{ pathname: "search", state: { destination: { label: "NUS", value: "nus" } } }}>
-              <IonIcon icon={arrowBack} />
+              <IonIcon className="search-back__icon" icon={arrowBack} />
             </Link>
           </div>
           <div className="search-container">
@@ -120,12 +111,20 @@ const SearchResult = ({ start, end }) => {
               </div>
             </div>
             <div className="search-options">
-              <IonChip style={dirType === "bus" ? { backgroundColor: "lightblue" } : {}} onClick={() => setDirType("bus")}>
-                <IonIcon icon={bus} />
+              <IonChip 
+                className={"search-option " + (dirType === "bus" ? "search-option--selected" : "search-option--unselected")} 
+                onClick={() => setDirType("bus")}>
+                <IonIcon
+                  className={dirType === "bus" ? "search-option__icon--selected" : "search-option__icon--unselected"} 
+                  icon={bus} />
                 <IonLabel>50 min</IonLabel>
               </IonChip>
-              <IonChip style={dirType === "walk" ? { backgroundColor: "lightblue" } : {}} onClick={() => setDirType("walk")}>
-                <IonIcon icon={walk} />
+              <IonChip 
+                className={"search-option " + (dirType === "walk" ? "search-option--selected" : "search-option--unselected")} 
+                onClick={() => setDirType("walk")}>
+                <IonIcon 
+                  className={dirType === "walk" ? "search-option__icon--selected" : "search-option__icon--unselected"} 
+                  icon={walk} />
                 <IonLabel>50 min</IonLabel>
               </IonChip>
             </div>
@@ -145,7 +144,14 @@ const SearchResult = ({ start, end }) => {
         <Sheet.Backdrop />
       </Sheet>
 
-      <IonButton className="directions__button" onClick={() => setOpen(true)}>Directions (1.5km, 15 mins)</IonButton>
+      <div className="directions__button--center">
+        <IonButton 
+          className="directions__button" 
+          shape="round" 
+          onClick={() => setOpen(true)}>
+            Directions (1.5km, 15 mins)
+        </IonButton>
+      </div>
 
       <div ref={mapContainer} className="map map--fixed map--fullscreen" />
     </IonPage>

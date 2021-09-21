@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { IonLabel, IonItem, IonIcon, IonButton } from "@ionic/react";
+
+import { IonItem, IonIcon } from "@ionic/react";
 import { star, starOutline, mapOutline } from "ionicons/icons";
 import {
   trackFavouritesUnfavouriteEvent,
@@ -9,6 +10,8 @@ import {
   trackFavouritesMapButtonEvent,
   trackRecentsMapButtonEvent,
 } from "../../utils/ReactGa";
+
+import "./Favourites.css";
 
 const FavouritesItem = ({ listItem, isFavouritesTab, toggleFavourite }) => {
   const { location, isFav } = listItem;
@@ -39,17 +42,17 @@ const FavouritesItem = ({ listItem, isFavouritesTab, toggleFavourite }) => {
     }
   };
   return (
-    <IonItem>
-      <IonLabel>{location}</IonLabel>
-      <div className="directions-button" onClick={handleRedirectToMap}>
+    <IonItem className="favourites-item">
+      <p className="favourites-item__text">{location}</p>
+      <div className="favourites-item__buttons" onClick={handleRedirectToMap}>
         {/* Passes Node data to SearchHome */}
-        <Link to={{ pathname: "search", state: { destination: { label: "NUS", value: "nus" } } }}>
-          <IonButton class="directions-button" slot="end">
-            <IonIcon icon={mapOutline} />
-          </IonButton>
+        <Link className="favourites-item__link" to={{ pathname: "search", state: { destination: { label: "NUS", value: "nus" } } }}>
+          <IonIcon className="favourites-item__icon" icon={mapOutline} />
         </Link>
+        <IonIcon className="favourites-item__icon" 
+          slot="end" onClick={handleToggleFavourite} 
+          icon={isFav ? star : starOutline} />
       </div>
-      <IonIcon slot="end" onClick={handleToggleFavourite} icon={isFav ? star : starOutline}></IonIcon>
     </IonItem>
   );
 };

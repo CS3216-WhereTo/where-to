@@ -1,0 +1,16 @@
+.sign-in {
+  position: absolute;
+  text-align: center;
+  top: 43%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.sign-in__img {
+max-width: 350px;
+height: auto;
+}
+
+.sign-in__button {
+  margin-top: 1em;
+}

@@ -1,4 +1,4 @@
-import { IonPage, IonIcon, IonButton } from "@ionic/react";
+import { IonPage, IonIcon } from "@ionic/react";
 import { useState, useEffect, useRef } from "react";
 
 import "./SearchHome.css";
@@ -118,14 +118,9 @@ const SearchHome = (props) => {
             </div>
           </div>
 
-          <div className="swap">
-            <IonButton size="small" fill="clear" onClick={swapStartEnd}>
-              <IonIcon slot="icon-only" icon={swapVertical} />
-            </IonButton>
-            <IonButton
-              color="light"
-              size="small"
-              shape="round"
+          <div className="search-buttons">
+            <IonIcon className="search-buttons__icon" slot="icon-only" onClick={swapStartEnd} icon={swapVertical} />
+            <p className="search-buttons__go"
               onClick={() => {
                 try {
                   map.current.removeLayer("route");
@@ -177,10 +172,9 @@ const SearchHome = (props) => {
               }}
             >
               <b>GO</b>
-            </IonButton>
+            </p>
           </div>
         </div>
-        <div className="search-button"></div>
       </div>
 
       <div ref={mapContainer} className="map map--fixed map--fullscreen" />
