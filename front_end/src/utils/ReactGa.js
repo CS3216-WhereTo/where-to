@@ -118,9 +118,16 @@ export const trackRecentsMapButtonEvent = () => {
   });
 };
 
-export const trackUpdateWalkingSpeed = () => {
+export const trackUpdateWalkingSpeedEvent = () => {
   ReactGA.event({
     category: "settings",
     action: "update_walking_speed",
+  });
+};
+
+export const trackDismissSettingsToastEvent = () => {
+  ReactGA.event({
+    category: "settings",
+    action: "dismiss_toast",
   });
 };
