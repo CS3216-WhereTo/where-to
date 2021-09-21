@@ -7,6 +7,7 @@
 .speed__text {
   margin-left: 5px;
   margin-bottom: 15px;
+  font-weight: 500;
 }
 
 .speed__options {
@@ -36,5 +37,4 @@
 }
 
 .sign-out__button {
-  color: #002f62e0;
 }

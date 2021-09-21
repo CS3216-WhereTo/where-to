@@ -1,11 +1,10 @@
-import { IonPage, IonIcon } from "@ionic/react";
+import { IonPage, IonIcon, IonRippleEffect } from "@ionic/react";
 import { useState, useEffect, useRef } from "react";
 
 import "./SearchHome.css";
 import { ellipseOutline, swapVertical } from "ionicons/icons";
 import { locationSharp } from "ionicons/icons";
-import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
-// import { geolocated } from "react-geolocated";
+import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import { useLocation } from "react-router-dom";
 
 import CustomSelect from "../../components/custom-select/CustomSelect";
@@ -120,7 +119,7 @@ const SearchHome = () => {
 
           <div className="search-buttons">
             <IonIcon className="search-buttons__icon" slot="icon-only" onClick={swapStartEnd} icon={swapVertical} />
-            <p className="search-buttons__go"
+            <p className="search-buttons__go ion-activatable"
               onClick={() => {
                 try {
                   map.current.removeLayer("route");
@@ -172,6 +171,7 @@ const SearchHome = () => {
               }}
             >
               <b>GO</b>
+              <IonRippleEffect></IonRippleEffect>
             </p>
           </div>
         </div>

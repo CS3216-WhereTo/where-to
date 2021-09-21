@@ -30,7 +30,7 @@ const Favourites = (props) => {
 
   const [favourites, setFavourites] = useState(favs);
   const [recents, setRecents] = useState(recs);
-  const [segment, setSegment] = useState("favourites");
+  const [segment, setSegment] = useState("Favourites");
 
   // a function to handle the segment changes
   const handleSegmentChange = (e) => {
@@ -38,7 +38,7 @@ const Favourites = (props) => {
       return;
     }
 
-    if (e.detail.value === "favourites") {
+    if (e.detail.value === "Favourites") {
       trackRecentsToFavouritesTabEvent();
     } else {
       trackFavouritesToRecentsTabEvent();
@@ -49,7 +49,7 @@ const Favourites = (props) => {
 
   const toggleFavourite = (i) => {
     // TODO: post unfav/fav to server
-    const isSegmentFav = segment === "favourites";
+    const isSegmentFav = segment === "Favourites";
     const currentList = isSegmentFav ? favourites : recents;
     const newList = currentList.slice();
     newList[i].isFav = !currentList[i].isFav;
@@ -62,15 +62,15 @@ const Favourites = (props) => {
   return (
     <IonPage className="page favourites-page">
       <div className="page-header">
-        <p className="page-header__text">Favourites</p>
+        <p className="page-header__text">{segment}</p>
       </div>
       
        {/* -- Segment -- */}
        <IonSegment className="segment" value={segment} onIonChange={e => handleSegmentChange(e)}>
-          <IonSegmentButton className="segment__button" value="favourites">
+          <IonSegmentButton className="segment__button" value="Favourites">
             <IonLabel className="segment__text">Favourites</IonLabel>
           </IonSegmentButton>
-          <IonSegmentButton className="segment__button" value="recents">
+          <IonSegmentButton className="segment__button" value="Recents">
             <IonLabel className="segment__text">Recents</IonLabel>
           </IonSegmentButton>
         </IonSegment>
@@ -79,8 +79,8 @@ const Favourites = (props) => {
         {/* -- List -- */}
         <FavouritesList
           className="favourites-list"
-          currentList={segment === "favourites" ? favourites : recents}
-          isFavouritesTab={segment === "favourites"}
+          currentList={segment === "Favourites" ? favourites : recents}
+          isFavouritesTab={segment === "Favourites"}
           toggleFavourite={(i) => toggleFavourite(i)}
         />
       </IonContent>
