@@ -37,6 +37,21 @@ def get_bus_waiting_time(bus_stop_id, bus_number, time_from_now):
     import random
     return random.randint(1, 10) * 60
 
+def get_services_serving_path(path, bus_route_edges):
+    if len(path) < 2:
+        return []
+    
+    services = bus_route_edges[(path[0], path[1])]["services"].copy()
+    for i in range(2, len(path)):
+        to_remove = []
+        for service in services:
+            if service not in bus_route_edges[(path[i-1], path[i])]["services"]:
+                to_remove.append(service)
+        for item in to_remove:
+            services.remove(item)
+    
+    return services
+
 
 def dijkstra_walk(origin_id, destination_id, walk_speed, node_graph):
     
