@@ -2,3 +2,4 @@ Django==3.2.7
 polyline==1.4.0
 pqdict==1.1.1
 google-auth==2.1.0
+requests==2.26.0
