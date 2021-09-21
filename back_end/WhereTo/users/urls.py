@@ -6,4 +6,5 @@ urlpatterns = [
     path('get_speed', views.get_speed),
     path('update_speed', views.update_speed),
     path('list_recents', views.list_recents),
+    path('check_token', views.check_token),
 ]

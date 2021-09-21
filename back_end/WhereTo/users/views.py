@@ -23,3 +23,9 @@ def update_speed(request, body, user):
 def list_recents(request, user):
     result = controller.list_recents(user)
     return JsonResponse({'routes': result}, content_type='application/json')
+
+@require_GET
+@authenticated(required=False)
+def check_token(request, user):
+    result = controller.check_user(user)
+    return JsonResponse({'valid': result}, content_type='application/json')

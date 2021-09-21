@@ -25,3 +25,6 @@ def list_recents(user):
 def add_recent(user, start_id, end_id, route_json):
     #todo: update model schema
     Recent(user_id=user.id, route=route_json).save()
+
+def check_user(user):
+    return 0 if user is None else 1
