@@ -35,7 +35,7 @@ def get_distance_from_walk_duration(duration, walk_speed):
 def get_bus_waiting_time(bus_stop_id, bus_number, time_from_now):
     return 300
     import random
-    return random.randint(1, 10) * 60
+    return random.randint(1, 600)
 
 def get_services_serving_path(path, bus_route_edges):
     if len(path) < 2:
