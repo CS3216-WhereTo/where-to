@@ -11,25 +11,30 @@ def extract_node_ids(body):
 @require_POST
 @extract_body
 @authenticated
-def find_combined_route(request, body, user):
-    node_ids = extract_node_ids(body)
-    walk, bus = get_combined_route(*node_ids)
+def find_route(request, body, user):
+    start_id, end_id = extract_node_ids(body)
+    walk = get_walk_route(start_id, end_id, user)
+    bus = get_bus_route(start_id, end_id, user)
     result = {
         'walk': walk,
         'bus': bus,
     }
     return JsonResponse(result, content_type='application/json')
 
+
 @require_POST
 @extract_body
-def find_walk_route(request, body):
-    node_ids = extract_node_ids(body)
-    result = get_walk_route(*node_ids)
+@authenticated
+def find_walk_route(request, body, user):
+    start_id, end_id = extract_node_ids(body)
+    result = get_walk_route(start_id, end_id, user)
     return JsonResponse(result, content_type='application/json')
+
 
 @require_GET
 @extract_body
-def find_bus_route(request, body):
-    node_ids = extract_node_ids(body)
-    result = get_bus_route(*node_ids)
+@authenticated
+def find_bus_route(request, body, user):
+    start_id, end_id = extract_node_ids(body)
+    result = get_bus_route(start_id, end_id, user)
     return JsonResponse(result, content_type='application/json')
