@@ -8,14 +8,15 @@ export default class NodeGateway {
      */
     async get() {
         const headers = {};
-        if (userIsLoggedIn()) {
-            headers['Authorization'] = `Bearer ${getUserToken()}`
-        }
+        if (userIsLoggedIn()) headers['Authorization'] = `Bearer ${getUserToken()}`;
+
+        console.log(headers);
         try {
             const response = await axios.get('nodes/list_nodes', {
-                headers: headers
+                headers: headers,
+                params: {}
             });
-            return response.data();
+            return response.data;
         } catch (e) {
             console.error(e);
             throw e;
@@ -31,9 +32,9 @@ export default class NodeGateway {
         try {
             const response = await axios.get('node/find_nearest_node', {
                 headers: { 'Content-Type': 'application/json' },
-                data: coords
+                params: coords
             });
-            return response.json();
+            return response.data;
         } catch (e) {
             console.log(e);
             throw e;

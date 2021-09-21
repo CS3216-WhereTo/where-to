@@ -14,7 +14,7 @@ export default class RouteGateway {
         try {
             const response = await axios.get('route/find_routes', {
                 headers: headers,
-                data: locations
+                params: locations
             });
             return response.data;
         } catch (e) {
@@ -34,7 +34,7 @@ export default class RouteGateway {
         try {
             const response = axios.get('route/find_walk_route', {
                 headers: headers,
-                body: locations
+                params: locations
             });
             return response.data;
         } catch (e) {
@@ -54,7 +54,7 @@ export default class RouteGateway {
         try {
             const response = await axios.get('route/find_bus_route', {
                 headers: headers,
-                body: locations
+                params: locations
             });
             return response.data;
         } catch (e) {

@@ -11,7 +11,7 @@ import { signUserIn } from "../../utils/AuthChecker";
 const Login = () => {
   
   trackPageView(window.location.pathname);
-  
+
   const history = useHistory();
   const redirectToSearchPage = () => history.replace('/search');
 

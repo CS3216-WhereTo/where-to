@@ -39,7 +39,7 @@ export default class FavouritesGateway {
         try {
             const response = await axios.post('favourites/add_favourite', {
                 headers: headers,
-                data: { node_id: nodeId }
+                params: { node_id: nodeId }
             })
             return response.data;
         } catch (e) {
