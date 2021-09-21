@@ -22,7 +22,6 @@ export function getUserToken() {
  * @param {string} token 
  */
 export function signUserIn(token, onSuccess) {
-    console.log(token);
     localStorage.setItem(STORAGE_KEY, token);
     checkUserLoggedIn().then(_ => onSuccess()).catch(console.error);
 }

@@ -7,13 +7,12 @@ export default class FavouritesGateway {
      * Sends a GET request for the user's favourited locations.
      */
     async get() {
-        const headers = {};
         const loggedIn = await checkUserLoggedIn();
         if (!loggedIn) {
             throw new Error('User should be logged in to use favourites!');
         }
 
-        headers['Authorization'] = `Bearer ${getUserToken()}`;
+        const headers = { 'Authorization': `Bearer ${getUserToken()}`};
         try {
             const response = await axios.get('favourites/list_favourites', {
                 headers: headers

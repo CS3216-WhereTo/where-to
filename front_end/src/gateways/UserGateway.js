@@ -19,10 +19,7 @@ export default class UserGateway {
         const token = getUserToken();
         if (!token) return false;
         const response = await axios.get('user/check_token', {
-            headers: { 
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${getUserToken()}`
-            }
+            headers: { 'Authorization': `Bearer ${getUserToken()}` }
         });
         return response.data.valid === 1;
     }
@@ -31,7 +28,7 @@ export default class UserGateway {
         const loggedIn = await checkUserLoggedIn();
         if (!loggedIn) throw new Error(ERR_SPEED);
         const response = await axios.get('user/get_speed', {
-            headers: { Authorization: `Bearer ${getUserToken()}` }
+            headers: { 'Authorization': `Bearer ${getUserToken()}` }
         });
         return response.data;
     }
@@ -44,7 +41,10 @@ export default class UserGateway {
         const loggedIn = await checkUserLoggedIn();
         if (!loggedIn) throw new Error(ERR_SPEED);
         const response = await axios.post('user/update_speed', {
-            headers: { Authorization: `Bearer ${getUserToken()}` },
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getUserToken()}`
+            },
             body: { speed: newSpeed }
         });
         return response.data;
