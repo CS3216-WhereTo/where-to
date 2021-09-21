@@ -1,4 +1,4 @@
-import { IonPage, IonIcon } from "@ionic/react";
+import { IonPage, IonIcon, IonRippleEffect } from "@ionic/react";
 import { useState, useEffect, useRef } from "react";
 
 import "./SearchHome.css";
@@ -119,7 +119,7 @@ const SearchHome = (props) => {
 
           <div className="search-buttons">
             <IonIcon className="search-buttons__icon" slot="icon-only" onClick={swapStartEnd} icon={swapVertical} />
-            <p className="search-buttons__go"
+            <p className="search-buttons__go ion-activatable"
               onClick={() => {
                 try {
                   map.current.removeLayer("route");
@@ -171,6 +171,7 @@ const SearchHome = (props) => {
               }}
             >
               <b>GO</b>
+              <IonRippleEffect></IonRippleEffect>
             </p>
           </div>
         </div>
