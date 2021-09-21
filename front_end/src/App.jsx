@@ -38,20 +38,23 @@ import checkUserLoggedIn from "./utils/AuthChecker";
  * @param {{nodes: NodeStore, routes: RouteStore}} stores 
  * @returns 
  */
-const App = ({nodes, routes}) => {
+const App = (props) => {
   useEffect(() => {
     initialiseGoogleAnalytics();
   }, []);
 
-  const { isLoggedIn, setLoginState } = useState(false);
+  const [ isLoggedIn, setLoginState ] = useState(false);
   checkUserLoggedIn()
-    .then(res => { 
+    .then(res => {
       if (res) setLoginState(true);
       else setLoginState(false);
     })
     .catch(console.error);
 
   const landingPage = !isLoggedIn ? <Login/> : <Redirect to="/search"/>;
+
+  const nodes = props.nodes;
+  const routes = props.routes;
 
   return (
     <IonApp>

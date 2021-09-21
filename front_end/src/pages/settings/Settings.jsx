@@ -10,15 +10,13 @@ import './Settings.css';
 
 const Settings = () => {
 
-  const { loggedIn, setLoginState } = useState(false);
+  const [ loggedIn, setLoginState ]  = useState(false);
   checkUserLoggedIn()
     .then(res => { 
       if (res) setLoginState(true);
       else setLoginState(false);
     })
     .catch(console.error);
-  
-  if (!loggedIn) return (<UnathenticatedUserScreen pageName={"Settings"}/>);
   
   const options = [
     "Very Slow (0.8 m/s)",
@@ -122,7 +120,8 @@ const Settings = () => {
       />
     )
   };
-
+  
+  if (!loggedIn) return (<UnathenticatedUserScreen pageName={"Settings"}/>);
   return (
     <IonPage className="page settings-page">
       <div className="page-header">

@@ -20,8 +20,7 @@ const Login = () => {
    */
   function handleGoogleLoginSuccess(googleResponse) {
     const token = googleResponse.tokenId;
-    signUserIn(token);
-    redirectToSearchPage();
+    signUserIn(token, redirectToSearchPage);
   }
 
   function handleGoogleLoginFailure(response) {

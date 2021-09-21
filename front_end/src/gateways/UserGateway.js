@@ -16,8 +16,13 @@ export default class UserGateway {
     }
 
     async isValidToken() {
+        const token = getUserToken();
+        if (!token) return false;
         const response = await axios.get('user/check_token', {
-            headers: { Authorization: `Bearer ${getUserToken()}` }
+            headers: { 
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${getUserToken()}`
+            }
         });
         return response.data.valid === 1;
     }

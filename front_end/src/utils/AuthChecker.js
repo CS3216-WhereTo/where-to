@@ -6,7 +6,10 @@ const gateway = new UserGateway();
 
 export default async function checkUserLoggedIn() {
     const token = getUserToken();
-    if (!token) return false;
+    if (!token) {
+        localStorage.removeItem(STORAGE_KEY);
+        return false;
+    }
     return await gateway.isValidToken();
 }
 
@@ -18,8 +21,10 @@ export function getUserToken() {
  * Stores a given encoded user JWT `token` locally.
  * @param {string} token 
  */
-export function signUserIn(token) {
+export function signUserIn(token, onSuccess) {
+    console.log(token);
     localStorage.setItem(STORAGE_KEY, token);
+    checkUserLoggedIn().then(_ => onSuccess()).catch(console.error);
 }
 
 export function signUserOut() {
