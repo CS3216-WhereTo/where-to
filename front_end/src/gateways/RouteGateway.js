@@ -1,10 +1,7 @@
-const axios = require('axios').default;
+import axios from "axios";
+import userIsLoggedIn, { getUserToken } from "../utils/AuthCheck";
 
 export default class RouteGateway {
-
-    constructor() {
-        this.token = '';
-    }
 
     /**
      * Sends a GET request for both walking and bus routes.
@@ -12,12 +9,11 @@ export default class RouteGateway {
      * @param {{start_id: number, end_id: number}} locations 
      */
     async getRoutes(locations) {
+        const headers = { 'Content-Type': 'application/json' };
+        if (userIsLoggedIn()) headers['Authorization'] = `Bearer ${getUserToken()}`
         try {
             const response = await axios.get('route/find_routes', {
-                headers: {
-                    'Authorization': `Bearer ${this.token}`,
-                    'Content-Type': 'application/json'
-                },
+                headers: headers,
                 data: locations
             });
             return response.data;
@@ -33,12 +29,11 @@ export default class RouteGateway {
      * @param {{start_id: number, end_id: number}} locations  
      */
     async getWalking(locations) {
+        const headers = { 'Content-Type': 'application/json' };
+        if (userIsLoggedIn()) headers['Authorization'] = `Bearer ${getUserToken()}`
         try {
             const response = axios.get('route/find_walk_route', {
-                headers: {
-                    'Authorization': `Bearer ${this.token}`,
-                    'Content-Type': 'application/json'
-                },
+                headers: headers,
                 body: locations
             });
             return response.data;
@@ -54,12 +49,11 @@ export default class RouteGateway {
      * @param {{start_id: number, end_id: number}} locations
      */
     async getBus(locations) {
+        const headers = { 'Content-Type': 'application/json' };
+        if (userIsLoggedIn()) headers['Authorization'] = `Bearer ${getUserToken()}`
         try {
             const response = await axios.get('route/find_bus_route', {
-                headers: {
-                    'Authorization': `Bearer ${this.token}`,
-                    'Content-Type': 'application/json'
-                },
+                headers: headers,
                 body: locations
             });
             return response.data;
@@ -67,15 +61,6 @@ export default class RouteGateway {
             console.error(e);
             throw e;
         }
-    }
-
-    /**
-     * Sets the user token
-     * 
-     * @param {string} userToken 
-     */
-    setToken(userToken) {
-        this.token = userToken;
     }
 
 }

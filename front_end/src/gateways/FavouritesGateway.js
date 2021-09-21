@@ -1,18 +1,21 @@
-const axios = require('axios').default;
+import axios from "axios";
+import userIsLoggedIn, { getUserToken } from "../utils/AuthCheck";
 
 export default class FavouritesGateway {
-
-    constructor() {
-        this.token = '';
-    }
 
     /**
      * Sends a GET request for the user's favourited locations.
      */
     async get() {
+        const headers = {};
+        if (!userIsLoggedIn()) {
+            throw new Error('User should be logged in to use favourites!');
+        }
+
+        headers['Authorization'] = `Bearer ${getUserToken()}`;
         try {
             const response = await axios.get('favourites/list_favourites', {
-                headers: { 'Authorization': `Bearer ${this.token}` }
+                headers: headers
             });
             return response.data;
         } catch (e) {
@@ -27,12 +30,15 @@ export default class FavouritesGateway {
      * @param {number} nodeId
      */
     async add(nodeId) {
+        const headers = { 'Content-Type': 'application/json' };
+        if (!userIsLoggedIn()) {
+            throw new Error('User should be logged in to use favourites!');
+        }
+
+        headers['Authorization'] = `Bearer ${getUserToken()}`;
         try {
             const response = await axios.post('favourites/add_favourite', {
-                headers: { 
-                    'Authorization': `Bearer ${this.token}`,
-                    'Content-Type': 'application/json' 
-                },
+                headers: headers,
                 data: { node_id: nodeId }
             })
             return response.data;
@@ -48,12 +54,15 @@ export default class FavouritesGateway {
      * @param {number} nodeId
      */
     async remove(nodeId) {
+        const headers = { 'Content-Type': 'application/json' };
+        if (!userIsLoggedIn()) {
+            throw new Error('User should be logged in to use favourites!');
+        }
+
+        headers['Authorization'] = `Bearer ${getUserToken()}`;
         try {
             const response = await axios.post('favourites/remove_favourite', {
-                headers: { 
-                    'Authorization': `Bearer ${this.token}`,
-                    'Content-Type': 'application/json' 
-                },
+                headers: headers,
                 data: { node_id: nodeId }
             });
             return response.data;
@@ -62,15 +71,6 @@ export default class FavouritesGateway {
             throw e;
         }
         
-    }
-
-    /**
-     * Sets the user token
-     * 
-     * @param {string} userToken 
-     */
-    setToken(userToken) {
-        this.token = userToken;
     }
 
 }

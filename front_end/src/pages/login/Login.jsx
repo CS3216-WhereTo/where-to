@@ -6,6 +6,7 @@ import "./Login.css";
 
 import Logo from "../../assets/logo.svg";
 import { trackPageView, trackGuestSignInEvent } from "../../utils/ReactGa";
+import { signUserIn } from "../../utils/AuthCheck";
 
 const Login = () => {
   
@@ -20,7 +21,7 @@ const Login = () => {
   function handleGoogleLoginSuccess(googleResponse) {
     console.log(googleResponse);
     const token = googleResponse.tokenId;
-    localStorage.setItem('jwtIdToken', token);
+    signUserIn(token);
     redirectToSearchPage();
   }
 

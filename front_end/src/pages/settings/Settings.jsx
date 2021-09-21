@@ -5,12 +5,9 @@ import { useGoogleLogout } from 'react-google-login';
 
 import UnathenticatedUserScreen from '../../components/sign-in/SignIn';
 import './Settings.css';
+import userIsLoggedIn, { signUserOut } from '../../utils/AuthCheck';
 
 const Settings = () => {
-
-  function isSignedIn() {
-    return localStorage.getItem('jwtIdToken') != null
-  };
 
   const options = [
     "Very Slow (0.8 m/s)", 
@@ -24,7 +21,7 @@ const Settings = () => {
 
   function handleLogOut() {
     history.push('/');
-    localStorage.removeItem('jwtIdToken');
+    signUserOut();
   }
 
   function handleLogOutFailure() {
@@ -71,7 +68,7 @@ const Settings = () => {
     </IonButton>
   )
 
-  if (!isSignedIn()) return (<UnathenticatedUserScreen/>);
+  if (!userIsLoggedIn()) return (<UnathenticatedUserScreen/>);
   return (
     <IonPage className="page settings-page">
       <div className="page-header">

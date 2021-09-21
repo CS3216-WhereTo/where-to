@@ -1,18 +1,19 @@
-const axios = require('axios').default;
+import axios from "axios";
+import userIsLoggedIn, { getUserToken } from "../utils/AuthCheck";
 
 export default class NodeGateway {
-
-    constructor() {
-        this.token = '';
-    }
 
     /**
      * Sends a GET request for all nodes.
      */
     async get() {
+        const headers = {};
+        if (userIsLoggedIn()) {
+            headers['Authorization'] = `Bearer ${getUserToken()}`
+        }
         try {
             const response = await axios.get('node/list_nodes', {
-                headers: { 'Authorization': `Bearer ${this.token}` }
+                headers: headers
             });
             return response.data();
         } catch (e) {
@@ -37,15 +38,6 @@ export default class NodeGateway {
             console.log(e);
             throw e;
         }
-    }
-
-    /**
-     * Sets the user token
-     * 
-     * @param {string} userToken 
-     */
-    setToken(userToken) {
-        this.token = userToken;
     }
 
 }
