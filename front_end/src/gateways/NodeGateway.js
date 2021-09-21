@@ -1,5 +1,5 @@
 import axios from "axios";
-import userIsLoggedIn, { getUserToken } from "../utils/AuthCheck";
+import userIsLoggedIn, { getUserToken } from "../utils/AuthChecker";
 
 export default class NodeGateway {
 

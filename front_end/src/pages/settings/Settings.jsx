@@ -5,7 +5,7 @@ import { useGoogleLogout } from 'react-google-login';
 
 import UnathenticatedUserScreen from '../../components/sign-in/SignIn';
 import './Settings.css';
-import userIsLoggedIn, { signUserOut } from '../../utils/AuthCheck';
+import userIsLoggedIn, { signUserOut } from '../../utils/AuthChecker';
 
 const Settings = () => {
 

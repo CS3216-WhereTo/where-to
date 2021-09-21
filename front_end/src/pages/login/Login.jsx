@@ -6,7 +6,7 @@ import "./Login.css";
 
 import Logo from "../../assets/logo.svg";
 import { trackPageView, trackGuestSignInEvent } from "../../utils/ReactGa";
-import { signUserIn } from "../../utils/AuthCheck";
+import { signUserIn } from "../../utils/AuthChecker";
 
 const Login = () => {
   
