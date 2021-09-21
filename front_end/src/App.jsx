@@ -1,4 +1,4 @@
-import { Route } from "react-router-dom";
+import { Route, Redirect } from "react-router-dom";
 import { useEffect } from "react";
 import { IonApp, IonRouterOutlet, IonTabBar, IonTabs, IonTabButton, IonIcon, IonText } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
@@ -7,7 +7,6 @@ import { mapOutline, starOutline, settingsOutline } from "ionicons/icons";
 
 import Login from "./pages/login/Login";
 import SearchHome from "./pages/search/SearchHome";
-import SearchResult from "./pages/search/SearchResult";
 import Favourites from "./pages/favourites/Favourites";
 import Settings from "./pages/settings/Settings";
 
@@ -31,42 +30,31 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { initialiseGoogleAnalytics } from "./utils/ReactGa";
+import NodeStore from "./stores/NodeStore";
+import RouteStore from "./stores/RouteStore";
+import userIsLoggedIn from "./utils/AuthChecker";
 
-const App = (props) => {
+/**
+ * @param {{nodes: NodeStore, routes: RouteStore}} stores 
+ * @returns 
+ */
+const App = ({nodes, routes}) => {
   useEffect(() => {
     initialiseGoogleAnalytics();
   }, []);
 
-  const nodes = props.nodes;
-  const routes = props.routes;
+  const landingPage = !userIsLoggedIn() ? <Login/> : <Redirect to="/search"/>;
 
   return (
     <IonApp>
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route path="/search" >
-              <SearchHome />
-            </Route>
-
-            <Route path="/search-result" >
-              <SearchResult />
-            </Route>
-
-            <Route exact path="/favourites" >
-              <Favourites />
-            </Route>
-
-            <Route exact path="/settings" >
-              <Settings />
-            </Route>
-
-            {/* if logged in redirect */}
-            <Route exact path="/">
-              <Login />
-            </Route>
+            <Route path="/search"><SearchHome nodes={nodes} routes={routes}/></Route>
+            <Route exact path="/favourites"><Favourites nodes={nodes}/></Route>
+            <Route exact path="/settings"><Settings/></Route>
+            <Route exact path="/">{landingPage}</Route>
           </IonRouterOutlet>
-
           <IonTabBar slot="bottom">
             <IonTabButton tab="search" href="/search">
               <IonIcon icon={mapOutline} />

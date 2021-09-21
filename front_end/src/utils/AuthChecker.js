@@ -1,7 +1,7 @@
 const STORAGE_KEY = 'jwtIdToken';
 
 export default function userIsLoggedIn() {
-    return localStorage.getItem(STORAGE_KEY) == null;
+    return localStorage.getItem(STORAGE_KEY) != null;
 }
 
 export function getUserToken() {

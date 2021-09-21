@@ -12,7 +12,7 @@ export default class NodeGateway {
             headers['Authorization'] = `Bearer ${getUserToken()}`
         }
         try {
-            const response = await axios.get('node/list_nodes', {
+            const response = await axios.get('nodes/list_nodes', {
                 headers: headers
             });
             return response.data();

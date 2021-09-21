@@ -6,7 +6,7 @@ import "./Login.css";
 
 import Logo from "../../assets/logo.svg";
 import { trackPageView, trackGuestSignInEvent } from "../../utils/ReactGa";
-import { signUserIn } from "../../utils/AuthChecker";
+import userIsLoggedIn, { signUserIn } from "../../utils/AuthChecker";
 
 const Login = () => {
   
@@ -19,7 +19,6 @@ const Login = () => {
    * @param {import("react-google-login").GoogleLoginResponse} googleResponse 
    */
   function handleGoogleLoginSuccess(googleResponse) {
-    console.log(googleResponse);
     const token = googleResponse.tokenId;
     signUserIn(token);
     redirectToSearchPage();

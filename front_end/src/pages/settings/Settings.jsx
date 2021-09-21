@@ -5,7 +5,7 @@ import { useGoogleLogout } from 'react-google-login';
 
 import UnathenticatedUserScreen from '../../components/sign-in/SignIn';
 import './Settings.css';
-import userIsLoggedIn, { signUserOut } from '../../utils/AuthChecker';
+import userIsLoggedIn, { getUserToken, signUserOut } from '../../utils/AuthChecker';
 
 const Settings = () => {
 
@@ -20,8 +20,8 @@ const Settings = () => {
   const history = useHistory();
 
   function handleLogOut() {
-    history.push('/');
     signUserOut();
+    history.push('/');
   }
 
   function handleLogOutFailure() {

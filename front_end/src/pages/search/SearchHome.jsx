@@ -5,19 +5,18 @@ import "./SearchHome.css";
 import { ellipseOutline, swapVertical } from "ionicons/icons";
 import { locationSharp } from "ionicons/icons";
 import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
-import { geolocated } from "react-geolocated";
+// import { geolocated } from "react-geolocated";
 import { useLocation } from "react-router-dom";
 
 import CustomSelect from "../../components/custom-select/CustomSelect";
 import { trackPageView } from "../../utils/ReactGa";
 
-console.log(process.env.REACT_APP_MAPBOX_KEY);
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
 
-const SearchHome = (props) => {
+const SearchHome = () => {
   const [start, setStart] = useState(null);
   const [end, setEnd] = useState(null);
-  const [centeredAtCurrent, setCenteredAtCurrent] = useState(false);
+  // const [centeredAtCurrent, setCenteredAtCurrent] = useState(false);
 
   useEffect(() => {
     trackPageView(window.location.pathname);
