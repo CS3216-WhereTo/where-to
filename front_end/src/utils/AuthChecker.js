@@ -20,10 +20,16 @@ export function getUserToken() {
 /**
  * Stores a given encoded user JWT `token` locally.
  * @param {string} token 
+ * @param {function} onSuccess
  */
-export function signUserIn(token, onSuccess) {
+export function signUserIn(token, onSuccess, onFailure, onError) {
     localStorage.setItem(STORAGE_KEY, token);
-    checkUserLoggedIn().then(_ => onSuccess()).catch(console.error);
+    checkUserLoggedIn()
+        .then((valid) => { if (valid) onSuccess(); else onFailure(); })
+        .catch((e) => {
+            console.error(e);
+            onError(e);
+        });
 }
 
 export function signUserOut() {

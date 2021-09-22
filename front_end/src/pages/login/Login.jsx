@@ -1,44 +1,40 @@
-import { IonPage, IonImg, IonText, IonButton, IonGrid, IonRow, IonIcon } from "@ionic/react";
+import { useState } from "react";
+import { GoogleLogin } from "react-google-login"
 import { withRouter, useHistory } from "react-router-dom";
 import { arrowForward } from "ionicons/icons";
-import { GoogleLogin } from "react-google-login"
-import "./Login.css";
+import { IonPage, IonImg, IonText, IonButton, IonGrid, IonRow, IonIcon, IonToast } from "@ionic/react";
 
-import Logo from "../../assets/logo.svg";
 import { trackPageView, trackGuestSignInEvent } from "../../utils/ReactGa";
 import { signUserIn } from "../../utils/AuthChecker";
+import Logo from "../../assets/logo.svg";
+import "./Login.css";
 
-const Login = () => {
-  
-  trackPageView(window.location.pathname);
+const ERR_CON_GOOGLE = 'We are unable to connect to Google right now, please try again later';
+const ERR_AUTH_FAIL = 'We are unable to authenticate you, please try again!';
 
-  const history = useHistory();
-  const redirectToSearchPage = () => history.replace('/search');
+function LoginHeaderRow(_) {
+  return (
+    <IonRow className="login__row login__row--top">
+      <div className="app-info">
+        <IonImg src={Logo} className="app-info__img" alt="logo" />
+        <IonText className="app-info__text">
+          <h2>
+            <b>Travel around NUS</b>
+          </h2>
+        </IonText>
+      </div>
+    </IonRow>
+  );
+}
 
-  /**
-   * @param {import("react-google-login").GoogleLoginResponse} googleResponse 
-   */
-  function handleGoogleLoginSuccess(googleResponse) {
-    const token = googleResponse.tokenId;
-    signUserIn(token, redirectToSearchPage);
-  }
-
-  function handleGoogleLoginFailure(response) {
-    console.log(`Login failed with error code ${response.error}: ${response.details}`);
-  }
-
-  function handleGuestLogin() {
-    trackGuestSignInEvent();
-    redirectToSearchPage();
-  }
+function LoginOptionsRow(props) {
 
   const loginButton = (
     <GoogleLogin
       clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-      onSuccess={handleGoogleLoginSuccess}
-      onFailure={handleGoogleLoginFailure}
+      onSuccess={props.onGoogleSuccess}
+      onFailure={props.onGoogleFailure}
       theme="dark"
-      isSignedIn={true}
     />
   );
 
@@ -47,14 +43,14 @@ const Login = () => {
       className="sns-login__button"
       shape="round"
       fill="outline"
-      onClick={handleGuestLogin}
+      onClick={props.onGuessLogin}
     >
       <IonText className="sns-login__text">Continue as a guest</IonText>
       <IonIcon className="sns-login__next" slot="end" icon={arrowForward} size="large"></IonIcon>
     </IonButton>
   );
 
-  const loginRow = (
+  return (
     <IonRow className="login__row login__row--bottom">
       <div className="auth">
         <div className="sns-login">
@@ -75,26 +71,69 @@ const Login = () => {
       </div>
     </IonRow>
   );
+}
 
-  const headerRow = (
-    <IonRow className="login__row login__row--top">
-      <div className="app-info">
-        <IonImg src={Logo} className="app-info__img" alt="logo" />
-        <IonText className="app-info__text">
-          <h2>
-            <b>Travel around NUS</b>
-          </h2>
-        </IonText>
-      </div>
-    </IonRow>
-  );
+function Login(_) {
+
+  trackPageView(window.location.pathname);
+
+  const history = useHistory();
+  const redirectToSearchPage = () => history.replace('/search');
+
+  const [ loginError, setLoginError ] = useState('');
+
+  /**
+   * @param {import("react-google-login").GoogleLoginResponse} googleResponse 
+   */
+  function handleGoogleLoginSuccess(googleResponse) {
+    const token = googleResponse.tokenId;
+    signUserIn(
+      token,
+      redirectToSearchPage,
+      () => setLoginError(ERR_AUTH_FAIL),
+      (_) => setLoginError(ERR_CON_GOOGLE)
+    );
+  }
+
+  function handleGoogleLoginFailure(response) {
+    console.log(`Login failed with error code ${response.error}: ${response.details}`);
+    setLoginError(ERR_CON_GOOGLE);
+  }
+
+  function handleGuestLogin() {
+    trackGuestSignInEvent();
+    redirectToSearchPage();
+  }
+
+  const toast = () => {
+    const dismissBtn = {
+      text: "Okay",
+      role: "cancel",
+      handler: () => {}
+    };
+    return (
+        <IonToast
+            isOpen={loginError !== ''}
+            onDidDismiss={() => setLoginError('')}
+            message={loginError}
+            position={'top'}
+            duration={2000}
+            buttons={[dismissBtn]}
+        />
+    );
+  };
 
   return (
     <IonPage className="page login-page">
       <IonGrid className="login">
-        {headerRow}
-        {loginRow}
+        <LoginHeaderRow/>
+        <LoginOptionsRow
+          onGoogleSuccess={handleGoogleLoginSuccess}
+          onGoogleFailure={handleGoogleLoginFailure}
+          onGuessLogin={handleGuestLogin}
+        />
       </IonGrid>
+      {toast()}
     </IonPage>
   );
 };

@@ -110,15 +110,15 @@ const Settings = () => {
       handler: trackDismissSettingsToastEvent
     };
     return (
-      <IonToast
-        isOpen={showToast}
-        onDidDismiss={() => setShowToast(false)}
-        message="Your walking speed has been updated. 👣👣👣"
-        position="top"
-        duration={2000}
-        buttons={[dismissBtn]}
-      />
-    )
+        <IonToast
+            isOpen={showToast}
+            onDidDismiss={() => setShowToast(false)}
+            message={"Your walking speed has been updated. 👣👣👣"}
+            position={'top'}
+            duration={2000}
+            buttons={[dismissBtn]}
+        />
+    );
   };
   
   if (!loggedIn) return (<UnathenticatedUserScreen pageName={"Settings"}/>);
