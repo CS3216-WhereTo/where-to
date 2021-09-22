@@ -77,17 +77,7 @@
       "last 1 safari version"
     ]
   },
-  "babel": {
-    "presets": [
-      [
-        "@babel/preset-react",
-        ["@babel/preset-env", { "shippedProposals": true }]
-      ]
-    ]
-  },
   "devDependencies": {
-    "@babel/core": "^7.15.5",
-    "@babel/preset-env": "^7.15.6",
     "react-scripts": "4.0.3"
   },
   "description": "An Ionic project"

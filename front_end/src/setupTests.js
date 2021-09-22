@@ -14,9 +14,7 @@ window.matchMedia = window.matchMedia || function() {
 };
 
 var localStorageMock = (function() {
-  var store = {
-      'favouriteNodes': '[]'
-  };
+  var store = { };
 
   return {
     getItem: function(key) {

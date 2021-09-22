@@ -8,8 +8,8 @@ export const ERR_INVALID_FAV_ARG = "Invalid input was given!";
 const event = 'UPDATE_NODE';
 const emitter = new MicroEmitter();
 
-const FAV_KEY = 'favouriteNodes';
-const NONFAV_KEY = 'nonFavouriteNodes';
+export const FAV_KEY = 'favouriteNodes';
+export const NONFAV_KEY = 'nonFavouriteNodes';
 
 /**
  * Exposes the following functions:
@@ -32,10 +32,10 @@ export default class NodeStore {
         this.#favourites = [];
         this.nodeGateway = nodeGateway;
         this.favGateway = favGateway;
-        emitter.on(event, () => this.#updateLocalStorage());
+        emitter.on(event, () => this._updateLocalStorage());
     }
 
-    #updateLocalStorage() {
+    _updateLocalStorage() {
         localStorage.setItem(FAV_KEY, JSON.stringify(this.#favourites));
         localStorage.setItem(NONFAV_KEY, JSON.stringify(this.#nonFavourites));
     }
@@ -46,24 +46,25 @@ export default class NodeStore {
     fetchNodes() {
         return this.nodeGateway
             .get()
-            .then(res => this.#setNodes(res))
+            .then(res => this._setNodes(res))
             .catch(e => {
                 console.error(e);
-                this.#loadNodesFromStorage();
+                this._loadNodesFromStorage();
             });
     }
 
-    #setNodes(result) {
+    _setNodes(result) {
         this.#favourites = result.favourites.slice();
         this.#nonFavourites = result.non_favourites.slice();
         emitter.emit(event);
     }
 
-    #loadNodesFromStorage() {
+    _loadNodesFromStorage() {
         const favStr = localStorage.getItem(FAV_KEY);
         const nonFavStr = localStorage.getItem(NONFAV_KEY);
         this.#favourites = (favStr) ? JSON.parse(favStr) : [];
         this.#nonFavourites = (nonFavStr) ? JSON.parse(nonFavStr) : [];
+        emitter.emit(event);
     }
 
     removeFavourite(nodeId) {
@@ -131,8 +132,7 @@ export default class NodeStore {
      * Returns the node ID of the nearest node to the given coordinates. The calling function
      * should check for himself whether the node is in the favourites or not.
      * 
-     * @param {{lat: number, lon: number}} coord 
-     * @returns {number}
+     * @param {{lat: number, lon: number}} coord
      */
     getNearestNode(coord) {
         return this.nodeGateway
