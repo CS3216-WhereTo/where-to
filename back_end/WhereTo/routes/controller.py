@@ -207,7 +207,8 @@ def get_bus_route(origin_id, destination_id, user):
         else:
             bus_waiting_time = bus_waiting_times[(current["nodes"][0][0], current["transport_mode"], time_to[current["nodes"][0]])]
             duration = time_to[current["nodes"][-1]] - time_to[current["nodes"][0]] - bus_waiting_time
-            services = {current["transport_mode"]: {"wait_time": bus_waiting_time}}
+            services = [{"code": current["transport_mode"], "wait_time": bus_waiting_time}]
+            services_list = [current["transport_mode"]]
             path = []
             polyline_coordinates = []
 
@@ -221,14 +222,17 @@ def get_bus_route(origin_id, destination_id, user):
                     polyline_coordinates.extend(polyline.decode(bus_route_edges[(current["nodes"][i-1][0], current["nodes"][i][0])]["polyline"])[1:])
             
             current_path = list(map(lambda x:x[0], current["nodes"]))
-            other_services = get_services_serving_path(current_path, bus_route_edges)
-            for service in other_services:
-                if service not in services:
+            other_services_list = get_services_serving_path(current_path, bus_route_edges)
+            for service in other_services_list:
+                if service not in services_list:
                     if (current["nodes"][0][0], service, time_to[current["nodes"][0]]) in bus_waiting_times:
                         bus_waiting_time = bus_waiting_times[(current["nodes"][0][0], service, time_to[current["nodes"][0]])]
                     else: 
                         bus_waiting_time = get_bus_waiting_time(current["nodes"][0][0], service, time_to[current["nodes"][0]])
-                services[service] = {"wait_time": bus_waiting_time}
+                    services.append({"code": service, "wait_time": bus_waiting_time})
+                    services_list.append(service)
+            
+            services.sort(key=lambda x: x["wait_time"])
 
             segments.append({
                 "transport_type": "bus",

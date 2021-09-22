@@ -26,7 +26,7 @@ def find_walk_route(request, body, user):
     return JsonResponse(result, content_type='application/json')
 
 
-@require_GET
+@require_POST
 @extract_body
 @authenticated(required=False)
 def find_bus_route(request, body, user):
