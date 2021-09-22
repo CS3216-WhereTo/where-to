@@ -15,13 +15,13 @@ beforeEach(async () => {
 })
 
 it('Test contructor', () => {
-    const store = new NodeStore(nodeGateway);
+    const store = new NodeStore(nodeGateway, favGateway);
     expect(store.getFavourites()).toHaveLength(0);
     expect(store.getNonFavourites()).toHaveLength(0);
 });
 
 it('Test fetch', async () => {
-    const store = new NodeStore(nodeGateway);
+    const store = new NodeStore(nodeGateway, favGateway);
     try {
         await store.fetchNodes();
         const favs = store.getFavourites();

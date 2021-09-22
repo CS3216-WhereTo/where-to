@@ -12,3 +12,25 @@ window.matchMedia = window.matchMedia || function() {
       removeListener: function() {}
   };
 };
+
+var localStorageMock = (function() {
+  var store = {
+      'favouriteNodes': '[]'
+  };
+
+  return {
+    getItem: function(key) {
+      return store[key];
+    },
+    setItem: function(key, value) {
+      store[key] = value.toString();
+    },
+    clear: function() {
+      store = {};
+    },
+    removeItem: function(key) {
+      delete store[key];
+    }
+  };
+})();
+Object.defineProperty(window, 'localStorage', { value: localStorageMock });

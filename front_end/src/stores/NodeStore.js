@@ -1,4 +1,5 @@
 import MicroEmitter from 'micro-emitter';
+import isEqual from 'lodash.isequal'
 
 export const ERR_FAV = "This node is not in the favourites!";
 export const ERR_UNFAV = "This node is not in the non favourites!";
@@ -6,6 +7,9 @@ export const ERR_INVALID_FAV_ARG = "Invalid input was given!";
 
 const event = 'UPDATE_NODE';
 const emitter = new MicroEmitter();
+
+const FAV_KEY = 'favouriteNodes';
+const NONFAV_KEY = 'nonFavouriteNodes';
 
 /**
  * Exposes the following functions:
@@ -28,6 +32,12 @@ export default class NodeStore {
         this.#favourites = [];
         this.nodeGateway = nodeGateway;
         this.favGateway = favGateway;
+        emitter.on(event, () => this.#updateLocalStorage());
+    }
+
+    #updateLocalStorage() {
+        localStorage.setItem(FAV_KEY, JSON.stringify(this.#favourites));
+        localStorage.setItem(NONFAV_KEY, JSON.stringify(this.#nonFavourites));
     }
 
     /**
@@ -36,14 +46,24 @@ export default class NodeStore {
     fetchNodes() {
         return this.nodeGateway
             .get()
-            .then(res => this._setNodes(res))
-            .catch(e => console.error(e));
+            .then(res => this.#setNodes(res))
+            .catch(e => {
+                console.error(e);
+                this.#loadNodesFromStorage();
+            });
     }
 
-    _setNodes(result) {
-        this.#favourites.splice(0, this.#favourites.length, ...result.favourites);
-        this.#nonFavourites.splice(0, this.#nonFavourites.length, ...result.non_favourites);
+    #setNodes(result) {
+        this.#favourites = result.favourites.slice();
+        this.#nonFavourites = result.non_favourites.slice();
         emitter.emit(event);
+    }
+
+    #loadNodesFromStorage() {
+        const favStr = localStorage.getItem(FAV_KEY);
+        const nonFavStr = localStorage.getItem(NONFAV_KEY);
+        this.#favourites = (favStr) ? JSON.parse(favStr) : [];
+        this.#nonFavourites = (nonFavStr) ? JSON.parse(nonFavStr) : [];
     }
 
     removeFavourite(nodeId) {
@@ -78,7 +98,6 @@ export default class NodeStore {
                 emitter.emit(event);
             })
             .catch(console.error);
-        
     }
 
     /**
