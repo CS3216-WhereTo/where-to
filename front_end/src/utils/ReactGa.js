@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import ReactGA from "react-ga4";
 
 // Initialise Google Analytics tracking

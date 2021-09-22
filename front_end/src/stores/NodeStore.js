@@ -1,5 +1,4 @@
 import MicroEmitter from 'micro-emitter';
-import isEqual from 'lodash.isequal'
 
 export const ERR_FAV = "This node is not in the favourites!";
 export const ERR_UNFAV = "This node is not in the non favourites!";

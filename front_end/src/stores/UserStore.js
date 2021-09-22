@@ -1,6 +1,4 @@
 import MicroEmitter from "micro-emitter";
-import { emit, eventNames } from "process";
-import UserGateway from "../gateways/UserGateway";
 
 const emitter = new MicroEmitter();
 const eventSpeed = 'UPDATE_SPEED';

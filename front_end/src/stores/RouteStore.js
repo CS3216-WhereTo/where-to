@@ -1,6 +1,4 @@
 import MicroEmitter from 'micro-emitter';
-import { emit } from 'process';
-import RouteGateway from '../gateways/RouteGateway';
 
 export const ERR_MSG = "Start ID should not be the same as the destination ID";
 
