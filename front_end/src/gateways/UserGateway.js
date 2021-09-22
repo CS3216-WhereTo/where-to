@@ -1,5 +1,5 @@
 import axios from "axios";
-import checkUserLoggedIn, { getUserToken } from "../utils/AuthChecker"
+import userTokenExists, { getUserToken } from "../utils/AuthChecker"
 
 const ERR_RECENTS = 'User should be logged in to view recents!'
 const ERR_SPEED = 'User should be logged in to use speed!'
@@ -7,7 +7,7 @@ const ERR_SPEED = 'User should be logged in to use speed!'
 export default class UserGateway {
 
     async getRecents() {
-        const loggedIn = await checkUserLoggedIn();
+        const loggedIn = userTokenExists();
         if (!loggedIn) throw new Error(ERR_RECENTS);
         const response = await axios.get('user/list_recents', {
             headers: { Authorization: `Bearer ${getUserToken()}` }
@@ -31,7 +31,7 @@ export default class UserGateway {
     }
 
     async getWalkingSpeed() {
-        const loggedIn = await checkUserLoggedIn();
+        const loggedIn = userTokenExists();
         if (!loggedIn) throw new Error(ERR_SPEED);
         const response = await axios.get('user/get_speed', {
             headers: { 'Authorization': `Bearer ${getUserToken()}` }
@@ -45,7 +45,7 @@ export default class UserGateway {
      * @returns 
      */
     async postWalkingSpeed(newSpeed) {
-        const loggedIn = await checkUserLoggedIn();
+        const loggedIn = userTokenExists();
         if (!loggedIn) throw new Error(ERR_SPEED);
         const response = await axios.post('user/update_speed', {
             headers: {

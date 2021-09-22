@@ -5,10 +5,10 @@ import { IonPage, IonContent, IonSegment, IonSegmentButton, IonLabel } from "@io
 import FavouritesList from "./FavouritesList";
 import { trackPageView, trackFavouritesToRecentsTabEvent, trackRecentsToFavouritesTabEvent } from "../../utils/ReactGa";
 import UnathenticatedUserScreen from "../../components/sign-in/SignIn";
-import checkUserLoggedIn from "../../utils/AuthChecker";
 import UserStore from "../../stores/UserStore";
 import NodeStore from "../../stores/NodeStore";
 import "./Favourites.css";
+import { useAuthContext } from "../../utils/Context";
 
 const Mode = Object.freeze({
   FAVOURITES: "Favourites",
@@ -39,11 +39,11 @@ function Favourites(props) {
 
   const [ _ /* hasLoaded */, setLoadingStatus ] = useState(false);
 
-  const [ loggedIn, setLoginState ] = useState(false);
+  const { isLoggedIn, setLoginState } = useAuthContext();
 
   /** @type {[ Location, React.Dispatch<React.SetStateAction<Location>> ]} */
   const [ favourites, setFavourites ] = useState([]);
-  function observeFavourites() {
+  function populateFavourites() {
     const data = nodes.getFavourites()
       .map(node => new Location(node.node_id, node.name, true));
     setFavourites(data);
@@ -52,7 +52,7 @@ function Favourites(props) {
   }
 
   const [ recents, setRecents ] = useState([]);
-  function observeRecents() {
+  function populateRecents() {
     
     const allNodes = {
       favs: nodes.getFavourites(),
@@ -85,27 +85,16 @@ function Favourites(props) {
     setRecents(data);
   }
 
-  function didMount() {
-    if (!loggedIn) return;
-
-    /* observeRecents is called by */
-    user.onChangeRecents(observeRecents);
-    nodes.onChange(observeFavourites);
-
-    nodes.fetchNodes();
-  }
-
   useEffect(() => {
     trackPageView(window.location.pathname);
 
-    checkUserLoggedIn()
-    .then((loggedIn) => {
-      setLoadingStatus(true);
-      if (loggedIn) setLoginState(true);
-      else setLoginState(false);
-      didMount();
-    })
-    .catch(console.error);
+    if (!isLoggedIn) return;
+
+    user.onChangeRecents(populateRecents);
+    nodes.onChange(populateFavourites);
+
+    nodes.fetchNodes(); /* triggers observeFavourites which triggers observeRecents */
+
   }, []);
 
   const [segment, setSegment] = useState(Mode.FAVOURITES);
@@ -131,7 +120,7 @@ function Favourites(props) {
     } else throw new Error(ERR_INVALID_STATE);
   };
 
-  if (!loggedIn) return (<UnathenticatedUserScreen pageName={"Favourites"}/>);
+  if (!isLoggedIn) return (<UnathenticatedUserScreen pageName={"Favourites"}/>);
 
   return (
     <IonPage className="page favourites-page">

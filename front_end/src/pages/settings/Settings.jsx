@@ -5,9 +5,10 @@ import { useGoogleLogout } from "react-google-login";
 
 import CustomToast from "../../components/custom-toast/CustomToast";
 import UnathenticatedUserScreen from "../../components/sign-in/SignIn";
-import checkUserLoggedIn, { signUserOut } from "../../utils/AuthChecker";
+import { signUserOut } from "../../utils/AuthChecker";
 import { trackPageView, trackUpdateWalkingSpeedEvent, trackDismissSettingsToastEvent, trackGoogleSignOutEvent } from "../../utils/ReactGa";
 import "./Settings.css";
+import { useAuthContext } from "../../utils/Context";
 
 // TODO
 // Add API call for changing walking speed
@@ -15,18 +16,11 @@ import "./Settings.css";
 // Fix bug where sign out doesn't redirect
 
 const Settings = () => {
-  const [loggedIn, setLoginState] = useState(false);
-  checkUserLoggedIn()
-    .then((res) => {
-      if (res) setLoginState(true);
-      else setLoginState(false);
-    })
-    .catch(console.error);
+  const { isLoggedIn, setLoginState } = useAuthContext();
+
+  const history = useHistory();
 
   const options = ["Very Slow (0.8 m/s)", "Slow (1.1 m/s)", "Average (1.4 m/s)", "Fast (1.6 m/s)", "Very Fast (1.9 m/s)"];
-
-  // Handling signouts
-  const history = useHistory();
 
   // Showing speed options
   const [selectedSpeed, setSelectedSpeed] = useState(2);
@@ -39,12 +33,13 @@ const Settings = () => {
 
   const handleLogOut = () => {
     signUserOut();
+    setLoginState(false);
+    history.push('/');
     trackGoogleSignOutEvent();
-    history.replace("/");
   };
 
   const handleLogOutFailure = () => {
-    console.log("Encountered error logging out");
+    console.error("Encountered error logging out");
   };
 
   const { signOut } = useGoogleLogout({
@@ -89,7 +84,7 @@ const Settings = () => {
     </IonButton>
   );
 
-  if (!loggedIn) return <UnathenticatedUserScreen pageName={"Settings"} />;
+  if (!isLoggedIn) return <UnathenticatedUserScreen pageName={"Settings"} />;
   return (
     <IonPage className="page settings-page">
       <div className="page-header">

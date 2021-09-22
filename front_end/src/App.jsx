@@ -33,8 +33,9 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import { initialiseGoogleAnalytics } from "./utils/ReactGa";
 import NodeStore from "./stores/NodeStore";
 import RouteStore from "./stores/RouteStore";
-import checkUserLoggedIn from "./utils/AuthChecker";
+import { verifyTokenIfExists } from "./utils/AuthChecker";
 import UserStore from "./stores/UserStore";
+import { AuthContext } from "./utils/Context";
 
 /**
  * @param {{nodes: NodeStore, routes: RouteStore}} stores 
@@ -46,7 +47,7 @@ const App = (props) => {
   }, []);
 
   const [ isLoggedIn, setLoginState ] = useState(false);
-  checkUserLoggedIn()
+  verifyTokenIfExists()
     .then(res => {
       if (res) setLoginState(true);
       else setLoginState(false);
@@ -63,32 +64,34 @@ const App = (props) => {
   const user = props.user;
 
   return (
-    <IonApp>
-      <IonReactRouter>
-        <IonTabs>
-          <IonRouterOutlet>
-            <Route path="/search"><SearchHome nodes={nodes} routes={routes}/></Route>
-            <Route exact path="/favourites"><Favourites nodes={nodes} user={user}/></Route>
-            <Route exact path="/settings"><Settings/></Route>
-            <Route exact path="/">{landingPage}</Route>
-          </IonRouterOutlet>
-          <IonTabBar slot="bottom">
-            <IonTabButton tab="search" href="/search">
-              <IonIcon icon={mapOutline} />
-              <IonText>Map</IonText>
-            </IonTabButton>
-            <IonTabButton tab="favourites" href="/favourites">
-              <IonIcon icon={starOutline} />
-              <IonText>Favourites</IonText>
-            </IonTabButton>
-            <IonTabButton tab="settings" href="/settings">
-              <IonIcon icon={settingsOutline} />
-              <IonText>Settings</IonText>
-            </IonTabButton>
-          </IonTabBar>
-        </IonTabs>
-      </IonReactRouter>
-    </IonApp>
+    <AuthContext.Provider value={{ isLoggedIn, setLoginState }}>
+      <IonApp>
+        <IonReactRouter>
+          <IonTabs>
+            <IonRouterOutlet>
+              <Route path="/search" ><SearchHome nodes={nodes} routes={routes}/></Route>
+              <Route exact path="/favourites" > <Favourites nodes={nodes} user={user}/> </Route>
+              <Route exact path="/settings" ><Settings/> </Route>
+              <Route exact path="/">{landingPage} </Route>
+            </IonRouterOutlet>
+            <IonTabBar slot="bottom">
+              <IonTabButton tab="search" href="/search">
+                <IonIcon icon={mapOutline} />
+                <IonText>Map</IonText>
+              </IonTabButton>
+              <IonTabButton tab="favourites" href="/favourites">
+                <IonIcon icon={starOutline} />
+                <IonText>Favourites</IonText>
+              </IonTabButton>
+              <IonTabButton tab="settings" href="/settings">
+                <IonIcon icon={settingsOutline} />
+                <IonText>Settings</IonText>
+              </IonTabButton>
+            </IonTabBar>
+          </IonTabs>
+        </IonReactRouter>
+      </IonApp>
+    </AuthContext.Provider>
   );
 };
 

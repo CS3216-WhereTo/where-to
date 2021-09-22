@@ -1,5 +1,5 @@
 import axios from "axios";
-import checkUserLoggedIn, { getUserToken } from "../utils/AuthChecker";
+import userTokenExists, { getUserToken } from "../utils/AuthChecker";
 
 export default class RouteGateway {
 
@@ -10,7 +10,7 @@ export default class RouteGateway {
      */
     async getRoutes(locations) {
         const headers = { 'Content-Type': 'application/json' };
-        const loggedIn = await checkUserLoggedIn();
+        const loggedIn = userTokenExists();
         if (loggedIn) headers['Authorization'] = `Bearer ${getUserToken()}`
         const response = await axios.get('route/find_routes', {
             headers: headers,
@@ -27,7 +27,7 @@ export default class RouteGateway {
      */
     async getWalking(locations) {
         const headers = { 'Content-Type': 'application/json' };
-        const loggedIn = await checkUserLoggedIn();
+        const loggedIn = userTokenExists();
         if (loggedIn) headers['Authorization'] = `Bearer ${getUserToken()}`
         const response = axios.get('route/find_walk_route', {
             headers: headers,
@@ -44,7 +44,7 @@ export default class RouteGateway {
      */
     async getBus(locations) {
         const headers = { 'Content-Type': 'application/json' };
-        const loggedIn = await checkUserLoggedIn();
+        const loggedIn = userTokenExists();
         if (loggedIn) headers['Authorization'] = `Bearer ${getUserToken()}`
         const response = await axios.get('route/find_bus_route', {
             headers: headers,
