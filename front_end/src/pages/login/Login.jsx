@@ -1,16 +1,17 @@
 import { useState } from "react";
-import { GoogleLogin } from "react-google-login"
+import { GoogleLogin } from "react-google-login";
 import { withRouter, useHistory } from "react-router-dom";
 import { arrowForward } from "ionicons/icons";
-import { IonPage, IonImg, IonText, IonButton, IonGrid, IonRow, IonIcon, IonToast } from "@ionic/react";
+import { IonPage, IonImg, IonText, IonButton, IonGrid, IonRow, IonIcon } from "@ionic/react";
+import CustomToast from "../../components/custom-toast/CustomToast";
 
-import { trackPageView, trackGuestSignInEvent } from "../../utils/ReactGa";
+import { trackPageView, trackGuestSignInEvent, trackDismissLoginToastEvent } from "../../utils/ReactGa";
 import { signUserIn } from "../../utils/AuthChecker";
 import Logo from "../../assets/logo.svg";
 import "./Login.css";
 
-const ERR_CON_GOOGLE = 'We are unable to connect to Google right now, please try again later';
-const ERR_AUTH_FAIL = 'We are unable to authenticate you, please try again!';
+const ERR_CON_GOOGLE = "We are unable to connect to Google right now, please try again later";
+const ERR_AUTH_FAIL = "We are unable to authenticate you, please try again!";
 
 function LoginHeaderRow(_) {
   return (
@@ -28,23 +29,12 @@ function LoginHeaderRow(_) {
 }
 
 function LoginOptionsRow(props) {
-
   const loginButton = (
-    <GoogleLogin
-      clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-      onSuccess={props.onGoogleSuccess}
-      onFailure={props.onGoogleFailure}
-      theme="dark"
-    />
+    <GoogleLogin clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID} onSuccess={props.onGoogleSuccess} onFailure={props.onGoogleFailure} theme="dark" />
   );
 
   const guestLoginButton = (
-    <IonButton
-      className="sns-login__button"
-      shape="round"
-      fill="outline"
-      onClick={props.onGuessLogin}
-    >
+    <IonButton className="sns-login__button" shape="round" fill="outline" onClick={props.onGuessLogin}>
       <IonText className="sns-login__text">Continue as a guest</IonText>
       <IonIcon className="sns-login__next" slot="end" icon={arrowForward} size="large"></IonIcon>
     </IonButton>
@@ -74,16 +64,15 @@ function LoginOptionsRow(props) {
 }
 
 function Login(_) {
-
   trackPageView(window.location.pathname);
 
   const history = useHistory();
-  const redirectToSearchPage = () => history.replace('/search');
+  const redirectToSearchPage = () => history.replace("/search");
 
-  const [ loginError, setLoginError ] = useState('');
+  const [loginError, setLoginError] = useState("");
 
   /**
-   * @param {import("react-google-login").GoogleLoginResponse} googleResponse 
+   * @param {import("react-google-login").GoogleLoginResponse} googleResponse
    */
   function handleGoogleLoginSuccess(googleResponse) {
     const token = googleResponse.tokenId;
@@ -105,37 +94,20 @@ function Login(_) {
     redirectToSearchPage();
   }
 
-  const toast = () => {
-    const dismissBtn = {
-      text: "Okay",
-      role: "cancel",
-      handler: () => {}
-    };
-    return (
-        <IonToast
-            isOpen={loginError !== ''}
-            onDidDismiss={() => setLoginError('')}
-            message={loginError}
-            position={'top'}
-            duration={2000}
-            buttons={[dismissBtn]}
-        />
-    );
-  };
-
   return (
     <IonPage className="page login-page">
       <IonGrid className="login">
-        <LoginHeaderRow/>
-        <LoginOptionsRow
-          onGoogleSuccess={handleGoogleLoginSuccess}
-          onGoogleFailure={handleGoogleLoginFailure}
-          onGuessLogin={handleGuestLogin}
-        />
+        <LoginHeaderRow />
+        <LoginOptionsRow onGoogleSuccess={handleGoogleLoginSuccess} onGoogleFailure={handleGoogleLoginFailure} onGuessLogin={handleGuestLogin} />
       </IonGrid>
-      {toast()}
+      <CustomToast
+        showToast={loginError !== ""}
+        setShowToast={() => setLoginError("")}
+        toastMessage={loginError}
+        dismissBtnHandler={() => trackDismissLoginToastEvent()}
+      />
     </IonPage>
   );
-};
+}
 
 export default withRouter(Login);
