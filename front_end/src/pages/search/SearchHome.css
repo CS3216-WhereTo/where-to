@@ -1,34 +1,25 @@
-.search-home-page {
-  /* padding: 12px; */
-}
-
+/* ----- SEARCH -----  */
 .search-header {
   background-color: rgba(182, 182, 182, 0.6);
-  /* margin: -12px; */
   padding: 15px;
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
   z-index: 100;
 }
-.search {
+
+.search-container {
   display: flex;
 }
-.search-container {
+
+.search-inner-container {
   flex: 1;
 }
-.start-search {
+
+.search-inner-container__content {
   display: flex;
   flex-direction: row;
-  justify-content: center;
   align-items: center;
-  margin-top: 8px;
-  margin-bottom: 8px;
-}
-.end-search {
-  display: flex;
-  flex-direction: row;
   justify-content: center;
-  align-items: center;
   margin-top: 8px;
   margin-bottom: 8px;
 }
@@ -59,20 +50,21 @@
   box-shadow: 1px 1px 4px 1px rgba(0, 0, 0, 0.4);
 }
 
-
-.map {
-}
+/* ----- MAP -----  */
 .map--fixed {
   position: fixed !important;
 }
+
 .map--fullscreen {
   height: 100%;
   width: 100%;
 }
+
 .mapboxgl-ctrl-top-right {
   top: auto !important;
   bottom: 40px;
 }
+
 .mapboxgl-canvas {
   height: 100% !important;
   width: 100% !important;

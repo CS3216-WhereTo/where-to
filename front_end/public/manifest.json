@@ -1,6 +1,6 @@
 {
-  "short_name": "Ionic App",
-  "name": "My Ionic App",
+  "short_name": "WhereTo?",
+  "name": "WhereTo?",
   "icons": [
     {
       "src": "assets/icon/favicon.png",
@@ -8,10 +8,15 @@
       "type": "image/x-icon"
     },
     {
+      "src": "assets/icon/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    },
+    {
       "src": "assets/icon/icon.png",
       "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "maskable"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     }
   ],
   "start_url": ".",

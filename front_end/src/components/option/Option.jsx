@@ -23,7 +23,7 @@ const Option = (props) => {
   return (
     <components.Option {...props} className="option">
       <div className="option__text">{props.data.label}</div>
-      <IonIcon slot="start" icon={isFavourite ? star : starOutline} size="medium" className="option__icon--favourite" onClick={parentClick} />
+      <IonIcon className="option__icon" slot="start" icon={isFavourite ? star : starOutline} size="medium" onClick={parentClick} />
     </components.Option>
   );
 };

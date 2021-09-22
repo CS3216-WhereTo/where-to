@@ -1,7 +1,8 @@
 on:
   push:
-    tags:
-      - '*'
+    branches: [ master ]
+  pull-request:
+    branches: [ master ]
 
 jobs:
   build:
@@ -18,12 +19,23 @@ jobs:
       - name: Test
         run: npm test
         env:
+          REACT_APP_MAPBOX_KEY: ${{ secrets.REACT_APP_MAPBOX_KEY }}
+          REACT_APP_GOOGLE_CLIENT_ID: ${{ secrets.REACT_APP_GOOGLE_CLIENT_ID }}
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
           CI: true
       - name: Generate build
         run: npm run build
+        env:
+          REACT_APP_MAPBOX_KEY: ${{ secrets.REACT_APP_MAPBOX_KEY }}
+          REACT_APP_GOOGLE_CLIENT_ID: ${{ secrets.REACT_APP_GOOGLE_CLIENT_ID }}
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
       # Share artifact inside workflow
       - name: Share artifact inside workflow
         uses: actions/upload-artifact@v1
         with:
           name: react-github-actions-build
           path: build
+        env:
+          REACT_APP_MAPBOX_KEY: ${{ secrets.REACT_APP_MAPBOX_KEY }}
+          REACT_APP_GOOGLE_CLIENT_ID: ${{ secrets.REACT_APP_GOOGLE_CLIENT_ID }}
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
