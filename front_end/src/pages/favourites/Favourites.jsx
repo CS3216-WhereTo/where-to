@@ -40,14 +40,7 @@ function Favourites(props) {
   const [ _ /* hasLoaded */, setLoadingStatus ] = useState(false);
 
   const [ loggedIn, setLoginState ] = useState(false);
-  checkUserLoggedIn()
-    .then((loggedIn) => {
-      setLoadingStatus(true);
-      if (loggedIn) setLoginState(true);
-      else setLoginState(false);
-    })
-    .catch(console.error);
-  
+
   /** @type {[ Location, React.Dispatch<React.SetStateAction<Location>> ]} */
   const [ favourites, setFavourites ] = useState([]);
   function observeFavourites() {
@@ -90,17 +83,26 @@ function Favourites(props) {
     setRecents(data);
   }
 
-  useEffect(() => {
+  function didMount() {
     if (!loggedIn) return;
 
     user.onChangeRecents(observeRecents);
     nodes.onChange(observeFavourites);
 
     nodes.fetchNodes().then(() => user.fetchRecents());
-  }, []);
+  }
 
   useEffect(() => {
     trackPageView(window.location.pathname);
+
+    checkUserLoggedIn()
+    .then((loggedIn) => {
+      setLoadingStatus(true);
+      if (loggedIn) setLoginState(true);
+      else setLoginState(false);
+      didMount();
+    })
+    .catch(console.error);
   }, []);
 
   const [segment, setSegment] = useState(Mode.FAVOURITES);
