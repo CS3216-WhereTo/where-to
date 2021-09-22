@@ -34,7 +34,9 @@ const SearchHome = (props) => {
 
   // Check if there is a Node passed from FavouritesItem
   useEffect(() => {
-    setEnd(redirectProps?.state?.destination);
+    if (redirectProps?.state?.destination) {
+      setEnd(redirectProps?.state?.destination);
+    }
   }, [redirectProps]);
 
   useEffect(() => {
