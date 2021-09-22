@@ -1,16 +1,14 @@
 import { IonPage, IonIcon, IonRippleEffect, IonToast } from "@ionic/react";
 import { useState, useEffect, useRef } from "react";
-
-import "./SearchHome.css";
-import { ellipseOutline, swapVertical } from "ionicons/icons";
-import { locationSharp } from "ionicons/icons";
+import { ellipseOutline, swapVertical, locationSharp } from "ionicons/icons";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import { useLocation } from "react-router-dom";
 import { geolocated } from "react-geolocated";
-import CustomToast from "../../components/custom-toast/CustomToast";
 
+import "./SearchHome.css";
+import CustomToast from "../../components/custom-toast/CustomToast";
 import CustomSelect from "../../components/custom-select/CustomSelect";
-import { trackPageView, trackSearchStartPointSelectEvent, trackSearchEndPointSelectEvent, trackDismissSearchToastEvent } from "../../utils/ReactGa";
+import { trackPageView, trackDismissSearchToastEvent } from "../../utils/ReactGa";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
 
@@ -221,6 +219,7 @@ const SearchHome = (props) => {
                 placeholder="Select a starting point"
               />
             </div>
+
             <div className="search-inner-container__content">
               <IonIcon className="search-inner-container__icon" slot="start" icon={locationSharp} size="medium"></IonIcon>
               <CustomSelect
@@ -243,6 +242,7 @@ const SearchHome = (props) => {
           </div>
         </div>
       </div>
+
       <div ref={mapContainer} className="map map--fixed map--fullscreen" />
       <CustomToast showToast={showToast} setShowToast={setShowToast} toastMessage={toastMessage} dismissBtnHandler={trackDismissSearchToastEvent} />
     </IonPage>
@@ -256,5 +256,3 @@ export default geolocated({
   },
   userDecisionTimeout: 5000,
 })(SearchHome);
-
-// export default SearchHome;
