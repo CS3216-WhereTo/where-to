@@ -1,7 +1,6 @@
 import { IonList } from "@ionic/react";
 import PropTypes from "prop-types";
 
-import { Location } from "./Favourites";
 import FavouritesItem from "./FavouritesItem";
 
 function FavouritesList(props) {

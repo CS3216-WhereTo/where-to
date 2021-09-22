@@ -15,7 +15,7 @@ const Mode = Object.freeze({
   RECENTS: "Recents"
 })
 
-export class Location {
+class Location {
   /**
    * @param {number} id 
    * @param {string} name 
@@ -97,7 +97,7 @@ function Favourites(props) {
     nodes.onChange(observeFavourites);
 
     nodes.fetchNodes().then(() => user.fetchRecents());
-  });
+  }, []);
 
   useEffect(() => {
     trackPageView(window.location.pathname);
