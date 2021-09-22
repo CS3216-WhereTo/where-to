@@ -19,8 +19,6 @@ const routeGateway = new RouteGateway();
 const nodeStore = new NodeStore(nodeGateway, favGateway);
 const routeStore = new RouteStore(routeGateway);
 
-nodeStore.fetchNodes();
-
 ReactDOM.render(
   <React.StrictMode>
     <App nodes={nodeStore} routes={routeStore}/>
