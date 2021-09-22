@@ -3,8 +3,6 @@ from .models import Recent
 DEFAULT_WALK_SPEED = 1.4
 
 def get_speed(user):
-    if not user.is_authenticated():
-        return DEFAULT_WALK_SPEED
     return user.walking_speed
 
 def update_speed(user, speed):
