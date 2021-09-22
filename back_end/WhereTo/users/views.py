@@ -6,20 +6,20 @@ from . import controller
 
 # Create your views here.
 @require_GET
-@authenticated
+@authenticated(required=True)
 def get_speed(request, user):
     result = controller.get_speed(user)
     return JsonResponse({'speed': result}, content_type='application/json')
 
 @require_POST
 @extract_body
-@authenticated
+@authenticated()
 def update_speed(request, body, user):
     result = controller.update_speed(user, body['speed'])
     return JsonResponse({'error': result}, content_type='application/json')
 
 @require_GET
-@authenticated
+@authenticated()
 def list_recents(request, user):
     result = controller.list_recents(user)
     return JsonResponse({'routes': result}, content_type='application/json')

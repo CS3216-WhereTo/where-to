@@ -7,14 +7,14 @@ from . import controller
 
 # Create your views here.
 @require_GET
-@authenticated
+@authenticated()
 def list_favourites(request, user):
     result = controller.list_favorites(user)
     return JsonResponse({'nodes': result}, content_type='application/json')
 
 @require_POST
 @extract_body
-@authenticated
+@authenticated()
 def add_favourite(request, body, user):
     if 'node_id' not in body:
         return BAD_REQUEST
@@ -24,7 +24,7 @@ def add_favourite(request, body, user):
 
 @require_POST
 @extract_body
-@authenticated
+@authenticated()
 def remove_favourite(request, body, user):
     if 'node_id' not in body:
         return BAD_REQUEST

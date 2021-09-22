@@ -48,7 +48,7 @@ def get_user_model(user_id):
         user.save()
     return user
 
-# decorator for custom authentication middleware. requires extract_body beforehand
+# decorator for custom authentication middleware
 def authenticated(required=True):
     def decorator(handler):
         def wrapped_handler(request, **kwargs):
