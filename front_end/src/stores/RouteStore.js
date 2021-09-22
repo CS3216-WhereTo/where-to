@@ -1,7 +1,11 @@
 import MicroEmitter from 'micro-emitter';
+import { emit } from 'process';
 import RouteGateway from '../gateways/RouteGateway';
 
 export const ERR_MSG = "Start ID should not be the same as the destination ID";
+
+export const BUS_KEY = 'busRoute';
+export const WALK_KEY = 'walkRoute';
 
 const event = 'UPDATE_ROUTE';
 const emitter = new MicroEmitter();
@@ -24,6 +28,13 @@ export default class RouteStore {
         this.#walkRoute = null;
         this.#busRoute = null;
         this.gateway = routeGateway;
+
+        emitter.on(event, () => this._updateLocalStorage());
+    }
+
+    _updateLocalStorage() {
+        localStorage.setItem(WALK_KEY, JSON.stringify(this.#walkRoute));
+        localStorage.setItem(BUS_KEY, JSON.stringify(this.#busRoute));
     }
 
     /**
@@ -37,7 +48,18 @@ export default class RouteStore {
         return this.gateway
             .getRoutes({ start_id: startId, end_id: endId })
             .then(res => this._setRoutes(res))
-            .catch(console.error);
+            .catch((e) => {
+                console.error(e);
+                this._loadLastRouteFromStorage();
+            });
+    }
+
+    _loadLastRouteFromStorage() {
+        const walkRoute = localStorage.getItem(WALK_KEY);
+        const busRoute = localStorage.getItem(BUS_KEY);
+        this.#walkRoute = (walkRoute) ? JSON.parse(walkRoute) : [];
+        this.#busRoute = (busRoute) ? JSON.parse(busRoute) : [];
+        emitter.emit(event);
     }
 
     _setRoutes(result) {
@@ -68,7 +90,7 @@ export default class RouteStore {
     }
 
     getBusRoute() {
-        return (this.#busRoute == null) ? null :{ ...this.#busRoute };
+        return (this.#busRoute == null) ? null : { ...this.#busRoute };
     }
 
 }

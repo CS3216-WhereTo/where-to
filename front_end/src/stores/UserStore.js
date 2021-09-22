@@ -1,4 +1,5 @@
 import MicroEmitter from "micro-emitter";
+import { emit, eventNames } from "process";
 import UserGateway from "../gateways/UserGateway";
 
 const emitter = new MicroEmitter();
@@ -6,6 +7,9 @@ const eventSpeed = 'UPDATE_SPEED';
 const eventRecents = 'UPDATE_RECENTS';
 
 export const ERR_INVALID_SPD = 'Invalid speed was given';
+
+export const SPEED_KEY = 'userSpeed';
+export const RECENTS_KEY = 'recents';
 
 export default class UserStore {
 
@@ -19,13 +23,39 @@ export default class UserStore {
         this.#speed = 0;
         this.#recents = [];
         this.gateway = gateway;
+
+        emitter.on(eventSpeed, () => this._updateLocalSpeed());
+        emitter.on(eventRecents, () => this._updateLocalRecents());
+    }
+
+    _updateLocalSpeed() {
+        localStorage.setItem(SPEED_KEY, JSON.stringify(this.#speed));
+    }
+
+    _updateLocalRecents() {
+        localStorage.setItem(RECENTS_KEY, JSON.stringify(this.#recents));
     }
 
     fetchRecents() {
         return this.gateway
             .getRecents()
             .then((res) => this._setRecents(res))
-            .catch(console.error);
+            .catch(e => {
+                console.error(e);
+                this._loadRecentsFromStorage();
+            });
+    }
+
+    _loadSpeedFromStorage() {
+        const speed = localStorage.getItem(SPEED_KEY);
+        this.#speed = (speed) ? JSON.parse(speed) : 0;
+        emitter.emit(eventSpeed);
+    }
+
+    _loadRecentsFromStorage() {
+        const recents = localStorage.getItem(RECENTS_KEY);
+        this.#recents = (recents) ? JSON.parse(recents) : [];
+        emitter.emit(eventRecents);
     }
 
     onChangeRecents(handler) {
@@ -45,7 +75,10 @@ export default class UserStore {
         return this.gateway
             .getWalkingSpeed()
             .then((res) => this._updateSpeed(res))
-            .catch(console.error);
+            .catch(e => {
+                console.error(e);
+                this._loadSpeedFromStorage();
+            });
     }
 
     _updateSpeed(res) {
