@@ -37,30 +37,47 @@ export const trackGuestSignInEvent = () => {
   });
 };
 
+export const trackDismissLoginToastEvent = () => {
+  ReactGA.event({
+    category: "auth",
+    action: "dismiss_toast",
+  });
+};
 export const trackSearchStartPointSelectEvent = () => {
   ReactGA.event({
     category: "search",
     action: "open_start_select",
   });
 };
+
 export const trackSearchEndPointSelectEvent = () => {
   ReactGA.event({
     category: "search",
     action: "open_end_select",
   });
 };
+
 export const trackSearchSwapStartEndEvent = () => {
   ReactGA.event({
     category: "search",
     action: "swap_start_end",
   });
 };
+
 export const trackSearchButtonPressEvent = () => {
   ReactGA.event({
     category: "search",
     action: "press_search_button",
   });
 };
+
+export const trackDismissSearchToastEvent = () => {
+  ReactGA.event({
+    category: "search",
+    action: "dismiss_toast",
+  });
+};
+
 export const trackFavouritesToRecentsTabEvent = () => {
   ReactGA.event({
     category: "favourites",
