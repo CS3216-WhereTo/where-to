@@ -1,5 +1,6 @@
 import { Route, Redirect } from "react-router-dom";
 import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { IonApp, IonRouterOutlet, IonTabBar, IonTabs, IonTabButton, IonIcon, IonText } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 
@@ -33,6 +34,7 @@ import { initialiseGoogleAnalytics } from "./utils/ReactGa";
 import NodeStore from "./stores/NodeStore";
 import RouteStore from "./stores/RouteStore";
 import checkUserLoggedIn from "./utils/AuthChecker";
+import UserStore from "./stores/UserStore";
 
 /**
  * @param {{nodes: NodeStore, routes: RouteStore}} stores 
@@ -53,8 +55,12 @@ const App = (props) => {
 
   const landingPage = !isLoggedIn ? <Login/> : <Redirect to="/search"/>;
 
+  /** @type {NodeStore} */
   const nodes = props.nodes;
+  /** @type {RouteStore} */
   const routes = props.routes;
+  /** @type {UserStore} */
+  const user = props.user;
 
   return (
     <IonApp>
@@ -62,7 +68,7 @@ const App = (props) => {
         <IonTabs>
           <IonRouterOutlet>
             <Route path="/search"><SearchHome nodes={nodes} routes={routes}/></Route>
-            <Route exact path="/favourites"><Favourites nodes={nodes}/></Route>
+            <Route exact path="/favourites"><Favourites nodes={nodes} user={user}/></Route>
             <Route exact path="/settings"><Settings/></Route>
             <Route exact path="/">{landingPage}</Route>
           </IonRouterOutlet>
@@ -87,3 +93,9 @@ const App = (props) => {
 };
 
 export default App;
+
+App.propTypes = {
+  nodes: PropTypes.instanceOf(NodeStore).isRequired,
+  user: PropTypes.instanceOf(UserStore).isRequired,
+  routes: PropTypes.instanceOf(RouteStore).isRequired
+};

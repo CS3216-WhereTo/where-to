@@ -112,7 +112,7 @@ export default class NodeStore {
     /**
      * Returns all favourited nodes.
      * 
-     * @returns {[{node_id: number, name: string, lat: number, lon: number, type: string}]} nodes
+     * @returns {[{node_id: number, name: string, coordinates: [number, number]]} nodes
      */
     getFavourites() {
         return [...this.#favourites];
@@ -121,7 +121,7 @@ export default class NodeStore {
     /**
      * Returns all unfavourited nodes.
      * 
-     * @returns {[{node_id: number, name: string, lat: number, lon: number, type: string}]} nodes
+     * @returns {[{node_id: number, name: string, coordinates: [number, number]]} nodes
      */
     getNonFavourites() {
         return [...this.#nonFavourites];

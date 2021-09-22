@@ -10,18 +10,22 @@ import FavouritesGateway from './gateways/FavouritesGateway';
 import RouteGateway from './gateways/RouteGateway';
 import NodeStore from './stores/NodeStore';
 import RouteStore from './stores/RouteStore';
+import UserGateway from './gateways/UserGateway';
+import UserStore from './stores/UserStore';
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 const nodeGateway = new NodeGateway();
 const favGateway = new FavouritesGateway();
 const routeGateway = new RouteGateway();
+const userGateway = new UserGateway();
 const nodeStore = new NodeStore(nodeGateway, favGateway);
 const routeStore = new RouteStore(routeGateway);
+const userStore = new UserStore(userGateway);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App nodes={nodeStore} routes={routeStore}/>
+    <App nodes={nodeStore} routes={routeStore} user={userStore}/>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -61,7 +61,7 @@ export default class UserStore {
     }
 
     _setRecents(recents) {
-        this.#recents = recents.nodes;
+        this.#recents = recents.routes.map(JSON.parse);
         emitter.emit(eventRecents);
     }
 
