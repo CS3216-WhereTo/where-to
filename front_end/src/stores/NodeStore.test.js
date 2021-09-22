@@ -1,6 +1,6 @@
 import NodeGateway, { kentRidge, infoTech, lt32 } from "../gateways/NodeGateway";
 import FavouritesGateway from "../gateways/FavouritesGateway";
-import NodeStore, { ERR_UNFAV, ERR_FAV } from "./NodeStore";
+import NodeStore, { ERR_UNFAV, ERR_FAV, FAV_KEY, NONFAV_KEY } from "./NodeStore";
 
 jest.mock('../gateways/FavouritesGateway')
 jest.mock('../gateways/NodeGateway');
@@ -12,25 +12,36 @@ let store = new NodeStore(nodeGateway, favGateway);
 beforeEach(async () => {
     store = new NodeStore(nodeGateway, favGateway);
     await store.fetchNodes();
+    localStorage.clear();
 })
 
 it('Test contructor', () => {
-    const store = new NodeStore(nodeGateway);
-    expect(store.favourites).toHaveLength(0);
-    expect(store.nonFavourites).toHaveLength(0);
+    const store = new NodeStore(nodeGateway, favGateway);
+    expect(store.getFavourites()).toHaveLength(0);
+    expect(store.getNonFavourites()).toHaveLength(0);
 });
 
 it('Test fetch', async () => {
-    const store = new NodeStore(nodeGateway);
+    let localFav = localStorage.getItem(FAV_KEY);
+    let localNonFav = localStorage.getItem(NONFAV_KEY);
+    expect(localFav).toBeUndefined();
+    expect(localNonFav).toBeUndefined();
+
+    const store = new NodeStore(nodeGateway, favGateway);
     try {
         await store.fetchNodes();
         const favs = store.getFavourites();
         const nonFavs = store.getNonFavourites();
         expect(favs).toEqual([infoTech]);
         expect(nonFavs).toEqual([ kentRidge, lt32 ]);
+
+        localFav = localStorage.getItem(FAV_KEY);
+        localNonFav = localStorage.getItem(NONFAV_KEY);
+        expect(JSON.parse(localFav)).toHaveLength(1);
+        expect(JSON.parse(localNonFav)).toHaveLength(2);
     } catch (e) {
         console.log(e);
-        fail(e);
+        expect(e).toBe('Test should not have reached this point!');
     }
 });
 

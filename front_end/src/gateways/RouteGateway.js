@@ -1,10 +1,7 @@
-const axios = require('axios').default;
+import axios from "axios";
+import checkUserLoggedIn, { getUserToken } from "../utils/AuthChecker";
 
 export default class RouteGateway {
-
-    constructor() {
-        this.token = '';
-    }
 
     /**
      * Sends a GET request for both walking and bus routes.
@@ -12,19 +9,14 @@ export default class RouteGateway {
      * @param {{start_id: number, end_id: number}} locations 
      */
     async getRoutes(locations) {
-        try {
-            const response = await axios.get('route/find_routes', {
-                headers: {
-                    'Authorization': `Bearer ${this.token}`,
-                    'Content-Type': 'application/json'
-                },
-                data: locations
-            });
-            return response.data;
-        } catch (e) {
-            console.error(e);
-            throw e;
-        }
+        const headers = { 'Content-Type': 'application/json' };
+        const loggedIn = await checkUserLoggedIn();
+        if (loggedIn) headers['Authorization'] = `Bearer ${getUserToken()}`
+        const response = await axios.get('route/find_routes', {
+            headers: headers,
+            params: locations
+        });
+        return response.data;
     }
 
     /**
@@ -33,19 +25,14 @@ export default class RouteGateway {
      * @param {{start_id: number, end_id: number}} locations  
      */
     async getWalking(locations) {
-        try {
-            const response = axios.get('route/find_walk_route', {
-                headers: {
-                    'Authorization': `Bearer ${this.token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: locations
-            });
-            return response.data;
-        } catch (e) {
-            console.error(e);
-            throw e;
-        }
+        const headers = { 'Content-Type': 'application/json' };
+        const loggedIn = await checkUserLoggedIn();
+        if (loggedIn) headers['Authorization'] = `Bearer ${getUserToken()}`
+        const response = axios.get('route/find_walk_route', {
+            headers: headers,
+            params: locations
+        });
+        return response.data;
     }
 
     /**
@@ -54,28 +41,14 @@ export default class RouteGateway {
      * @param {{start_id: number, end_id: number}} locations
      */
     async getBus(locations) {
-        try {
-            const response = await axios.get('route/find_bus_route', {
-                headers: {
-                    'Authorization': `Bearer ${this.token}`,
-                    'Content-Type': 'application/json'
-                },
-                body: locations
-            });
-            return response.data;
-        } catch (e) {
-            console.error(e);
-            throw e;
-        }
-    }
-
-    /**
-     * Sets the user token
-     * 
-     * @param {string} userToken 
-     */
-    setToken(userToken) {
-        this.token = userToken;
+        const headers = { 'Content-Type': 'application/json' };
+        const loggedIn = await checkUserLoggedIn();
+        if (loggedIn) headers['Authorization'] = `Bearer ${getUserToken()}`
+        const response = await axios.get('route/find_bus_route', {
+            headers: headers,
+            params: locations
+        });
+        return response.data;
     }
 
 }

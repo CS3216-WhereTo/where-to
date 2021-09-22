@@ -1,4 +1,4 @@
-import { IonButton } from "@ionic/react";
+import { IonButton, IonPage, IonContent } from "@ionic/react";
 
 import NotSignedIn from '../../assets/not-signed-in.jpg'
 
@@ -18,4 +18,18 @@ const SignIn = () => {
   );
 }
 
-export default SignIn;
+function UnathenticatedUserScreen(props) {
+  return (
+    <IonPage className="page settings-page">
+      <div className="page-header">
+        <p className="page-header__text">{props.pageName}</p>
+      </div>
+
+      <IonContent>
+        <SignIn />
+      </IonContent>
+    </IonPage>
+  );
+}
+
+export default UnathenticatedUserScreen;

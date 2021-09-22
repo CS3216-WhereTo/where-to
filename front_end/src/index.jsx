@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import axios from 'axios';
 
 import NodeGateway from './gateways/NodeGateway';
 import FavouritesGateway from './gateways/FavouritesGateway';
@@ -10,8 +11,7 @@ import RouteGateway from './gateways/RouteGateway';
 import NodeStore from './stores/NodeStore';
 import RouteStore from './stores/RouteStore';
 
-const axios = require('axios').default;
-axios.defaults.baseURL = '{insert URL here}/api/v1';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 const nodeGateway = new NodeGateway();
 const favGateway = new FavouritesGateway();

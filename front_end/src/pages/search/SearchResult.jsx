@@ -11,7 +11,7 @@ import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-load
 import Modal from '../../components/modal/Modal'
 import "./SearchResult.css";
 
-mapboxgl.accessToken = "pk.eyJ1IjoidGVvanVueGlvbmciLCJhIjoiY2t0aTl0OGp6MHp3bjJ1cGlsdHhzODAwdSJ9.rujr8ESzMSG6u7pFL6OQ6A";
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
 
 // Receive in start and end location
 const SearchResult = ({ start, end }) => {

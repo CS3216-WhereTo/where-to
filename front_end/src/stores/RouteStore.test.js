@@ -7,8 +7,8 @@ const gateway = new RouteGateway();
 
 it('Test constructor', () => {
     const store = new RouteStore(gateway);
-    expect(store.walkRoute).toBeNull();
-    expect(store.busRoute).toBeNull();
+    expect(store.getWalkRoute()).toBeNull();
+    expect(store.getBusRoute()).toBeNull();
 });
 
 it('Test fetchRoutes', async () => {
