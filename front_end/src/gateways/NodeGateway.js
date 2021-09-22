@@ -14,6 +14,7 @@ export default class NodeGateway {
         const response = await axios.get('nodes/list_nodes', {
             headers: headers
         });
+        console.log('GET nodes/list_nodes success');
         return response.data;
     }
 
@@ -27,6 +28,7 @@ export default class NodeGateway {
             headers: { 'Content-Type': 'application/json' },
             params: coords
         });
+        console.log('GET node/find_nearest_node success');
         return response.data;
     }
 
