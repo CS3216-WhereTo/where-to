@@ -3,12 +3,13 @@ import Select from "react-select";
 
 import "./CustomSelect.css";
 
-const CustomSelect = ({ value, onChange, placeholder, options }) => {
+const CustomSelect = ({ value, onChange, onInputChange, placeholder, options }) => {
   return (
     <Select
       value={value}
       onChange={onChange}
       options={options}
+      onInputChange={onInputChange}
       isClearable={true}
       components={{ Option }}
       placeholder={placeholder}
