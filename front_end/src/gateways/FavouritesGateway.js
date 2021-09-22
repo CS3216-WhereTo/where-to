@@ -17,6 +17,7 @@ export default class FavouritesGateway {
             const response = await axios.get('favourites/list_favourites', {
                 headers: headers
             });
+            console.log('GET favourites/list_favourites success');
             return response.data;
         } catch (e) {
             console.error(e);
@@ -41,7 +42,8 @@ export default class FavouritesGateway {
             const response = await axios.post('favourites/add_favourite', {
                 headers: headers,
                 data: { node_id: nodeId }
-            })
+            });
+            console.log('POST favourites/add_favourites success');
             return response.data;
         } catch (e) {
             console.error(e);
@@ -67,6 +69,7 @@ export default class FavouritesGateway {
                 headers: headers,
                 data: { node_id: nodeId }
             });
+            console.log('POST favourites/remove_favourite success');
             return response.data;
         } catch (e) {
             console.error(e);

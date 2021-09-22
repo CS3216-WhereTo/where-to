@@ -12,6 +12,7 @@ export default class UserGateway {
         const response = await axios.get('user/list_recents', {
             headers: { Authorization: `Bearer ${getUserToken()}` }
         });
+        console.log('GET user/list_recents success');
         return response.data;
     }
 
@@ -22,6 +23,7 @@ export default class UserGateway {
             const response = await axios.get('user/check_token', {
                 headers: { 'Authorization': `Bearer ${getUserToken()}` }
             });
+            console.log('GET user/check_token success');
             return response.data.valid === 1;
         } catch (e) {
             console.error(e);
@@ -34,6 +36,7 @@ export default class UserGateway {
         const response = await axios.get('user/get_speed', {
             headers: { 'Authorization': `Bearer ${getUserToken()}` }
         });
+        console.log('GET user/get_speed success');
         return response.data;
     }
 
@@ -51,6 +54,7 @@ export default class UserGateway {
             },
             body: { speed: newSpeed }
         });
+        console.log('POST user/update_speed success');
         return response.data;
     }
 
