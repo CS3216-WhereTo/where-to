@@ -1,4 +1,4 @@
-from django.http.response import JsonResponse
+from django.http.response import HttpResponse
 
-UNAUTHORIZED = JsonResponse({}, status=401)
-BAD_REQUEST = JsonResponse({}, status=400)
+UNAUTHORIZED = HttpResponse(status=401)
+BAD_REQUEST = HttpResponse(status=400)
