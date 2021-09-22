@@ -18,9 +18,9 @@ const SignIn = () => {
   );
 }
 
-function UnathenticatedUserScreen(props) {
+function UnauthenticatedUserScreen(props) {
   return (
-    <IonPage className="page settings-page">
+    <IonPage className="page unauthenticated-page">
       <div className="page-header">
         <p className="page-header__text">{props.pageName}</p>
       </div>
@@ -32,4 +32,4 @@ function UnathenticatedUserScreen(props) {
   );
 }
 
-export default UnathenticatedUserScreen;
+export default UnauthenticatedUserScreen;

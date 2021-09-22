@@ -2,16 +2,17 @@ import { useState, useEffect } from "react";
 
 import { IonPage, IonContent, IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";
 
+import Loading from '../../components/loading/Loading';
 import FavouritesList from "./FavouritesList";
 import "./Favourites.css";
 import { trackPageView, trackFavouritesToRecentsTabEvent, trackRecentsToFavouritesTabEvent } from "../../utils/ReactGa";
-import UnathenticatedUserScreen from "../../components/sign-in/SignIn";
+import UnauthenticatedUserScreen from "../../components/sign-in/SignIn";
 import checkUserLoggedIn from "../../utils/AuthChecker";
 
 // TODO: pull to refresh
 const Favourites = (props) => {
 
-  const [ loggedIn, setLoginState ] = useState(false);
+  const [ loggedIn, setLoginState ] = useState(null);
   checkUserLoggedIn()
     .then((loggedIn) => {
       if (loggedIn) setLoginState(true);
@@ -66,7 +67,8 @@ const Favourites = (props) => {
     isSegmentFav ? setFavourites(newList) : setRecents(newList);
   };
 
-  if (!loggedIn) return (<UnathenticatedUserScreen pageName={"Favourites"}/>);
+  if (loggedIn === null) return (<Loading pageName={"Favourites"}/>);
+  if (!loggedIn) return (<UnauthenticatedUserScreen pageName={"Favourites"}/>);
 
   return (
     <IonPage className="page favourites-page">

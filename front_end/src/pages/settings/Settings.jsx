@@ -3,17 +3,17 @@ import { useHistory } from 'react-router';
 import { IonPage, IonContent, IonLabel, IonButton, IonChip, IonToast } from "@ionic/react";
 import { useGoogleLogout } from 'react-google-login';
 
-import UnathenticatedUserScreen from '../../components/sign-in/SignIn';
+import Loading from '../../components/loading/Loading';
+import UnauthenticatedUserScreen from '../../components/sign-in/SignIn';
 import checkUserLoggedIn, { signUserOut } from '../../utils/AuthChecker';
 import { trackPageView, trackUpdateWalkingSpeedEvent, trackDismissSettingsToastEvent,trackGoogleSignOutEvent } from "../../utils/ReactGa";
 import './Settings.css';
 
 const Settings = () => {
-
-  const [ loggedIn, setLoginState ]  = useState(false);
+  const [ loggedIn, setLoginState ]  = useState(null);
   checkUserLoggedIn()
-    .then(res => { 
-      if (res) setLoginState(true);
+    .then((loggedIn) => {
+      if (loggedIn) setLoginState(true);
       else setLoginState(false);
     })
     .catch(console.error);
@@ -121,7 +121,8 @@ const Settings = () => {
     );
   };
   
-  if (!loggedIn) return (<UnathenticatedUserScreen pageName={"Settings"}/>);
+  if (loggedIn === null) return (<Loading pageName={"Settings"}/>);
+  if (!loggedIn) return (<UnauthenticatedUserScreen pageName={"Settings"}/>);
   return (
     <IonPage className="page settings-page">
       <div className="page-header">
