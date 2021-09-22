@@ -45,8 +45,10 @@ function Favourites(props) {
   const [ favourites, setFavourites ] = useState([]);
   function observeFavourites() {
     const data = nodes.getFavourites()
-    .map(node => new Location(node.node_id, node.name, true));
+      .map(node => new Location(node.node_id, node.name, true));
     setFavourites(data);
+
+    user.fetchRecents();
   }
 
   const [ recents, setRecents ] = useState([]);
@@ -86,10 +88,11 @@ function Favourites(props) {
   function didMount() {
     if (!loggedIn) return;
 
+    /* observeRecents is called by */
     user.onChangeRecents(observeRecents);
     nodes.onChange(observeFavourites);
 
-    nodes.fetchNodes().then(() => user.fetchRecents());
+    nodes.fetchNodes();
   }
 
   useEffect(() => {
