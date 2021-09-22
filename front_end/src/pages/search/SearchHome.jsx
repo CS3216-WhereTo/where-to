@@ -180,6 +180,10 @@ const SearchHome = (props) => {
                     },
                   });
 
+                  // Markers for start and end
+                  new mapboxgl.Marker().setLngLat([103.7846, 1.29431]).addTo(map.current);
+                  new mapboxgl.Marker().setLngLat([103.7818, 1.29654]).addTo(map.current);
+                  
                   // Centers on start location
                   map.current.flyTo({ center: [103.7846, 1.29431] });
                 }
