@@ -95,6 +95,22 @@ const SearchHome = (props) => {
     { label: "EnglishEnglishEnglish EnglishEnglishEnglishEnglishEnglish ", value: "en" },
   ];
 
+  const handleInputChange = (input) => {
+    const displayOptions = options.filter(option => {
+      const words = option.label.toLowerCase().split(" ");
+      for (const word of words) {
+        if (word.startsWith(input)) {
+          return true;
+        }
+      }
+      return false;
+    })
+
+    setFilteredOptions(displayOptions);
+  }
+
+  const [filteredOptions, setFilteredOptions] = useState(options);
+
   const swapStartEnd = () => {
     const temp = start;
     setStart(end);
@@ -108,7 +124,7 @@ const SearchHome = (props) => {
           <div className="search-inner-container">
             <div className="search-inner-container__content">
               <IonIcon className="search__icon" slot="start" icon={ellipseOutline} size="medium"></IonIcon>
-              <CustomSelect className="search__input" value={start} onChange={setStart} options={options} placeholder="Select a starting point" />
+              <CustomSelect className="search__input" value={start} onChange={setStart} options={filteredOptions} onInputChange={handleInputChange} placeholder="Select a starting point" />
             </div>
             <div className="search-inner-container__content">
               <IonIcon className="search-inner-container__icon" slot="start" icon={locationSharp} size="medium"></IonIcon>
