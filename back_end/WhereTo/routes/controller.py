@@ -1,7 +1,7 @@
 from .routing_helper import *
 from .models import WalkEdge, BusEdge, BusService
 from nodes.models import Node, BusStop, Landmark, Road
-from users.controller import get_speed, add_recent
+from users.controller import get_speed, add_recent, DEFAULT_WALK_SPEED
 from django.contrib.sessions.backends.db import SessionStore
 import copy
 import polyline
@@ -103,7 +103,7 @@ def get_walk_route(origin_id, destination_id, user):
     if user:
         walk_speed = get_speed(user)
     else:
-        walk_speed = 1.4
+        walk_speed = DEFAULT_WALK_SPEED
 
     time_to, pred = dijkstra_walk(origin_id, destination_id, walk_speed, node_graph)
 
@@ -141,7 +141,7 @@ def get_bus_route(origin_id, destination_id, user):
     if user:
         walk_speed = get_speed(user)
     else:
-        walk_speed = 1.4
+        walk_speed = DEFAULT_WALK_SPEED
 
     time_to, pred, bus_waiting_times = dijkstra_bus(origin_id, destination_id, walk_speed, node_graph, bus_stop_graph, bus_route_edges)
     

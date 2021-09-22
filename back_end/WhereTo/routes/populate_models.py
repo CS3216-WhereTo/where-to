@@ -5,7 +5,7 @@ from nodes.models import Node, BusStop
 """ 
 to use this file:
 1. run "python manage.py shell" in back_end/WhereTo
-2. "from nodes.populate_models import populate_walkedge" etc
+2. "from routes.populate_models import populate_walkedge" etc
 3. "populate_walkedge()", etc
 """
 

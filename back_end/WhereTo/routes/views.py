@@ -10,7 +10,7 @@ def extract_node_ids(body):
 # Create your views here.
 @require_POST
 @extract_body
-@authenticated
+@authenticated(required=False)
 def find_route(request, body, user):
     start_id, end_id = extract_node_ids(body)
     result = get_route(start_id, end_id, user)
@@ -19,7 +19,7 @@ def find_route(request, body, user):
 
 @require_POST
 @extract_body
-@authenticated
+@authenticated(required=False)
 def find_walk_route(request, body, user):
     start_id, end_id = extract_node_ids(body)
     result = get_walk_route(start_id, end_id, user)
@@ -28,7 +28,7 @@ def find_walk_route(request, body, user):
 
 @require_GET
 @extract_body
-@authenticated
+@authenticated(required=False)
 def find_bus_route(request, body, user):
     start_id, end_id = extract_node_ids(body)
     result = get_bus_route(start_id, end_id, user)
