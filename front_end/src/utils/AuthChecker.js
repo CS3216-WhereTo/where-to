@@ -8,13 +8,14 @@ function clearLocalToken() {
     localStorage.removeItem(STORAGE_KEY);
 }
 
-export default async function checkUserLoggedIn() {
-    const token = getUserToken();
-    if (!token) {
-        clearLocalToken();
-        return false;
-    }
+export async function verifyTokenIfExists() {
+    if (!userTokenExists()) return false;
     return await gateway.isValidToken();
+}
+
+export default function userTokenExists() {
+    const token = getUserToken();
+    return (token != null);
 }
 
 export function getUserToken() {
@@ -28,7 +29,7 @@ export function getUserToken() {
  */
 export function signUserIn(token, onSuccess, onFailure, onError) {
     localStorage.setItem(STORAGE_KEY, token);
-    checkUserLoggedIn()
+    return verifyTokenIfExists()
         .then((valid) => {
             if (valid) onSuccess();
             else {
@@ -44,6 +45,5 @@ export function signUserIn(token, onSuccess, onFailure, onError) {
 }
 
 export function signUserOut() {
-    if (!checkUserLoggedIn()) throw new Error('No user found!');
     clearLocalToken();
 }

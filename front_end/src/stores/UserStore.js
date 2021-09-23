@@ -1,12 +1,4 @@
-import MicroEmitter from "micro-emitter";
-import { emit, eventNames } from "process";
-import UserGateway from "../gateways/UserGateway";
-
 const DEFAULT_SPEED = 1.4;
-
-const emitter = new MicroEmitter();
-const eventSpeed = "UPDATE_SPEED";
-const eventRecents = "UPDATE_RECENTS";
 
 export const ERR_INVALID_SPD = "Invalid speed was given";
 
@@ -14,6 +6,7 @@ export const SPEED_KEY = "userSpeed";
 export const RECENTS_KEY = "recents";
 
 export default class UserStore {
+
   #speed;
   #recents;
 
@@ -24,85 +17,87 @@ export default class UserStore {
     this.#speed = DEFAULT_SPEED;
     this.#recents = [];
     this.gateway = gateway;
-
-    emitter.on(eventSpeed, () => this._updateLocalSpeed());
-    emitter.on(eventRecents, () => this._updateLocalRecents());
   }
 
-  _updateLocalSpeed() {
-    localStorage.setItem(SPEED_KEY, JSON.stringify(this.#speed));
+  ////////////////////////////////
+  // RECENTS PART
+  ////////////////////////////////
+
+  fetchRecents(callback) {
+    return this.gateway
+      .getRecents()
+      .then((res) => this._setRecents(res, callback))
+      .catch((e) => {
+        console.error(e);
+        this._loadRecentsFromStorage(callback);
+      });
+  }
+
+  _loadRecentsFromStorage(callback) {
+    const recents = localStorage.getItem(RECENTS_KEY);
+    this.#recents = recents ? JSON.parse(recents) : [];
+    callback();
+    this._updateLocalRecents();
+  }
+
+  _setRecents(recents, callback) {
+    this.#recents = recents.routes;
+    callback();
+    this._updateLocalRecents();
   }
 
   _updateLocalRecents() {
     localStorage.setItem(RECENTS_KEY, JSON.stringify(this.#recents));
   }
 
-  fetchRecents() {
-    return this.gateway
-      .getRecents()
-      .then((res) => this._setRecents(res))
-      .catch((e) => {
-        console.error(e);
-        this._loadRecentsFromStorage();
-      });
-  }
-
-  _loadSpeedFromStorage() {
-    const speed = localStorage.getItem(SPEED_KEY);
-    this.#speed = speed ? JSON.parse(speed) : DEFAULT_SPEED;
-    emitter.emit(eventSpeed);
-  }
-
-  _loadRecentsFromStorage() {
-    const recents = localStorage.getItem(RECENTS_KEY);
-    this.#recents = recents ? JSON.parse(recents) : [];
-    emitter.emit(eventRecents);
-  }
-
-  onChangeRecents(handler) {
-    emitter.on(eventRecents, handler);
-  }
-
-  _setRecents(recents) {
-    this.#recents = recents.nodes;
-    emitter.emit(eventRecents);
-  }
-
   getRecents() {
     return [...this.#recents];
   }
 
-  fetchSpeed() {
+  ////////////////////////////////
+  // SPEED PART
+  ////////////////////////////////
+
+  fetchSpeed(callback) {
     return this.gateway
       .getWalkingSpeed()
-      .then((res) => this._updateSpeed(res))
+      .then((res) => this._updateSpeed(res, callback))
       .catch((e) => {
         console.error(e);
-        this._loadSpeedFromStorage();
+        this._loadSpeedFromStorage(callback);
       });
   }
 
-  _updateSpeed(res) {
-    this.#speed = res.speed;
-    emitter.emit(eventSpeed);
+  _loadSpeedFromStorage(callback) {
+    const speed = localStorage.getItem(SPEED_KEY);
+    this.#speed = speed ? JSON.parse(speed) : DEFAULT_SPEED;
+    callback();
+    this._updateLocalSpeed();
   }
 
-  onChangeSpeed(handler) {
-    emitter.on(eventSpeed, handler);
+  _updateSpeed(res, callback) {
+    this.#speed = res.speed;
+    callback();
+    this._updateLocalSpeed();
+  }
+
+  _updateLocalSpeed() {
+    localStorage.setItem(SPEED_KEY, JSON.stringify(this.#speed));
   }
 
   getSpeed() {
     return this.#speed;
   }
 
-  setSpeed(newSpeed) {
+  setSpeed(newSpeed, callback) {
     if (newSpeed < 0) throw new Error(ERR_INVALID_SPD);
     return this.gateway
       .postWalkingSpeed(newSpeed)
       .then((res) => {
         if (res.error !== 0) throw new Error(ERR_INVALID_SPD);
-        this._updateSpeed({ speed: newSpeed });
+        this._updateSpeed({ speed: newSpeed }, callback);
       })
       .catch(console.error);
   }
+
 }

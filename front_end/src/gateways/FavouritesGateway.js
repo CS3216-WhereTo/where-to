@@ -1,5 +1,5 @@
 import axios from "axios";
-import checkUserLoggedIn, { getUserToken } from "../utils/AuthChecker";
+import userTokenExists, { getUserToken } from "../utils/AuthChecker";
 
 export default class FavouritesGateway {
 
@@ -7,7 +7,7 @@ export default class FavouritesGateway {
      * Sends a GET request for the user's favourited locations.
      */
     async get() {
-        const loggedIn = await checkUserLoggedIn();
+        const loggedIn = userTokenExists();
         if (!loggedIn) {
             throw new Error('User should be logged in to use favourites!');
         }
@@ -32,7 +32,7 @@ export default class FavouritesGateway {
      */
     async add(nodeId) {
         const headers = { 'Content-Type': 'application/json' };
-        const loggedIn = await checkUserLoggedIn();
+        const loggedIn = userTokenExists();
         if (!loggedIn) {
             throw new Error('User should be logged in to use favourites!');
         }
@@ -58,7 +58,7 @@ export default class FavouritesGateway {
      */
     async remove(nodeId) {
         const headers = { 'Content-Type': 'application/json' };
-        const loggedIn = await checkUserLoggedIn();
+        const loggedIn = userTokenExists();
         if (!loggedIn) {
             throw new Error('User should be logged in to use favourites!');
         }

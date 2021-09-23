@@ -24,7 +24,6 @@
     "framer-motion": "^4.1.17",
     "fuse.js": "^6.4.6",
     "ionicons": "^5.4.0",
-    "lodash.isequal": "^4.5.0",
     "mapbox-gl": "^2.4.1",
     "micro-emitter": "^1.2.5",
     "react": "^17.0.1",
