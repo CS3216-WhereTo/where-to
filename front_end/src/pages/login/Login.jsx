@@ -75,7 +75,7 @@ function Login() {
 
     const guestLoginButton = (
       <IonButton className="sns-login__button" shape="round" onClick={props.onGuestLogin}>
-        <IonText className="sns-login__text">Continue as a guest</IonText>
+       <IonText className="sns-login__text">Continue as a guest</IonText>
         <IonIcon className="sns-login__next" slot="end" icon={arrowForward} size="large"></IonIcon>
       </IonButton>
     );
