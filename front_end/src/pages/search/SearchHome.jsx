@@ -49,13 +49,20 @@ const SearchHome = (props) => {
     setOptionsLoading(true);
     props.nodes.onChange(() => {
       const favourites = props.nodes.getFavourites().map((node) => {
-        return { label: node.name, value: { ...node, isFavourite: true } };
+        return {
+          label: node.name,
+          value: { ...node, isFavourite: true, nodes: props.nodes },
+        };
       });
 
       const nonFavourites = props.nodes.getNonFavourites().map((node) => {
-        return { label: node.name, value: { ...node, isFavourite: false } };
+        return {
+          label: node.name,
+          value: { ...node, isFavourite: false, nodes: props.nodes },
+        };
       });
-      setOptions([...favourites, ...nonFavourites]);
+      // setOptions([...favourites, ...nonFavourites]);
+      setOptions([...favourites, nonFavourites[0]]);
       setOptionsLoading(false);
     });
 
@@ -169,7 +176,7 @@ const SearchHome = (props) => {
     }
 
     props.routes.onChange(() => {
-      console.log("ran")
+      console.log("ran");
       const route = props.routes.getRoutes();
 
       if (route) {

@@ -48,7 +48,7 @@ export default class NodeStore {
       .then((res) => this._setNodes(res))
       .catch((e) => {
         console.error(e);
-        this._loadNodesFromStorage();
+        // this._loadNodesFromStorage();
       });
   }
 
@@ -68,8 +68,11 @@ export default class NodeStore {
 
   removeFavourite(nodeId) {
     const idx = this.#favourites.findIndex((node) => node.node_id === nodeId);
-    if (idx < 0) throw new Error(ERR_FAV);
-
+    // if (idx < 0) throw new Error(ERR_FAV);
+    if (idx < 0) {
+      console.log(ERR_FAV);
+      return;
+    }
     return this.favGateway
       .remove(nodeId)
       .then((res) => {
@@ -85,8 +88,11 @@ export default class NodeStore {
 
   addFavourite(nodeId) {
     const idx = this.#nonFavourites.findIndex((node) => node.node_id === nodeId);
-    if (idx < 0) throw new Error(ERR_UNFAV);
-
+    // if (idx < 0) throw new Error(ERR_UNFAV);
+    if (idx < 0) {
+      console.log(ERR_UNFAV);
+      return;
+    }
     return this.favGateway
       .add(nodeId)
       .then((res) => {
