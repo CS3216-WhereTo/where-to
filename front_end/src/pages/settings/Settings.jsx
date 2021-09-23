@@ -51,7 +51,7 @@ const Settings = ({ users }) => {
     });
 
     users.fetchSpeed();
-  }, []);
+  }, [selectedSpeed]);
 
   const handleLogOut = () => {
     signUserOut();
@@ -75,15 +75,8 @@ const Settings = ({ users }) => {
     // Trigger api call to set new speed
     setLoading(true);
     users.setSpeed(val);
-    
-    // Mimic API response time
-    // setTimeout(() => {
-    //   setLoading(false);
-    //   setShowToast(true);
-    // }, 2000);
 
     trackUpdateWalkingSpeedEvent();
-    // Should disable all options until API call is complete
   };
 
   const getSpeedOptions = () => {
