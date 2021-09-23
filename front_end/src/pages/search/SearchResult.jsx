@@ -1,17 +1,18 @@
 import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-
 import { IonPage, IonChip, IonIcon, IonLabel, IonButton } from "@ionic/react";
 import { ellipseOutline, locationSharp, arrowBack, bus, walk } from "ionicons/icons";
-
-import Sheet from 'react-modal-sheet'
-
+import Sheet from "react-modal-sheet";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 
-import Modal from '../../components/modal/Modal'
+import Modal from "../../components/modal/Modal";
 import "./SearchResult.css";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
+
+// TODO
+// Add geolocation to track current location
+// Pull route data and plot on map, and add markers for them
 
 // Receive in start and end location
 const SearchResult = ({ start, end }) => {
@@ -109,20 +110,18 @@ const SearchResult = ({ start, end }) => {
               </div>
             </div>
             <div className="search-options">
-              <IonChip 
-                className={"search-option " + (dirType === "bus" ? "search-option--selected" : "search-option--unselected")} 
-                onClick={() => setDirType("bus")}>
-                <IonIcon
-                  className={dirType === "bus" ? "search-option__icon--selected" : "search-option__icon--unselected"} 
-                  icon={bus} />
+              <IonChip
+                className={"search-option " + (dirType === "bus" ? "search-option--selected" : "search-option--unselected")}
+                onClick={() => setDirType("bus")}
+              >
+                <IonIcon className={dirType === "bus" ? "search-option__icon--selected" : "search-option__icon--unselected"} icon={bus} />
                 <IonLabel>50 min</IonLabel>
               </IonChip>
-              <IonChip 
-                className={"search-option " + (dirType === "walk" ? "search-option--selected" : "search-option--unselected")} 
-                onClick={() => setDirType("walk")}>
-                <IonIcon 
-                  className={dirType === "walk" ? "search-option__icon--selected" : "search-option__icon--unselected"} 
-                  icon={walk} />
+              <IonChip
+                className={"search-option " + (dirType === "walk" ? "search-option--selected" : "search-option--unselected")}
+                onClick={() => setDirType("walk")}
+              >
+                <IonIcon className={dirType === "walk" ? "search-option__icon--selected" : "search-option__icon--unselected"} icon={walk} />
                 <IonLabel>50 min</IonLabel>
               </IonChip>
             </div>
@@ -130,24 +129,19 @@ const SearchResult = ({ start, end }) => {
         </div>
       </div>
 
-        <Sheet 
-          isOpen={isOpen} 
-          onClose={() => setOpen(false)}>
+      <Sheet isOpen={isOpen} onClose={() => setOpen(false)}>
         <Sheet.Container>
           <Sheet.Header />
           <Sheet.Content>
             <Modal dirType={dirType} busDir={busDir} walkDir={walkDir} />
           </Sheet.Content>
-          </Sheet.Container>
+        </Sheet.Container>
         <Sheet.Backdrop />
       </Sheet>
 
       <div className="directions-button--center">
-        <IonButton 
-          className="directions-button" 
-          shape="round" 
-          onClick={() => setOpen(true)}>
-            Directions (1.5km, 15 mins)
+        <IonButton className="directions-button" shape="round" onClick={() => setOpen(true)}>
+          Directions (1.5km, 15 mins)
         </IonButton>
       </div>
 
