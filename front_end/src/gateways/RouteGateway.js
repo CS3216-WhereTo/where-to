@@ -16,6 +16,7 @@ export default class RouteGateway {
             headers: headers,
             params: locations
         });
+        console.log('GET route/find_routes success');
         return response.data;
     }
 
@@ -32,6 +33,7 @@ export default class RouteGateway {
             headers: headers,
             params: locations
         });
+        console.log('GET route/find_walk_route success');
         return response.data;
     }
 
@@ -48,6 +50,7 @@ export default class RouteGateway {
             headers: headers,
             params: locations
         });
+        console.log('GET route/find_bus_route success');
         return response.data;
     }
 
