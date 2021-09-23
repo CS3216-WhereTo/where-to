@@ -33,25 +33,27 @@ import { initialiseGoogleAnalytics } from "./utils/ReactGa";
 import NodeStore from "./stores/NodeStore";
 import RouteStore from "./stores/RouteStore";
 import checkUserLoggedIn from "./utils/AuthChecker";
+import { useUserLoggedIn } from "./context/UserContext";
 
 /**
- * @param {{nodes: NodeStore, routes: RouteStore}} stores 
- * @returns 
+ * @param {{nodes: NodeStore, routes: RouteStore}} stores
+ * @returns
  */
 const App = (props) => {
   useEffect(() => {
     initialiseGoogleAnalytics();
   }, []);
+  
+  const { isLoggedIn, setIsLoggedIn } = useUserLoggedIn();
+  console.log(isLoggedIn)
+  // checkUserLoggedIn()
+  //   .then(res => {
+  //     if (res) setLoginState(true);
+  //     else setLoginState(false);
+  //   })
+  //   .catch(console.error);
 
-  const [ isLoggedIn, setLoginState ] = useState(false);
-  checkUserLoggedIn()
-    .then(res => {
-      if (res) setLoginState(true);
-      else setLoginState(false);
-    })
-    .catch(console.error);
-
-  const landingPage = !isLoggedIn ? <Login/> : <Redirect to="/search"/>;
+  const landingPage = !isLoggedIn ? <Login /> : <Redirect to="/search" />;
 
   const nodes = props.nodes;
   const routes = props.routes;
@@ -61,10 +63,18 @@ const App = (props) => {
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route path="/search"><SearchHome nodes={nodes} routes={routes}/></Route>
-            <Route exact path="/favourites"><Favourites nodes={nodes}/></Route>
-            <Route exact path="/settings"><Settings/></Route>
-            <Route exact path="/">{landingPage}</Route>
+            <Route path="/search">
+              <SearchHome nodes={nodes} routes={routes} />
+            </Route>
+            <Route exact path="/favourites">
+              <Favourites nodes={nodes} />
+            </Route>
+            <Route exact path="/settings">
+              <Settings />
+            </Route>
+            <Route exact path="/">
+              {landingPage}
+            </Route>
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
             <IonTabButton tab="search" href="/search">

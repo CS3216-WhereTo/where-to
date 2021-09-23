@@ -8,12 +8,15 @@ import "./Login.css";
 import CustomToast from "../../components/custom-toast/CustomToast";
 import { trackPageView, trackGuestSignInEvent, trackDismissLoginToastEvent } from "../../utils/ReactGa";
 import { signUserIn } from "../../utils/AuthChecker";
+import { useUserLoggedIn } from "../../context/UserContext";
 import Logo from "../../assets/logo.svg";
 
 const ERR_CON_GOOGLE = "We are unable to connect to Google right now, please try again later";
 const ERR_AUTH_FAIL = "We are unable to authenticate you, please try again!";
 
 const Login = () => {
+  const { isLoggedIn, setIsLoggedIn } = useUserLoggedIn();
+
   useEffect(() => {
     trackPageView(window.location.pathname);
   }, []);
@@ -30,7 +33,10 @@ const Login = () => {
     const token = googleResponse.tokenId;
     signUserIn(
       token,
-      redirectToSearchPage,
+      () => {
+        setIsLoggedIn(true);
+        redirectToSearchPage();
+      },
       () => setLoginError(ERR_AUTH_FAIL),
       () => setLoginError(ERR_CON_GOOGLE)
     );
@@ -72,7 +78,7 @@ const Login = () => {
     );
 
     const guestLoginButton = (
-      <IonButton className="sns-login__button" shape="round" fill="outline" onClick={props.onGuessLogin}>
+      <IonButton className="sns-login__button" shape="round" onClick={props.onGuessLogin}>
         <IonText className="sns-login__text">Continue as a guest</IonText>
         <IonIcon className="sns-login__next" slot="end" icon={arrowForward} size="large"></IonIcon>
       </IonButton>

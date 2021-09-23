@@ -4,10 +4,11 @@ import { IonPage, IonContent, IonLabel, IonButton, IonChip } from "@ionic/react"
 import { useGoogleLogout } from "react-google-login";
 
 import CustomToast from "../../components/custom-toast/CustomToast";
-import UnathenticatedUserScreen from "../../components/sign-in/SignIn";
+import UnauthenticatedScreen from "../../components/unauthenticated-screen/UnauthenticatedScreen";
 import checkUserLoggedIn, { signUserOut } from "../../utils/AuthChecker";
 import { trackPageView, trackUpdateWalkingSpeedEvent, trackDismissSettingsToastEvent, trackGoogleSignOutEvent } from "../../utils/ReactGa";
 import "./Settings.css";
+import { useUserLoggedIn } from "../../context/UserContext";
 
 // TODO
 // Add API call for changing walking speed
@@ -15,13 +16,14 @@ import "./Settings.css";
 // Fix bug where sign out doesn't redirect
 
 const Settings = () => {
-  const [loggedIn, setLoginState] = useState(false);
-  checkUserLoggedIn()
-    .then((res) => {
-      if (res) setLoginState(true);
-      else setLoginState(false);
-    })
-    .catch(console.error);
+  const { isLoggedIn, setIsLoggedIn } = useUserLoggedIn();
+
+  // checkUserLoggedIn()
+  //   .then((res) => {
+  //     if (res) setLoginState(true);
+  //     else setLoginState(false);
+  //   })
+  //   .catch(console.error);
 
   const options = ["Very Slow (0.8 m/s)", "Slow (1.1 m/s)", "Average (1.4 m/s)", "Fast (1.6 m/s)", "Very Fast (1.9 m/s)"];
 
@@ -39,6 +41,7 @@ const Settings = () => {
 
   const handleLogOut = () => {
     signUserOut();
+    setIsLoggedIn(false);
     trackGoogleSignOutEvent();
     history.replace("/");
   };
@@ -49,7 +52,7 @@ const Settings = () => {
 
   const { signOut } = useGoogleLogout({
     clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-    onLogoutSuccess: handleLogOut,
+    onLogoutSuccess: () => handleLogOut(),
     onFailure: handleLogOutFailure,
   });
 
@@ -89,7 +92,7 @@ const Settings = () => {
     </IonButton>
   );
 
-  if (!loggedIn) return <UnathenticatedUserScreen pageName={"Settings"} />;
+  if (!isLoggedIn) return <UnauthenticatedScreen pageName={"Settings"} />;
   return (
     <IonPage className="page settings-page">
       <div className="page-header">

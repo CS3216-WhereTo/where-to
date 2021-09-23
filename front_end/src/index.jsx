@@ -1,15 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import reportWebVitals from './reportWebVitals';
-import axios from 'axios';
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import reportWebVitals from "./reportWebVitals";
+import axios from "axios";
 
-import NodeGateway from './gateways/NodeGateway';
-import FavouritesGateway from './gateways/FavouritesGateway';
-import RouteGateway from './gateways/RouteGateway';
-import NodeStore from './stores/NodeStore';
-import RouteStore from './stores/RouteStore';
+import NodeGateway from "./gateways/NodeGateway";
+import FavouritesGateway from "./gateways/FavouritesGateway";
+import RouteGateway from "./gateways/RouteGateway";
+import NodeStore from "./stores/NodeStore";
+import RouteStore from "./stores/RouteStore";
+import { UserLoggedInProvider } from "./context/UserContext";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
@@ -21,9 +22,11 @@ const routeStore = new RouteStore(routeGateway);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App nodes={nodeStore} routes={routeStore}/>
+    <UserLoggedInProvider>
+      <App nodes={nodeStore} routes={routeStore} />
+    </UserLoggedInProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

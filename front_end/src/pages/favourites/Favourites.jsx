@@ -5,19 +5,13 @@ import { IonPage, IonContent, IonSegment, IonSegmentButton, IonLabel } from "@io
 import FavouritesList from "./FavouritesList";
 import "./Favourites.css";
 import { trackPageView, trackFavouritesToRecentsTabEvent, trackRecentsToFavouritesTabEvent } from "../../utils/ReactGa";
-import UnathenticatedUserScreen from "../../components/sign-in/SignIn";
+import UnauthenticatedScreen from "../../components/unauthenticated-screen/UnauthenticatedScreen";
 import checkUserLoggedIn from "../../utils/AuthChecker";
+import { useUserLoggedIn } from "../../context/UserContext";
 
 // TODO: pull to refresh
 const Favourites = (props) => {
-
-  const [ loggedIn, setLoginState ] = useState(false);
-  checkUserLoggedIn()
-    .then((loggedIn) => {
-      if (loggedIn) setLoginState(true);
-      else setLoginState(false);
-    })
-    .catch(console.error);
+  const { isLoggedIn, setIsLoggedIn } = useUserLoggedIn();
 
   useEffect(() => {
     // TODO: some function to fetch favs & recents from server
@@ -66,24 +60,24 @@ const Favourites = (props) => {
     isSegmentFav ? setFavourites(newList) : setRecents(newList);
   };
 
-  if (!loggedIn) return (<UnathenticatedUserScreen pageName={"Favourites"}/>);
+  if (!isLoggedIn) return <UnauthenticatedScreen pageName={"Favourites"} />;
 
   return (
     <IonPage className="page favourites-page">
       <div className="page-header">
         <p className="page-header__text">{segment}</p>
       </div>
-      
-       {/* -- Segment -- */}
-       <IonSegment className="segment" value={segment} onIonChange={e => handleSegmentChange(e)}>
-          <IonSegmentButton className="segment__button" value="Favourites">
-            <IonLabel className="segment__text">Favourites</IonLabel>
-          </IonSegmentButton>
-          <IonSegmentButton className="segment__button" value="Recents">
-            <IonLabel className="segment__text">Recents</IonLabel>
-          </IonSegmentButton>
-        </IonSegment>
-      
+
+      {/* -- Segment -- */}
+      <IonSegment className="segment" value={segment} onIonChange={(e) => handleSegmentChange(e)}>
+        <IonSegmentButton className="segment__button" value="Favourites">
+          <IonLabel className="segment__text">Favourites</IonLabel>
+        </IonSegmentButton>
+        <IonSegmentButton className="segment__button" value="Recents">
+          <IonLabel className="segment__text">Recents</IonLabel>
+        </IonSegmentButton>
+      </IonSegment>
+
       <IonContent>
         {/* -- List -- */}
         <FavouritesList

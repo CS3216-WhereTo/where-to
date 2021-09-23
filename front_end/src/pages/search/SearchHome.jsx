@@ -95,7 +95,7 @@ const SearchHome = (props) => {
       })
     );
 
-    // Use a splash screen to hide the resize
+    // Bug where it is unresized if it reloads
     map.current.once("load", () => {
       map.current.resize();
     });
