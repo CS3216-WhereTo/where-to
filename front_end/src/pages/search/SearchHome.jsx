@@ -62,7 +62,6 @@ const SearchHome = (props) => {
         };
       });
       setOptions([...favourites, ...nonFavourites]);
-      // setOptions([...favourites, nonFavourites[0]]);
       setOptionsLoading(false);
     });
 

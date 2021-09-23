@@ -37,18 +37,7 @@ export default class FavouritesGateway {
     }
 
     headers["Authorization"] = `Bearer ${getUserToken()}`;
-    // try {
-    //     const response = await axios.post('favourites/add_favourite', {
-    //         headers: headers,
-    //         data: { node_id: nodeId }
-    //     });
-    //     console.log('POST favourites/add_favourites success');
-    //     return response.data;
-    // } catch (e) {
-    //     console.error(e);
-    //     throw e;
-    // }
-    console.log(nodeId);
+
     const response = await axios.post(
       "favourites/add_favourite",
       {
@@ -77,16 +66,18 @@ export default class FavouritesGateway {
     }
 
     headers["Authorization"] = `Bearer ${getUserToken()}`;
-    try {
-      const response = await axios.post("favourites/remove_favourite", {
-        headers: headers,
-        data: { node_id: nodeId },
-      });
-      console.log("POST favourites/remove_favourite success");
-      return response.data;
-    } catch (e) {
-      console.error(e);
-      throw e;
-    }
+    const response = await axios.post(
+      "favourites/remove_favourite",
+      {
+        node_id: nodeId,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getUserToken()}`,
+        },
+      }
+    );
+    return response.data;
   }
 }

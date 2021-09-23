@@ -92,7 +92,6 @@ const SearchResult = () => {
 
   useEffect(() => {
     if (mapLoading) return;
-    console.log("mapmap");
 
     var mapLayer = map.current.getLayer("route");
 
