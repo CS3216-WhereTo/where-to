@@ -22,7 +22,7 @@ def update_speed(request, speed, user):
 @authenticated()
 def list_recents(request, user):
     result = controller.list_recents(user)
-    return JsonResponse({'routes': result}, content_type='application/json')
+    return JsonResponse({"recents": result}, content_type='application/json')
 
 @require_GET
 @authenticated(required=False)

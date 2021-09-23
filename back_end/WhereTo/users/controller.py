@@ -31,7 +31,7 @@ def list_recents(user):
         recent['route'] = json.loads(recent['route'])
         del recents["start_id"]
         del recents["end_id"]
-    return {"recents": recents}
+    return recents
 
 def add_recent(user, start_id, end_id, route_json):
     route_str = json.dumps(route_json)
