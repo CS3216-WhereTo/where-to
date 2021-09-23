@@ -9,14 +9,11 @@ import CustomToast from "../../components/custom-toast/CustomToast";
 import { trackPageView, trackGuestSignInEvent, trackDismissLoginToastEvent } from "../../utils/ReactGa";
 import { signUserIn } from "../../utils/AuthChecker";
 import Logo from "../../assets/logo.svg";
-import { useAuthContext } from "../../utils/Context";
 
 const ERR_CON_GOOGLE = "We are unable to connect to Google right now, please try again later";
 const ERR_AUTH_FAIL = "We are unable to authenticate you, please try again!";
 
 const Login = () => {
-
-  const { setLoginState } = useAuthContext();
 
   useEffect(() => {
     trackPageView(window.location.pathname);
@@ -24,11 +21,7 @@ const Login = () => {
 
   const history = useHistory();
   const redirectToSearch = () => history.replace("/search");
-  function completeSignIn() {
-    setLoginState(true);
-    redirectToSearch();
-  }
-
+  
   const [loginError, setLoginError] = useState("");
 
   /**
@@ -38,7 +31,7 @@ const Login = () => {
     const token = googleResponse.tokenId;
     signUserIn(
       token,
-      completeSignIn,
+      redirectToSearch,
       () => setLoginError(ERR_AUTH_FAIL),
       () => setLoginError(ERR_CON_GOOGLE)
     );

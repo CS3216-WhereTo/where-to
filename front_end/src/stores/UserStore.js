@@ -5,6 +5,7 @@ const DEFAULT_SPEED = 1.4;
 const emitter = new MicroEmitter();
 const eventSpeed = "UPDATE_SPEED";
 const eventRecents = "UPDATE_RECENTS";
+const eventAuth = "UPDATE_AUTH";
 
 export const ERR_INVALID_SPD = "Invalid speed was given";
 
@@ -63,7 +64,7 @@ export default class UserStore {
   }
 
   _setRecents(recents) {
-    this.#recents = recents.routes.map(JSON.parse);
+    this.#recents = recents.routes;
     emitter.emit(eventRecents);
   }
 
@@ -104,4 +105,13 @@ export default class UserStore {
       })
       .catch(console.error);
   }
+
+  onChangeAuth(handler) {
+    emitter.on(eventAuth, handler);
+  }
+
+  notifyAuthChanged() {
+    emitter.emit(eventAuth);
+  }
+
 }

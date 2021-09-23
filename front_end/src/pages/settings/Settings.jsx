@@ -1,22 +1,21 @@
 import { useState, useEffect, useRef } from "react";
 import { IonPage, IonContent, IonLabel, IonButton, IonChip } from "@ionic/react";
+import { Redirect } from "react-router";
 import { useGoogleLogout } from "react-google-login";
 import PropTypes from "prop-types"
 
 import Loading from '../../components/loading/Loading';
 import CustomToast from "../../components/custom-toast/CustomToast";
-import { signUserOut } from "../../utils/AuthChecker";
+import userTokenExists, { signUserOut } from "../../utils/AuthChecker";
 import UnauthenticatedUserScreen from "../../components/sign-in/SignIn";
 import { trackPageView, trackUpdateWalkingSpeedEvent, trackDismissSettingsToastEvent, trackGoogleSignOutEvent } from "../../utils/ReactGa";
 import "./Settings.css";
-import { useAuthContext } from "../../utils/Context";
 import UserStore from "../../stores/UserStore";
-import { Redirect } from "react-router";
 
 function Settings(props) {
 
   const [ loading, setLoading ] = useState(true);
-  const { isLoggedIn, setLoginState } = useAuthContext();
+  const loggedIn = userTokenExists();
   const mounted = useRef(null);
   const [ assignedObserver, setObserveStatus ] = useState(false);
   const [ isLoggedOut, setLogoutState ] = useState(false);
@@ -24,14 +23,14 @@ function Settings(props) {
   /** @type {UserStore} */
   const user = props.user
 
-  const handleLogOut = () => {
+  function handleLogOut() {
     signUserOut();
-    setLoginState(false);
+    user.notifyAuthChanged();
     setLogoutState(true);
     trackGoogleSignOutEvent();
   };
 
-  const handleLogOutFailure = () => {
+  function handleLogOutFailure() {
     console.error("Encountered error logging out");
   };
 
@@ -72,7 +71,7 @@ function Settings(props) {
     mounted.current = true;
     console.log('I got mounted');
 
-    if (!isLoggedIn) {
+    if (!loggedIn) {
       setLoading(false);
       return;
     }
@@ -123,7 +122,7 @@ function Settings(props) {
 
   if (loading) return (<Loading pageName={"Settings"}/>);
   if (isLoggedOut) return (<Redirect exact to='/'/>);
-  else if (!isLoggedIn) return (<UnauthenticatedUserScreen pageName={"Settings"}/>);
+  if (!loggedIn) return (<UnauthenticatedUserScreen pageName={"Settings"}/>);
   return (
     <IonPage className="page settings-page">
       <div className="page-header">
