@@ -32,6 +32,7 @@ const SearchHome = (props) => {
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
+  const [routeObject, setRouteObject] = useState({});
 
   // Check if there is a Node passed from FavouritesItem
   useEffect(() => {
@@ -124,6 +125,15 @@ const SearchHome = (props) => {
     }
   }, [currentMarker, isInitiallyCentered, props.coords]);
 
+  useEffect(() => {
+    if (routeObject.start === undefined || routeObject.start === null) return;
+
+    history.push({
+      pathname: "/search-result",
+      state: routeObject,
+    });
+  }, [history, routeObject]);
+
   const handleInputChange = (input) => {
     const displayOptions = options.filter((option) => {
       const words = option.label.toLowerCase().split(" ");
@@ -157,19 +167,36 @@ const SearchHome = (props) => {
       setShowToast(true);
       return;
     }
-    console.log(props.routes)
+
     props.routes.onChange(() => {
-      const r = props.routes.getRoutes();
-      console.log(r)
-      console.log(props.routes.getWalkRoute())
-      console.log(props.routes.getBusRoute());
+      const route = props.routes.getRoutes();
+
+      if (route) {
+        // start
+        const start_coordinates = start.value.coordinates;
+        const route_start_coordinates = route.walk.path[0].coordinates;
+
+        const end_coordinates = end.value.coordinates;
+        const route_end_coordinates = route.walk.path.at(-1).coordinates;
+
+        if (
+          !(
+            start_coordinates[0] === route_start_coordinates[0] &&
+            start_coordinates[1] === route_start_coordinates[1] &&
+            end_coordinates[0] === route_end_coordinates[0] &&
+            end_coordinates[1] === route_end_coordinates[1]
+          )
+        ) {
+          setToastMessage(`⚠️ There was a problem searching for the directions. Please try again.`);
+          setShowToast(true);
+          return;
+        }
+      }
+
+      setRouteObject({ start: start, end: end, ...route });
     });
 
     props.routes.fetchRoutes(start.value.node_id, end.value.node_id);
-    // history.push({
-    //   pathname: "/search-result",
-    //   state: { start: start, end: end },
-    // });
     // try {
     //   map.current.removeLayer("route");
     //   map.current.removeSource("route");

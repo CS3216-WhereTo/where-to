@@ -3,6 +3,7 @@ import Select from "react-select";
 
 import "./CustomSelect.css";
 
+// TODO: https://react-select.com/async
 const CustomSelect = ({ value, onChange, onInputChange, placeholder, options, disabled }) => {
   return (
     <Select
