@@ -101,16 +101,16 @@ const SearchHome = (props) => {
 
     // Adds Geolocate control to Map, will be disabled if user blocks location service
     // Hide if not in bounds?
-    map.current.addControl(
-      new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true,
-        },
-        showAccuracyCircle: false,
-        trackUserLocation: true,
-        showUserHeading: true,
-      })
-    );
+    const geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true,
+      },
+      showAccuracyCircle: false,
+      trackUserLocation: true,
+      showUserHeading: true,
+    });
+
+    map.current.addControl(geolocate);
 
     // Adds Navigation control (zoom) to Map
     map.current.addControl(
@@ -122,30 +122,31 @@ const SearchHome = (props) => {
     // Bug where it is unresized if it reloads
     map.current.once("load", () => {
       map.current.resize();
+      geolocate.trigger();
     });
   });
 
-  useEffect(() => {
-    if (!props.coords) return;
+  // useEffect(() => {
+  //   if (!props.coords) return;
 
-    if (!isInitiallyCentered) {
-      // Center the Map at user's current location, will only be done once
-      map.current.flyTo({
-        center: [props.coords.longitude, props.coords.latitude],
-        essential: true,
-      });
-      setIsInitiallyCentered(true);
-    }
+  //   if (!isInitiallyCentered) {
+  //     // Center the Map at user's current location, will only be done once
+  //     map.current.flyTo({
+  //       center: [props.coords.longitude, props.coords.latitude],
+  //       essential: true,
+  //     });
+  //     setIsInitiallyCentered(true);
+  //   }
 
-    if (currentMarker) {
-      currentMarker.setLngLat([props.coords.longitude, props.coords.latitude]);
-    } else {
-      const marker = new mapboxgl.Marker();
-      marker.setLngLat([props.coords.longitude, props.coords.latitude]).addTo(map.current);
+  //   if (currentMarker) {
+  //     currentMarker.setLngLat([props.coords.longitude, props.coords.latitude]);
+  //   } else {
+  //     const marker = new mapboxgl.Marker();
+  //     marker.setLngLat([props.coords.longitude, props.coords.latitude]).addTo(map.current);
 
-      setCurrentMarker(marker);
-    }
-  }, [currentMarker, isInitiallyCentered, props.coords]);
+  //     setCurrentMarker(marker);
+  //   }
+  // }, [currentMarker, isInitiallyCentered, props.coords]);
 
   useEffect(() => {
     if (routeObject.start === undefined || routeObject.start === null) return;

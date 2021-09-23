@@ -8,7 +8,7 @@ import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-load
 import Modal from "../../components/modal/Modal";
 import "./SearchResult.css";
 import { parseBusRoute, parseWalkRoute } from "../../utils/ParseRoute";
-import { trackPageView, trackSetDirectionTypeToBus, trackSetDirectionTypeToWalk,trackSearchResultBackPressEvent } from "../../utils/ReactGa";
+import { trackPageView, trackSetDirectionTypeToBus, trackSetDirectionTypeToWalk, trackSearchResultBackPressEvent } from "../../utils/ReactGa";
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
 
 // TODO
@@ -66,17 +66,17 @@ const SearchResult = () => {
       zoom: zoom,
     });
 
+    const geolocate = new mapboxgl.GeolocateControl({
+      positionOptions: {
+        enableHighAccuracy: true,
+      },
+      showAccuracyCircle: false,
+      trackUserLocation: true,
+      showUserHeading: true,
+    });
+
     // Adds Geolocate control to Map, will be disabled if user blocks location service
-    map.current.addControl(
-      new mapboxgl.GeolocateControl({
-        positionOptions: {
-          enableHighAccuracy: true,
-        },
-        showAccuracyCircle: false,
-        trackUserLocation: true,
-        showUserHeading: true,
-      })
-    );
+    map.current.addControl(geolocate);
 
     // Adds Navigation control (zoom) to Map
     map.current.addControl(
@@ -87,6 +87,7 @@ const SearchResult = () => {
 
     map.current.once("load", () => {
       map.current.resize();
+      geolocate.trigger();
     });
 
     setTimeout(() => setMapLoading(false), 1500);
@@ -147,7 +148,7 @@ const SearchResult = () => {
         <div className="search-container">
           <div className="back-button">
             <Link to={{ pathname: "search" }}>
-              <IonIcon className="back-button__icon" icon={arrowBack} onClick={()=>trackSearchResultBackPressEvent()} />
+              <IonIcon className="back-button__icon" icon={arrowBack} onClick={() => trackSearchResultBackPressEvent()} />
             </Link>
           </div>
           <div className="search-inner-container">
