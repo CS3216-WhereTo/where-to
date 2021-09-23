@@ -1,3 +1,5 @@
+import json
+
 from .models import Recent
 
 DEFAULT_WALK_SPEED = 1.4
@@ -17,12 +19,14 @@ MAX_RECENTS = 10
 
 def list_recents(user):
     recents = Recent.objects.filter(user_id=user).order_by('-access_time')
-    recents = recents[:MAX_RECENTS].values_list('route', flat=True).all()
+    recents = list(recents[:MAX_RECENTS].values('start_id', 'end_id', 'route'))
+    for i in recents:
+        i['route'] = json.loads(i['route'])
     return recents
 
 def add_recent(user, start_id, end_id, route_json):
-    #todo: update model schema
-    Recent(user_id=user, route=route_json).save()
+    route_str = json.dumps(route_json)
+    Recent(user_id=user, start_id_id=start_id, end_id_id=end_id, route=route_str).save()
 
 def check_user(user):
     return 0 if user is None else 1
