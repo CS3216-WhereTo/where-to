@@ -29,8 +29,8 @@ def list_recents(user):
         recent["start_node"] = {"node_id": start_id, "name": node_graph[start_id]["name"], "coordinates": node_graph[start_id]["coordinates"]}
         recent["end_node"] = {"node_id": end_id, "name": node_graph[end_id]["name"], "coordinates": node_graph[end_id]["coordinates"]}
         recent['route'] = json.loads(recent['route'])
-        del recents["start_id"]
-        del recents["end_id"]
+        del recent["start_id"]
+        del recent["end_id"]
     return recents
 
 def add_recent(user, start_id, end_id, route_json):
