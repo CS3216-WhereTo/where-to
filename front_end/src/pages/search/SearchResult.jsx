@@ -4,33 +4,11 @@ import { IonPage, IonChip, IonIcon, IonLabel, IonButton } from "@ionic/react";
 import { ellipseOutline, locationSharp, arrowBack, bus, walk } from "ionicons/icons";
 import Sheet from "react-modal-sheet";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
-import polyline from "@mapbox/polyline";
 
 import Modal from "../../components/modal/Modal";
 import "./SearchResult.css";
-
+import { parseBusRoute, parseWalkRoute } from "../../utils/ParseRoute";
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
-
-const walkDir = [
-  { location: "XXX", type: "walk", duration: 10 },
-  { location: "XXX", type: "walk", duration: 10 },
-  { location: "XXX", type: "walk", duration: 10 },
-  { location: "XXX", type: "walk", duration: 10 },
-  { location: "XXX", type: "walk", duration: 10 },
-  { location: "XXX", type: "walk", duration: 10 },
-];
-
-const busDir = [
-  { location: "XXX", type: "walk", duration: 10 },
-  { location: "XXX", type: "bus", duration: 10 },
-  { location: "XXX", type: "walk", duration: 10 },
-  { location: "XXX", type: "bus", duration: 10 },
-  { location: "XXX", type: "walk", duration: 10 },
-  { location: "XXX", type: "bus", duration: 10 },
-  { location: "XXX", type: "walk", duration: 10 },
-  { location: "XXX", type: "bus", duration: 10 },
-  { location: "XXX", type: "walk", duration: 10 },
-];
 
 // TODO
 // Add geolocation to track current location
@@ -57,76 +35,6 @@ const SearchResult = () => {
   const [busRoute, setBusRoute] = useState({ totalDistance: 0, totalDuration: 0 });
   const [walkRoute, setWalkRoute] = useState({ totalDistance: 0, totalDuration: 0 });
 
-  const parseBusRoute = useCallback((busRoute) => {
-    const parsedData = {};
-    parsedData.totalDistance = 0;
-    parsedData.totalDuration = busRoute.total_duration;
-
-    // { location: "XXX", type: "bus", duration: 10 },
-
-    // decode polyline
-    // parsedData.coordinates = polyline.decode(busRoute.polyline).map((coord) => [coord[1], coord[0]]);
-
-    const directions = [];
-    const coordinates = [];
-    for (var i = 0; i < busRoute.segments.length; i++) {
-      if (busRoute.segments[i].transport_type === "bus") {
-        directions.push(...parseBusSegment(busRoute.segments[i]));
-
-        coordinates.push(...polyline.decode(busRoute.segments[i].polyline).map((coord) => [coord[1], coord[0]]));
-      } else {
-        parsedData.totalDistance += Number(busRoute.segments[i].distance);
-        directions.push(...parseWalkSegment(busRoute.segments[i]));
-
-        coordinates.push(...polyline.decode(busRoute.segments[i].polyline).map((coord) => [coord[1], coord[0]]));
-      }
-    }
-    parsedData.directions = directions;
-    parsedData.coordinates = coordinates;
-    setBusRoute(parsedData);
-  }, []);
-
-  const parseBusSegment = (busSegment) => {
-    var locationString = "Take";
-
-    for (var i = 0; i < busSegment.services.length; i++) {
-      if (i === 0) {
-        locationString += " bus ";
-      }
-
-      locationString += `${busSegment.services[0].code} (in ${Math.floor(busSegment.services[0].wait_time / 60)} min)`;
-
-      if (i > 0 && i < busSegment.services.length - 1) {
-        locationString += " or ";
-      }
-    }
-
-    locationString += ` to ${busSegment.path.at(-1).name}`;
-    return [{ location: locationString, type: "bus", duration: busSegment.duration, stops: busSegment.path.length }];
-  };
-
-  const parseWalkRoute = useCallback((walkRoute) => {
-    const parsedData = {};
-    parsedData.totalDistance = walkRoute.total_distance;
-    parsedData.totalDuration = walkRoute.total_duration;
-
-    // decode polyline
-    parsedData.coordinates = polyline.decode(walkRoute.polyline).map((coord) => [coord[1], coord[0]]);
-    parsedData.directions = parseWalkSegment(walkRoute);
-    setWalkRoute(parsedData);
-  }, []);
-
-  const parseWalkSegment = (walkSegment) => {
-    const directions = [];
-
-    for (var i = 0; i < walkSegment.path.length; i++) {
-      const node = walkSegment.path[i];
-      directions.push({ location: `Walk to ${node.name}`, type: "walk", duration: node.duration ? node.duration : node.total_duration });
-    }
-
-    return directions;
-  };
-
   // redirect is state is null or undef
   // Loading variable
   useEffect(() => {
@@ -136,9 +44,9 @@ const SearchResult = () => {
 
     setStart(state.start);
     setEnd(state.end);
-    parseWalkRoute(state.walk);
-    parseBusRoute(state.bus);
-  }, [parseBusRoute, parseWalkRoute, redirectProps]);
+    setWalkRoute(parseWalkRoute(state.walk));
+    setBusRoute(parseBusRoute(state.bus));
+  }, [redirectProps]);
 
   useEffect(() => {
     if (map.current) return;
