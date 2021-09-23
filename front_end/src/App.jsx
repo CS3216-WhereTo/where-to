@@ -1,5 +1,5 @@
 import { Route, Redirect } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { IonApp, IonRouterOutlet, IonTabBar, IonTabs, IonTabButton, IonIcon, IonText } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 
@@ -31,9 +31,6 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { initialiseGoogleAnalytics } from "./utils/ReactGa";
-import NodeStore from "./stores/NodeStore";
-import RouteStore from "./stores/RouteStore";
-import checkUserLoggedIn from "./utils/AuthChecker";
 import { useUserLoggedIn } from "./context/UserContext";
 
 /**
@@ -46,12 +43,6 @@ const App = (props) => {
   }, []);
 
   const { isLoggedIn, setIsLoggedIn } = useUserLoggedIn();
-  // checkUserLoggedIn()
-  //   .then(res => {
-  //     if (res) setLoginState(true);
-  //     else setLoginState(false);
-  //   })
-  //   .catch(console.error);
 
   const landingPage = !isLoggedIn ? <Login /> : <Redirect to="/search" />;
 
