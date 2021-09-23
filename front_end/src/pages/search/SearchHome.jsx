@@ -47,7 +47,8 @@ const SearchHome = (props) => {
 
   useEffect(() => {
     setOptionsLoading(true);
-    props.nodes.onChange(() => {
+    console.log(props.nodes);
+    const fetchNodesCallback = () => {
       const favourites = props.nodes.getFavourites().map((node) => {
         return {
           label: node.name,
@@ -63,9 +64,9 @@ const SearchHome = (props) => {
       });
       setOptions([...favourites, ...nonFavourites]);
       setOptionsLoading(false);
-    });
+    };
 
-    props.nodes.fetchNodes();
+    props.nodes.fetchNodes(fetchNodesCallback);
   }, [props.nodes]);
 
   useEffect(() => {

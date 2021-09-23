@@ -1,5 +1,5 @@
 import axios from "axios";
-import checkUserLoggedIn, { getUserToken } from "../utils/AuthChecker";
+import userTokenExists, { getUserToken } from "../utils/AuthChecker";
 
 export default class NodeGateway {
 
@@ -8,7 +8,7 @@ export default class NodeGateway {
      */
     async get() {
         const headers = {};
-        const loggedIn = await checkUserLoggedIn();
+        const loggedIn = userTokenExists();
         if (loggedIn) headers['Authorization'] = `Bearer ${getUserToken()}`;
 
         const response = await axios.get('nodes/list_nodes', {

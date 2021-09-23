@@ -1,41 +1,34 @@
-import { useState, useEffect } from "react";
-import { useHistory } from "react-router";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { IonPage, IonContent, IonLabel, IonButton, IonChip } from "@ionic/react";
+import { Redirect } from "react-router";
 import { useGoogleLogout } from "react-google-login";
+import PropTypes from "prop-types";
 
 import Loading from "../../components/loading/Loading";
 import CustomToast from "../../components/custom-toast/CustomToast";
-import UnauthenticatedScreen from "../../components/unauthenticated-screen/UnauthenticatedScreen";
-import checkUserLoggedIn, { signUserOut } from "../../utils/AuthChecker";
+import userTokenExists, { signUserOut } from "../../utils/AuthChecker";
+import UnauthenticatedUserScreen from "../../components/sign-in/SignIn";
 import { trackPageView, trackUpdateWalkingSpeedEvent, trackDismissSettingsToastEvent, trackGoogleSignOutEvent } from "../../utils/ReactGa";
 import "./Settings.css";
-import { useUserLoggedIn } from "../../context/UserContext";
+import UserStore from "../../stores/UserStore";
 
-// TODO
-// Fix bug where sign out doesn't redirect
+const Settings = (props) => {
+  const [loading, setLoading] = useState(true);
+  const loggedIn = userTokenExists();
+  const mounted = useRef(null);
+  const [isLoggedOut, setLogoutState] = useState(false);
 
-const Settings = ({ users }) => {
-  const { isLoggedIn, setIsLoggedIn } = useUserLoggedIn();
-
-  // checkUserLoggedIn()
-  //   .then((res) => {
-  //     if (res) setLoginState(true);
-  //     else setLoginState(false);
-  //   })
-  //   .catch(console.error);
-
-  // Handling signouts
-  const history = useHistory();
+  /** @type {UserStore} */
+  const user = props.user;
 
   const handleLogOut = () => {
     signUserOut();
-    setIsLoggedIn(false);
+    setLogoutState(true);
     trackGoogleSignOutEvent();
-    history.replace("/");
   };
 
   const handleLogOutFailure = () => {
-    console.log("Encountered error logging out");
+    console.error("Encountered error logging out");
   };
 
   const { signOut } = useGoogleLogout({
@@ -54,30 +47,45 @@ const Settings = ({ users }) => {
   ];
 
   const [selectedSpeed, setSelectedSpeed] = useState(0);
-  const [loading, setLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
+  const [updating, setUpdateStatus] = useState(false);
 
   useEffect(() => {
     trackPageView(window.location.pathname);
   }, []);
 
-  useEffect(() => {
-    users.onChangeSpeed(() => {
-      const speed = users.getSpeed();
-      setSelectedSpeed(speed);
-      if (loading) setShowToast(true);
-      setLoading(false);
-    });
+  const updateSpeedSelection = useCallback(() => {
+    console.log("SETTINGS: updateSpeedSelection() called");
+    if (!mounted.current) return;
 
-    users.fetchSpeed();
-  }, [selectedSpeed]);
+    const speed = user.getSpeed();
+    setSelectedSpeed(speed);
+    if (updating) setShowToast(true);
+    setLoading(false);
+    setUpdateStatus(false);
+  }, [updating, user]);
+
+  useEffect(() => {
+    mounted.current = true;
+
+    if (!loggedIn) {
+      setLoading(false);
+      return;
+    }
+
+    user.fetchSpeed(updateSpeedSelection);
+
+    return () => {
+      mounted.current = false;
+    };
+  }, [loggedIn, updateSpeedSelection, user]);
 
   const selectSpeed = (val) => {
     if (val === selectedSpeed) return;
 
     // Trigger api call to set new speed
-    setLoading(true);
-    users.setSpeed(val);
+    setUpdateStatus(true);
+    user.setSpeed(val, updateSpeedSelection);
 
     trackUpdateWalkingSpeedEvent();
   };
@@ -85,8 +93,9 @@ const Settings = ({ users }) => {
   const getSpeedOptions = () => {
     const speedOption = ({ label, val }, key) => {
       const selectionStyle = val === selectedSpeed ? "speed__option--selected" : "speed__option--unselected";
+
       return (
-        <IonChip key={key} onClick={() => selectSpeed(val)} className={"speed__option " + selectionStyle} disabled={loading}>
+        <IonChip key={key} onClick={() => selectSpeed(val)} className={"speed__option " + selectionStyle} disabled={updating}>
           <IonLabel>{label}</IonLabel>
         </IonChip>
       );
@@ -101,8 +110,9 @@ const Settings = ({ users }) => {
     </IonButton>
   );
 
-  if (isLoggedIn === null) return <Loading pageName={"Settings"} />;
-  if (!isLoggedIn) return <UnauthenticatedScreen pageName={"Settings"} />;
+  if (loading) return <Loading pageName={"Settings"} />;
+  if (isLoggedOut) return <Redirect exact to="/" />;
+  if (!loggedIn) return <UnauthenticatedUserScreen pageName={"Settings"} />;
   return (
     <IonPage className="page settings-page">
       <div className="page-header">
@@ -124,6 +134,10 @@ const Settings = ({ users }) => {
       </IonContent>
     </IonPage>
   );
+};
+
+Settings.propTypes = {
+  user: PropTypes.instanceOf(UserStore),
 };
 
 export default Settings;

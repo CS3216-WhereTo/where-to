@@ -1,5 +1,6 @@
-import { Route, Redirect } from "react-router-dom";
-import { useEffect } from "react";
+import { Route, Redirect, Switch } from "react-router-dom";
+import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 import { IonApp, IonRouterOutlet, IonTabBar, IonTabs, IonTabButton, IonIcon, IonText } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 
@@ -31,7 +32,10 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { initialiseGoogleAnalytics } from "./utils/ReactGa";
-import { useUserLoggedIn } from "./context/UserContext";
+import { verifyTokenIfExists } from "./utils/AuthChecker";
+import NodeStore from "./stores/NodeStore";
+import RouteStore from "./stores/RouteStore";
+import UserStore from "./stores/UserStore";
 
 /**
  * @param {{nodes: NodeStore, routes: RouteStore, users: UserStore}} stores
@@ -42,34 +46,46 @@ const App = (props) => {
     initialiseGoogleAnalytics();
   }, []);
 
-  const { isLoggedIn, setIsLoggedIn } = useUserLoggedIn();
+  const [isLoggedIn, setLoginState] = useState(false);
 
-  const landingPage = !isLoggedIn ? <Login /> : <Redirect to="/search" />;
+  verifyTokenIfExists()
+    .then((res) => {
+      if (res) setLoginState(true);
+      else setLoginState(false);
+    })
+    .catch(console.error);
 
+  const landingPage = !isLoggedIn ? <Login /> : <Redirect exact to="/favourites" />;
+
+  /** @type {NodeStore} */
   const nodes = props.nodes;
+  /** @type {RouteStore} */
   const routes = props.routes;
-  const users = props.users;
+  /** @type {UserStore} */
+  const user = props.user;
 
   return (
     <IonApp>
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route path="/search">
-              <SearchHome nodes={nodes} routes={routes} />
-            </Route>
-            <Route path="/search-result">
-              <SearchResult />
-            </Route>
-            <Route exact path="/favourites">
-              <Favourites nodes={nodes} />
-            </Route>
-            <Route exact path="/settings">
-              <Settings users={users} />
-            </Route>
-            <Route exact path="/">
-              {landingPage}
-            </Route>
+            <Switch>
+              <Route path="/search">
+                <SearchHome nodes={nodes} routes={routes} />
+              </Route>
+              <Route path="/search-result">
+                <SearchResult />
+              </Route>
+              <Route exact path="/favourites">
+                <Favourites nodes={nodes} user={user} />
+              </Route>
+              <Route exact path="/settings">
+                <Settings user={user} />
+              </Route>
+              <Route exact path="/">
+                {landingPage}
+              </Route>
+            </Switch>
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
             <IonTabButton tab="search" href="/search">
@@ -92,3 +108,9 @@ const App = (props) => {
 };
 
 export default App;
+
+App.propTypes = {
+  nodes: PropTypes.instanceOf(NodeStore).isRequired,
+  user: PropTypes.instanceOf(UserStore).isRequired,
+  routes: PropTypes.instanceOf(RouteStore).isRequired,
+};

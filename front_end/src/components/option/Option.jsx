@@ -14,17 +14,17 @@ const Option = (props) => {
   useEffect(() => {
     if (!performAction) return;
 
-    props.data.value.nodes.onChange(() => {
+    const toggleFavourite = () => {
       setIsFavourite(!isFavourite);
-    });
+    };
 
     if (isFavourite) {
-      props.data.value.nodes.removeFavourite(props.data.value.node_id);
+      props.data.value.nodes.removeFavourite(props.data.value.node_id, toggleFavourite);
     } else {
-      props.data.value.nodes.addFavourite(props.data.value.node_id);
+      props.data.value.nodes.addFavourite(props.data.value.node_id, toggleFavourite);
     }
 
-    setPerformAction(false)
+    setPerformAction(false);
   }, [isFavourite, performAction, props.data.value.node_id, props.data.value.nodes, props.nodes]);
 
   const parentClick = (e) => {

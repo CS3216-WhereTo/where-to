@@ -14,16 +14,15 @@ import Logo from "../../assets/logo.svg";
 const ERR_CON_GOOGLE = "We are unable to connect to Google right now, please try again later";
 const ERR_AUTH_FAIL = "We are unable to authenticate you, please try again!";
 
-const Login = () => {
-  const { isLoggedIn, setIsLoggedIn } = useUserLoggedIn();
+function Login() {
 
   useEffect(() => {
     trackPageView(window.location.pathname);
   }, []);
 
   const history = useHistory();
-  const redirectToSearchPage = () => history.replace("/search");
-
+  const redirectToSearch = () => history.replace("/favourites");
+  
   const [loginError, setLoginError] = useState("");
 
   /**
@@ -33,10 +32,7 @@ const Login = () => {
     const token = googleResponse.tokenId;
     signUserIn(
       token,
-      () => {
-        setIsLoggedIn(true);
-        redirectToSearchPage();
-      },
+      redirectToSearch,
       () => setLoginError(ERR_AUTH_FAIL),
       () => setLoginError(ERR_CON_GOOGLE)
     );
@@ -44,12 +40,12 @@ const Login = () => {
 
   const handleGoogleLoginFailure = (response) => {
     console.log(`Login failed with error code ${response.error}: ${response.details}`);
-    setLoginError(ERR_CON_GOOGLE);
+    setLoginError(ERR_AUTH_FAIL);
   };
 
   const handleGuestLogin = () => {
     trackGuestSignInEvent();
-    redirectToSearchPage();
+    redirectToSearch();
   };
 
   const LoginHeaderRow = () => {
@@ -78,8 +74,8 @@ const Login = () => {
     );
 
     const guestLoginButton = (
-      <IonButton className="sns-login__button" shape="round" onClick={props.onGuessLogin}>
-        <IonText className="sns-login__text">Continue as a guest</IonText>
+      <IonButton className="sns-login__button" shape="round" onClick={props.onGuestLogin}>
+       <IonText className="sns-login__text">Continue as a guest</IonText>
         <IonIcon className="sns-login__next" slot="end" icon={arrowForward} size="large"></IonIcon>
       </IonButton>
     );
@@ -111,7 +107,11 @@ const Login = () => {
     <IonPage className="page login-page">
       <IonGrid className="login">
         <LoginHeaderRow />
-        <LoginOptionsRow onGoogleSuccess={handleGoogleLoginSuccess} onGoogleFailure={handleGoogleLoginFailure} onGuessLogin={handleGuestLogin} />
+        <LoginOptionsRow
+          onGoogleSuccess={handleGoogleLoginSuccess}
+          onGoogleFailure={handleGoogleLoginFailure}
+          onGuestLogin={handleGuestLogin}
+        />
       </IonGrid>
       <CustomToast
         showToast={loginError !== ""}
