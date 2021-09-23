@@ -21,7 +21,27 @@ const Settings = ({ users }) => {
       else setLoginState(false);
     })
     .catch(console.error);
-  
+
+  // Handling signouts
+  const history = useHistory();
+
+  const handleLogOut = () => {
+    signUserOut();
+    trackGoogleSignOutEvent();
+    history.replace("/");
+  };
+
+  const handleLogOutFailure = () => {
+    console.log("Encountered error logging out");
+  };
+
+  const { signOut } = useGoogleLogout({
+    clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+    onLogoutSuccess: handleLogOut,
+    onFailure: handleLogOutFailure,
+  });
+
+  // Showing speed options
   const options = [
     {label: "Very Slow (0.8 m/s)", val: 0.8},
     {label: "Slow (1.1 m/s)", val: 1.1},
@@ -29,12 +49,8 @@ const Settings = ({ users }) => {
     {label: "Fast (1.6 m/s)", val: 1.6},
     {label: "Very Fast (1.9 m/s)", val: 1.9},
   ];
-
-  // Handling signouts
-  const history = useHistory();
-
-  // Showing speed options
-  const [selectedSpeed, setSelectedSpeed] = useState(1.4);
+  
+  const [selectedSpeed, setSelectedSpeed] = useState(0);
   const [loading, setLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
@@ -52,22 +68,6 @@ const Settings = ({ users }) => {
 
     users.fetchSpeed();
   }, [selectedSpeed]);
-
-  const handleLogOut = () => {
-    signUserOut();
-    trackGoogleSignOutEvent();
-    history.replace("/");
-  };
-
-  const handleLogOutFailure = () => {
-    console.log("Encountered error logging out");
-  };
-
-  const { signOut } = useGoogleLogout({
-    clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-    onLogoutSuccess: handleLogOut,
-    onFailure: handleLogOutFailure,
-  });
 
   const selectSpeed = (val) => {
     if (val === selectedSpeed) return;
