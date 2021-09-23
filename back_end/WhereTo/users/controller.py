@@ -1,4 +1,4 @@
-from back_end.WhereTo.routes.graphs import get_node_graph
+from routes.graphs import get_node_graph
 import json
 
 from .models import Recent
