@@ -17,7 +17,6 @@ function Settings(props) {
   const [ loading, setLoading ] = useState(true);
   const loggedIn = userTokenExists();
   const mounted = useRef(null);
-  const [ assignedObserver, setObserveStatus ] = useState(false);
   const [ isLoggedOut, setLogoutState ] = useState(false);
 
   /** @type {UserStore} */
@@ -25,7 +24,6 @@ function Settings(props) {
 
   function handleLogOut() {
     signUserOut();
-    user.notifyAuthChanged();
     setLogoutState(true);
     trackGoogleSignOutEvent();
   };
@@ -58,6 +56,7 @@ function Settings(props) {
   }, []);
 
   function updateSpeedSelection() {
+    console.log('SETTINGS: updateSpeedSelection() called');
     if (!mounted.current) return;
 
     const speed = user.getSpeed();
@@ -69,18 +68,13 @@ function Settings(props) {
 
   useEffect(() => {
     mounted.current = true;
-    console.log('I got mounted');
 
     if (!loggedIn) {
       setLoading(false);
       return;
     }
 
-    if (!assignedObserver) {
-      user.onChangeSpeed(updateSpeedSelection);
-      setObserveStatus(true);
-    }
-    user.fetchSpeed();
+    user.fetchSpeed(updateSpeedSelection);
 
     return () => { mounted.current = false };
   }, []);
@@ -90,7 +84,7 @@ function Settings(props) {
 
     // Trigger api call to set new speed
     setUpdateStatus(true);
-    user.setSpeed(val);
+    user.setSpeed(val, updateSpeedSelection);
 
     trackUpdateWalkingSpeedEvent();
   };

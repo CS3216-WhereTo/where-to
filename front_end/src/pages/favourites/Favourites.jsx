@@ -39,10 +39,7 @@ function Favourites(props) {
   const nodes = props.nodes;
 
   const [ loading, setLoadingStatus ] = useState(true);
-  const [ assignedObserver, setObserveStatus ] = useState(false);
-
-  const tokenPresent = userTokenExists();
-  const [ loggedIn, setLoggedIn ] = useState(tokenPresent);
+  const loggedIn = userTokenExists();
   const mounted = useRef(null);
 
   //////////////////////////
@@ -52,14 +49,14 @@ function Favourites(props) {
   /** @type {[ Location, React.Dispatch<React.SetStateAction<Location>> ]} */
   const [ favourites, setFavourites ] = useState([]);
   function populateFavourites() {
-    console.log('Populating favourites');
+    console.log('FAVOURITES: populateFavourites() called');
 
     const data = nodes.getFavourites()
       .map(node => new Location(node.node_id, node.name, true));
       if (!mounted.current) return;
       setFavourites(data);
 
-    if (mounted.current) user.fetchRecents();
+    if (mounted.current) user.fetchRecents(() => populateRecents());
   }
   
   //////////////////////////
@@ -68,7 +65,7 @@ function Favourites(props) {
 
   const [ recents, setRecents ] = useState([]);
   function populateRecents() {
-    console.log('Populating recents');
+    console.log('FAVOURITES: populateRecents() called');
     const allNodes = {
       favs: nodes.getFavourites(),
       nonFavs: nodes.getNonFavourites()
@@ -103,34 +100,16 @@ function Favourites(props) {
     setLoadingStatus(false);
   }
 
-  function checkLogInStatus() {
-    const tokenPresent = userTokenExists();
-    console.log('Token found? ' + tokenPresent);
-    setLoggedIn(tokenPresent);
-  }
-
   useEffect(() => {
     trackPageView(window.location.pathname);
     mounted.current = true;
 
-    console.log("FAVOURITES: Gonna check if i can log in");
     if (!loggedIn) {
       setLoadingStatus(false);
-      console.log("FAVOURITES: damn i guess i'm not logged in");
       return;
     }
 
-    console.log("FAVOURITES: I'm gonna set some observers aha");
-    if (!assignedObserver) {
-      nodes.onChange(populateFavourites);
-      user.onChangeRecents(populateRecents);
-      user.onChangeAuth(checkLogInStatus)
-      setObserveStatus(true);
-      console.log("FAVOURITES: I'm gonna set some observers aha");
-    }
-
-    console.log("FAVOURITES: I'm gonna fetch from the API");
-    nodes.fetchNodes(); /* triggers observeFavourites which triggers observeRecents */
+    nodes.fetchNodes(populateFavourites); /* callback fetches recents */
 
     return () => { mounted.current = false; };
   }, [loggedIn]);
@@ -162,12 +141,9 @@ function Favourites(props) {
     } else throw new Error(ERR_INVALID_STATE);
   };
 
-  console.log("Boy I sure hope I don't happen to be a loading screen");
   if (loading) return (<Loading pageName={"Favourites"}/>);
-  console.log('Boy I sure hope I get rendered');
   if (!loggedIn) return (<UnauthenticatedUserScreen pageName={"Favourites"}/>);
 
-  console.log("how the fuck did i get here?");
   return (
     <IonPage className="page favourites-page">
       <div className="page-header">

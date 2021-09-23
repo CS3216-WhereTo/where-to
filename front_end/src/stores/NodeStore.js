@@ -1,11 +1,6 @@
-import MicroEmitter from 'micro-emitter';
-
 export const ERR_FAV = "This node is not in the favourites!";
 export const ERR_UNFAV = "This node is not in the non favourites!";
 export const ERR_INVALID_FAV_ARG = "Invalid input was given!";
-
-const event = "UPDATE_NODE";
-const emitter = new MicroEmitter();
 
 export const FAV_KEY = "favouriteNodes";
 export const NONFAV_KEY = "nonFavouriteNodes";
@@ -30,7 +25,35 @@ export default class NodeStore {
     this.#favourites = [];
     this.nodeGateway = nodeGateway;
     this.favGateway = favGateway;
-    emitter.on(event, () => this._updateLocalStorage());
+  }
+
+  /**
+   * Fetches and updates the list of nodes.
+   */
+  fetchNodes(callback) {
+    return this.nodeGateway
+      .get()
+      .then((res) => this._setNodes(res, callback))
+      .catch((e) => {
+        console.error(e);
+        this._loadNodesFromStorage(callback);
+      });
+  }
+
+  _setNodes(result, callback) {
+    this.#favourites = result.favourites.slice();
+    this.#nonFavourites = result.non_favourites.slice();
+    callback();
+    this._updateLocalStorage();
+  }
+
+  _loadNodesFromStorage(callback) {
+    const favStr = localStorage.getItem(FAV_KEY);
+    const nonFavStr = localStorage.getItem(NONFAV_KEY);
+    this.#favourites = favStr ? JSON.parse(favStr) : [];
+    this.#nonFavourites = nonFavStr ? JSON.parse(nonFavStr) : [];
+    callback();
+    this._updateLocalStorage();
   }
 
   _updateLocalStorage() {
@@ -38,34 +61,7 @@ export default class NodeStore {
     localStorage.setItem(NONFAV_KEY, JSON.stringify(this.#nonFavourites));
   }
 
-  /**
-   * Fetches and updates the list of nodes.
-   */
-  fetchNodes() {
-    return this.nodeGateway
-      .get()
-      .then((res) => this._setNodes(res))
-      .catch((e) => {
-        console.error(e);
-        this._loadNodesFromStorage();
-      });
-  }
-
-  _setNodes(result) {
-    this.#favourites = result.favourites.slice();
-    this.#nonFavourites = result.non_favourites.slice();
-    emitter.emit(event);
-  }
-
-  _loadNodesFromStorage() {
-    const favStr = localStorage.getItem(FAV_KEY);
-    const nonFavStr = localStorage.getItem(NONFAV_KEY);
-    this.#favourites = favStr ? JSON.parse(favStr) : [];
-    this.#nonFavourites = nonFavStr ? JSON.parse(nonFavStr) : [];
-    emitter.emit(event);
-  }
-
-  removeFavourite(nodeId) {
+  removeFavourite(nodeId, callback) {
     const idx = this.#favourites.findIndex((node) => node.node_id === nodeId);
     if (idx < 0) throw new Error(ERR_FAV);
 
@@ -77,12 +73,13 @@ export default class NodeStore {
         const node = this.#favourites[idx];
         this.#favourites.splice(idx, 1);
         this.#nonFavourites.push(node);
-        emitter.emit(event);
+        callback();
+        this._updateLocalStorage();
       })
       .catch(console.error);
   }
 
-  addFavourite(nodeId) {
+  addFavourite(nodeId, callback) {
     const idx = this.#nonFavourites.findIndex((node) => node.node_id === nodeId);
     if (idx < 0) throw new Error(ERR_UNFAV);
 
@@ -94,18 +91,10 @@ export default class NodeStore {
         const node = this.#nonFavourites[idx];
         this.#nonFavourites.splice(idx, 1);
         this.#favourites.push(node);
-        emitter.emit(event);
+        callback();
+        this._updateLocalStorage();
       })
       .catch(console.error);
-  }
-
-  /**
-   * Sets a handler that is called when the data changes.
-   *
-   * @param {Function} handler
-   */
-  onChange(handler) {
-    emitter.on(event, handler);
   }
 
   /**

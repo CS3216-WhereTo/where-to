@@ -20,7 +20,7 @@ const Login = () => {
   }, []);
 
   const history = useHistory();
-  const redirectToSearch = () => history.replace("/search");
+  const redirectToSearch = () => history.replace("/favourites");
   
   const [loginError, setLoginError] = useState("");
 

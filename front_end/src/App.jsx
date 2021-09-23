@@ -1,4 +1,4 @@
-import { Route, Redirect } from "react-router-dom";
+import { Route, Redirect, Switch } from "react-router-dom";
 import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { IonApp, IonRouterOutlet, IonTabBar, IonTabs, IonTabButton, IonIcon, IonText } from "@ionic/react";
@@ -53,7 +53,7 @@ const App = (props) => {
     })
     .catch(console.error);
 
-  const landingPage = !isLoggedIn ? <Login/> : <Redirect exact to="/search"/>;
+  const landingPage = !isLoggedIn ? <Login/> : <Redirect exact to="/favourites"/>;
 
   /** @type {NodeStore} */
   const nodes = props.nodes;
@@ -67,10 +67,12 @@ const App = (props) => {
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route path="/search" ><SearchHome nodes={nodes} routes={routes}/></Route>
-            <Route exact path="/favourites" ><Favourites nodes={nodes} user={user}/></Route>
-            <Route exact path="/settings" ><Settings user={user}/></Route>
-            <Route exact path="/">{landingPage}</Route>
+            <Switch>
+              <Route path="/search" ><SearchHome nodes={nodes} routes={routes}/></Route>
+              <Route exact path="/favourites" ><Favourites nodes={nodes} user={user}/></Route>
+              <Route exact path="/settings" ><Settings user={user}/></Route>
+              <Route exact path="/">{landingPage}</Route>
+            </Switch>
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
             <IonTabButton tab="search" href="/search">
