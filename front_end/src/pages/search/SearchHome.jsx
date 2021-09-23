@@ -47,7 +47,7 @@ const SearchHome = (props) => {
 
   useEffect(() => {
     setOptionsLoading(true);
-    console.log(props.nodes);
+
     const fetchNodesCallback = () => {
       const favourites = props.nodes.getFavourites().map((node) => {
         return {
@@ -175,7 +175,7 @@ const SearchHome = (props) => {
       return;
     }
 
-    props.routes.onChange(() => {
+    const fetchRoutesCallback = () => {
       const route = props.routes.getRoutes();
 
       if (route) {
@@ -201,9 +201,9 @@ const SearchHome = (props) => {
       }
 
       setRouteObject({ start: start, end: end, ...route });
-    });
+    };
 
-    props.routes.fetchRoutes(start.value.node_id, end.value.node_id);
+    props.routes.fetchRoutes(start.value.node_id, end.value.node_id,fetchRoutesCallback);
   };
 
   return (
