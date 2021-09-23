@@ -1,5 +1,5 @@
-import { IonPage, IonIcon, IonRippleEffect, IonToast } from "@ionic/react";
-import { useState, useEffect, useRef } from "react";
+import { IonPage, IonIcon, IonRippleEffect } from "@ionic/react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { ellipseOutline, swapVertical, locationSharp } from "ionicons/icons";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 import { useLocation, useHistory } from "react-router-dom";
@@ -45,29 +45,44 @@ const SearchHome = (props) => {
     trackPageView(window.location.pathname);
   }, []);
 
-  useEffect(() => {
-    setOptionsLoading(true);
-
+  const fetchNodes = useCallback(() => {
     const fetchNodesCallback = () => {
       const favourites = props.nodes.getFavourites().map((node) => {
         return {
           label: node.name,
-          value: { ...node, isFavourite: true, nodes: props.nodes },
+          value: {
+            ...node,
+            isFavourite: true,
+            nodes: props.nodes,
+            favouriteCallback: fetchNodes,
+          },
         };
       });
 
       const nonFavourites = props.nodes.getNonFavourites().map((node) => {
         return {
           label: node.name,
-          value: { ...node, isFavourite: false, nodes: props.nodes },
+          value: {
+            ...node,
+            isFavourite: false,
+            nodes: props.nodes,
+            favouriteCallback: fetchNodes,
+          },
         };
       });
+
       setOptions([...favourites, ...nonFavourites]);
+      setFilteredOptions([...favourites, ...nonFavourites]);
       setOptionsLoading(false);
     };
 
     props.nodes.fetchNodes(fetchNodesCallback);
   }, [props.nodes]);
+
+  useEffect(() => {
+    setOptionsLoading(true);
+    fetchNodes();
+  }, [fetchNodes]);
 
   useEffect(() => {
     if (map.current) return;
@@ -203,7 +218,7 @@ const SearchHome = (props) => {
       setRouteObject({ start: start, end: end, ...route });
     };
 
-    props.routes.fetchRoutes(start.value.node_id, end.value.node_id,fetchRoutesCallback);
+    props.routes.fetchRoutes(start.value.node_id, end.value.node_id, fetchRoutesCallback);
   };
 
   return (

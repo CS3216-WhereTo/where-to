@@ -16,6 +16,7 @@ const Option = (props) => {
 
     const toggleFavourite = () => {
       setIsFavourite(!isFavourite);
+      props.data.value.favouriteCallback();
     };
 
     if (isFavourite) {
@@ -25,7 +26,7 @@ const Option = (props) => {
     }
 
     setPerformAction(false);
-  }, [isFavourite, performAction, props.data.value.node_id, props.data.value.nodes, props.nodes]);
+  }, [isFavourite, performAction, props.data.value, props.data.value.node_id, props.data.value.nodes, props.nodes]);
 
   const parentClick = (e) => {
     e.stopPropagation();
