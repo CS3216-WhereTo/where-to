@@ -35,7 +35,7 @@ import RouteStore from "./stores/RouteStore";
 import checkUserLoggedIn from "./utils/AuthChecker";
 
 /**
- * @param {{nodes: NodeStore, routes: RouteStore}} stores 
+ * @param {{nodes: NodeStore, routes: RouteStore, users: UserStore}} stores 
  * @returns 
  */
 const App = (props) => {
@@ -55,6 +55,7 @@ const App = (props) => {
 
   const nodes = props.nodes;
   const routes = props.routes;
+  const users = props.users;
 
   return (
     <IonApp>
@@ -63,7 +64,7 @@ const App = (props) => {
           <IonRouterOutlet>
             <Route path="/search"><SearchHome nodes={nodes} routes={routes}/></Route>
             <Route exact path="/favourites"><Favourites nodes={nodes}/></Route>
-            <Route exact path="/settings"><Settings/></Route>
+            <Route exact path="/settings"><Settings users={users} /></Route>
             <Route exact path="/">{landingPage}</Route>
           </IonRouterOutlet>
           <IonTabBar slot="bottom">

@@ -9,7 +9,7 @@ import checkUserLoggedIn, { signUserOut } from '../../utils/AuthChecker';
 import { trackPageView, trackUpdateWalkingSpeedEvent, trackDismissSettingsToastEvent,trackGoogleSignOutEvent } from "../../utils/ReactGa";
 import './Settings.css';
 
-const Settings = () => {
+const Settings = ({ users }) => {
   const [ loggedIn, setLoginState ]  = useState(null);
   checkUserLoggedIn()
     .then((loggedIn) => {
@@ -19,11 +19,11 @@ const Settings = () => {
     .catch(console.error);
   
   const options = [
-    "Very Slow (0.8 m/s)",
-    "Slow (1.1 m/s)",
-    "Average (1.4 m/s)",
-    "Fast (1.6 m/s)",
-    "Very Fast (1.9 m/s)"
+    {label: "Very Slow (0.8 m/s)", val: 0.8},
+    {label: "Slow (1.1 m/s)", val: 1.1},
+    {label: "Average (1.4 m/s)", val: 1.4},
+    {label: "Fast (1.6 m/s)", val: 1.6},
+    {label: "Very Fast (1.9 m/s)", val: 1.9},
   ];
 
   // Handling signouts
@@ -46,7 +46,7 @@ const Settings = () => {
   });
 
   // Showing speed options
-  const [selectedSpeed, setSelectedSpeed] = useState(2);
+  const [selectedSpeed, setSelectedSpeed] = useState(1.4);
   const [loading, setLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
@@ -54,36 +54,47 @@ const Settings = () => {
     trackPageView(window.location.pathname);
   }, []);
 
-  const selectSpeed = (i) => {
-    if (i === selectedSpeed) return;
+  useEffect(() => {
+    users.onChangeSpeed(handler);
+
+    users.fetchSpeed();
+  }, []);
+
+  const handler = () => {
+    const speed = users.getSpeed();
+    setSelectedSpeed(speed);
+  }
+
+  const selectSpeed = (val) => {
+    if (val === selectedSpeed) return;
 
     // Trigger api call to set new speed
     setLoading(true);
-
+    users.setSpeed(val);
+    
     // Mimic API response time
-    setTimeout(() => {
-      setLoading(false);
-      setShowToast(true);
-    }, 2000);
+    // setTimeout(() => {
+    //   setLoading(false);
+    //   setShowToast(true);
+    // }, 2000);
 
-    setSelectedSpeed(i);
     trackUpdateWalkingSpeedEvent();
     // Should disable all options until API call is complete
   };
 
   function getSpeedOptions() {
 
-    function speedOption(speed, key) {
-      const selectionStyle = (key === selectedSpeed)
+    function speedOption({label, val}, key) {
+      const selectionStyle = (val === selectedSpeed)
         ? "speed__option--selected" 
         : "speed__option--unselected";
       return (
         <IonChip 
           key={key}
-          onClick={() => selectSpeed(key)}
+          onClick={() => selectSpeed(val)}
           className={"speed__option " + selectionStyle}
         >
-          <IonLabel>{speed}</IonLabel>
+          <IonLabel>{label}</IonLabel>
         </IonChip>
       );
     }
