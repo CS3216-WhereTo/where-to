@@ -1,6 +1,5 @@
 from .models import Favourite
 from routes.controller import get_node_graph
-from django.contrib.sessions.backends.db import SessionStore
 
 def list_favourites(user):
 
