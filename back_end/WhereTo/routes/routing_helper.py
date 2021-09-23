@@ -2,6 +2,7 @@ import math
 from pqdict import minpq
 from users.controller import DEFAULT_WALK_SPEED
 
+DEFAULT_BUS_WAIT_TIME = 180
 
 def get_distance(p, q):
     """Calculates Haversine distance between coordinates p and q
@@ -33,7 +34,7 @@ def get_distance_from_walk_duration(duration, walk_speed):
 
 
 def get_bus_waiting_time(bus_stop_id, bus_number, time_from_now):
-    return 300
+    return DEFAULT_BUS_WAIT_TIME
     import random
     return random.randint(1, 600)
 

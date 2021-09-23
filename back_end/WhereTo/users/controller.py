@@ -1,6 +1,7 @@
 import json
 
 from .models import Recent
+from routes.controller import get_node_graph
 
 DEFAULT_WALK_SPEED = 1.4
 
@@ -19,9 +20,17 @@ MAX_RECENTS = 10
 
 def list_recents(user):
     recents = Recent.objects.filter(user_id=user).order_by('-access_time')
-    recents = list(recents[:MAX_RECENTS].values('start_id', 'end_id', 'route'))
-    for i in recents:
-        i['route'] = json.loads(i['route'])
+    recents = list(recents.values('start_id', 'end_id', 'route')[:MAX_RECENTS])
+    
+    node_graph = get_node_graph()
+    
+    for recent in recents:
+        start_id, end_id = recent["start_id"], recent["end_id"]
+        recent["start_node"] = {"node_id": start_id, "name": node_graph[start_id]["name"], "coordinates": node_graph[start_id]["coordinates"]}
+        recent["end_node"] = {"node_id": start_id, "name": node_graph[end_id]["name"], "coordinates": node_graph[end_id]["coordinates"]}
+        recent['route'] = json.loads(recent['route'])
+        del recents["start_id"]
+        del recents["end_id"]
     return recents
 
 def add_recent(user, start_id, end_id, route_json):
