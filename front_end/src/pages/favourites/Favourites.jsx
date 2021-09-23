@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 import { IonPage, IonContent, IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";
 
@@ -38,23 +38,39 @@ function Favourites(props) {
   /** @type {NodeStore} */
   const nodes = props.nodes;
 
-  const [ loading /* hasLoaded */, setLoadingStatus ] = useState(true);
+  const [ loading, setLoadingStatus ] = useState(true);
+  const [ assignedObserver, setObserveStatus ] = useState(false);
 
   const { isLoggedIn } = useAuthContext();
+  const mounted = useRef(null);
+
+  //////////////////////////
+  // FAVOURITES OBSERVER
+  //////////////////////////
 
   /** @type {[ Location, React.Dispatch<React.SetStateAction<Location>> ]} */
   const [ favourites, setFavourites ] = useState([]);
   function populateFavourites() {
+    if (!isLoggedIn) return;
+    console.log('Populating favourites');
+
     const data = nodes.getFavourites()
       .map(node => new Location(node.node_id, node.name, true));
-    setFavourites(data);
+      if (!mounted.current) return;
+      setFavourites(data);
 
-    user.fetchRecents();
+    if (mounted.current) user.fetchRecents();
   }
+  
+  //////////////////////////
+  // RECENTS OBSERVER
+  //////////////////////////
 
   const [ recents, setRecents ] = useState([]);
   function populateRecents() {
-    
+    if (!isLoggedIn) return;
+
+    console.log('Populating recents');
     const allNodes = {
       favs: nodes.getFavourites(),
       nonFavs: nodes.getNonFavourites()
@@ -84,24 +100,34 @@ function Favourites(props) {
       .map(getDestinationFromRoute)
       .map(getNodeDetails);
 
+    if (!mounted.current) return;
     setRecents(data);
     setLoadingStatus(false);
   }
 
   useEffect(() => {
     trackPageView(window.location.pathname);
+    mounted.current = true;
 
-    if (!isLoggedIn) {
+    if (!isLoggedIn && mounted.current) {
       setLoadingStatus(false);
       return;
     }
 
-    user.onChangeRecents(populateRecents);
-    nodes.onChange(populateFavourites);
+    if (!assignedObserver) {
+      nodes.onChange(populateFavourites);
+      user.onChangeRecents(populateRecents);
+      setObserveStatus(true);
+    }
 
     nodes.fetchNodes(); /* triggers observeFavourites which triggers observeRecents */
 
-  }, []);
+    return () => { mounted.current = false; };
+  }, [isLoggedIn]);
+
+  //////////////////////////
+  // SEGMENT CHANGE OBSERVER
+  //////////////////////////
 
   const [segment, setSegment] = useState(Mode.FAVOURITES);
   function handleSegmentChange(event) {

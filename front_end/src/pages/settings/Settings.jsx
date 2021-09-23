@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import { useHistory } from "react-router";
+import { useState, useEffect, useRef } from "react";
 import { IonPage, IonContent, IonLabel, IonButton, IonChip } from "@ionic/react";
 import { useGoogleLogout } from "react-google-login";
+import PropTypes from "prop-types"
 
 import Loading from '../../components/loading/Loading';
 import CustomToast from "../../components/custom-toast/CustomToast";
@@ -10,16 +10,24 @@ import UnauthenticatedUserScreen from "../../components/sign-in/SignIn";
 import { trackPageView, trackUpdateWalkingSpeedEvent, trackDismissSettingsToastEvent, trackGoogleSignOutEvent } from "../../utils/ReactGa";
 import "./Settings.css";
 import { useAuthContext } from "../../utils/Context";
+import UserStore from "../../stores/UserStore";
+import { Redirect } from "react-router";
 
-const Settings = () => {
+function Settings(props) {
 
   const [ loading, setLoading ] = useState(true);
   const { isLoggedIn, setLoginState } = useAuthContext();
+  const mounted = useRef(null);
+  const [ assignedObserver, setObserveStatus ] = useState(false);
+  const [ isLoggedOut, setLogoutState ] = useState(false);
 
-  const history = useHistory();
+  /** @type {UserStore} */
+  const user = props.user
+
   const handleLogOut = () => {
     signUserOut();
     setLoginState(false);
+    setLogoutState(true);
     trackGoogleSignOutEvent();
   };
 
@@ -44,38 +52,46 @@ const Settings = () => {
   
   const [selectedSpeed, setSelectedSpeed] = useState(0);
   const [showToast, setShowToast] = useState(false);
+  const [updating, setUpdateStatus] = useState(false);
 
   useEffect(() => {
     trackPageView(window.location.pathname);
   }, []);
 
+  function updateSpeedSelection() {
+    if (!mounted.current) return;
+
+    const speed = user.getSpeed();
+    setSelectedSpeed(speed);
+    if (updating) setShowToast(true);
+    setLoading(false);
+    setUpdateStatus(false);
+  }
+
   useEffect(() => {
+    mounted.current = true;
+    console.log('I got mounted');
+
     if (!isLoggedIn) {
       setLoading(false);
       return;
     }
 
-    users.onChangeSpeed(() => {
-      const speed = users.getSpeed();
-      setSelectedSpeed(speed);
-      if (loading) setShowToast(true);
-      setLoading(false);
-    });
+    if (!assignedObserver) {
+      user.onChangeSpeed(updateSpeedSelection);
+      setObserveStatus(true);
+    }
+    user.fetchSpeed();
 
-    users.fetchSpeed();
-  }, [selectedSpeed]);
-
-  useEffect(() => {
-    if (isLoggedIn) return;
-    history.replace('/');
-  }, [isLoggedIn])
+    return () => { mounted.current = false };
+  }, []);
 
   function selectSpeed(val) {
     if (val === selectedSpeed) return;
 
     // Trigger api call to set new speed
-    setLoading(true);
-    users.setSpeed(val);
+    setUpdateStatus(true);
+    user.setSpeed(val);
 
     trackUpdateWalkingSpeedEvent();
   };
@@ -84,7 +100,12 @@ const Settings = () => {
     const speedOption = ({label, val}, key) => {
       const selectionStyle = val === selectedSpeed ? "speed__option--selected" : "speed__option--unselected";
       return (
-        <IonChip key={key} onClick={() => selectSpeed(val)} className={"speed__option " + selectionStyle} disabled={loading}>
+        <IonChip
+          key={key}
+          onClick={() => selectSpeed(val)}
+          className={"speed__option " + selectionStyle}
+          disabled={updating}
+        >
           <IonLabel>{label}</IonLabel>
         </IonChip>
       );
@@ -101,7 +122,8 @@ const Settings = () => {
 
 
   if (loading) return (<Loading pageName={"Settings"}/>);
-  if (!isLoggedIn) return (<UnauthenticatedUserScreen pageName={"Settings"}/>);
+  if (isLoggedOut) return (<Redirect exact to='/'/>);
+  else if (!isLoggedIn) return (<UnauthenticatedUserScreen pageName={"Settings"}/>);
   return (
     <IonPage className="page settings-page">
       <div className="page-header">
@@ -123,6 +145,10 @@ const Settings = () => {
       </IonContent>
     </IonPage>
   );
+};
+
+Settings.propTypes = {
+  user: PropTypes.instanceOf(UserStore)
 };
 
 export default Settings;

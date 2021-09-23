@@ -11,7 +11,6 @@ import RouteGateway from './gateways/RouteGateway';
 import UserGateway from './gateways/UserGateway';
 import NodeStore from './stores/NodeStore';
 import RouteStore from './stores/RouteStore';
-import UserGateway from './gateways/UserGateway';
 import UserStore from './stores/UserStore';
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
