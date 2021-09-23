@@ -9,12 +9,10 @@ const ModalWalkItem = ({ location, duration }) => {
       <IonIcon className="directions__icon" icon={walk}></IonIcon>
       <p className="directions__text">Walk to {location}</p>
       <IonLabel className="directions__time" slot="end">
-        {parseInt(duration)} min
+        {/* {parseInt(duration)} min */}{" "}
       </IonLabel>
     </IonItem>
-
   );
 };
-  
-export default ModalWalkItem;
 
+export default ModalWalkItem;

@@ -94,7 +94,7 @@ const SearchResult = () => {
         locationString += " bus ";
       }
 
-      locationString += `${busSegment.services[0].code} (in ${busSegment.services[0].wait_time})`;
+      locationString += `${busSegment.services[0].code} (in ${Math.floor(busSegment.services[0].wait_time / 60)} min)`;
 
       if (i > 0 && i < busSegment.services.length - 1) {
         locationString += " or ";
@@ -102,7 +102,7 @@ const SearchResult = () => {
     }
 
     locationString += ` to ${busSegment.path.at(-1).name}`;
-    return [{ location: locationString, type: "bus", duration: busSegment.duration }];
+    return [{ location: locationString, type: "bus", duration: busSegment.duration, stops: busSegment.path.length }];
   };
 
   const parseWalkRoute = useCallback((walkRoute) => {
@@ -142,6 +142,7 @@ const SearchResult = () => {
 
   useEffect(() => {
     if (map.current) return;
+    setMapLoading(true);
 
     // Initialises new Map
     map.current = new mapboxgl.Map({
@@ -178,7 +179,7 @@ const SearchResult = () => {
       map.current.resize();
     });
 
-    setMapLoading(false);
+    setTimeout(() => setMapLoading(false), 1500);
   }, [lng, lat, zoom]);
 
   useEffect(() => {
@@ -279,7 +280,15 @@ const SearchResult = () => {
         <Sheet.Container>
           <Sheet.Header />
           <Sheet.Content>
-            <Modal dirType={dirType} busDir={busDir} walkDir={walkDir} />
+            <Modal
+              dirType={dirType}
+              busDir={busRoute.directions}
+              walkDir={walkRoute.directions}
+              busDuration={Math.floor(busRoute.totalDuration / 60)}
+              busDistance={busRoute.totalDistance / 1000}
+              walkDuration={Math.floor(walkRoute.totalDuration / 60)}
+              walkDistance={walkRoute.totalDistance / 1000}
+            />
           </Sheet.Content>
         </Sheet.Container>
         <Sheet.Backdrop />

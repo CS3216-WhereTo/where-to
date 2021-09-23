@@ -197,57 +197,6 @@ const SearchHome = (props) => {
     });
 
     props.routes.fetchRoutes(start.value.node_id, end.value.node_id);
-    // try {
-    //   map.current.removeLayer("route");
-    //   map.current.removeSource("route");
-    // } catch (e) {
-    //   // Map currently has no result plotted
-    // } finally {
-    //   // Polyline should be decoded before being received here, e.g. in gateway or store
-    //   map.current.addSource("route", {
-    //     type: "geojson",
-    //     data: {
-    //       type: "Feature",
-    //       properties: {},
-    //       geometry: {
-    //         type: "LineString",
-    //         coordinates: [
-    //           [1.29431, 103.7846],
-    //           [1.29442, 103.784],
-    //           [1.29444, 103.783],
-    //           [1.29525, 103.7827],
-    //           [1.29532, 103.7824],
-    //           [1.29614, 103.7823],
-    //           [1.29642, 103.7822],
-    //           [1.29654, 103.7818],
-    //         ].map((c) => [c[1], c[0]]),
-    //       },
-    //     },
-    //   });
-
-    //   // Different colours for walking and bus
-    //   // Maybe bus is dotted?
-    //   map.current.addLayer({
-    //     id: "route",
-    //     type: "line",
-    //     source: "route",
-    //     layout: {
-    //       "line-join": "round",
-    //       "line-cap": "round",
-    //     },
-    //     paint: {
-    //       "line-color": "#3880FF",
-    //       "line-width": 4,
-    //     },
-    //   });
-
-    //   // Markers for start and end
-    //   new mapboxgl.Marker().setLngLat([103.7846, 1.29431]).addTo(map.current);
-    //   new mapboxgl.Marker().setLngLat([103.7818, 1.29654]).addTo(map.current);
-
-    //   // Centers on start location
-    //   map.current.flyTo({ center: [103.7846, 1.29431] });
-    // }
   };
 
   return (
