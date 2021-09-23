@@ -19,6 +19,7 @@ const SearchResult = ({ start, end }) => {
   const mapContainer = useRef(null);
   const map = useRef(null);
 
+  console.log(start,end)
   // Defaults to NUS location if Geolocation permission not given
   const [lng, setLng] = useState(103.7764);
   const [lat, setLat] = useState(1.2956);
@@ -92,7 +93,7 @@ const SearchResult = ({ start, end }) => {
       <div className="search-header">
         <div className="search-container">
           <div className="back-button">
-            <Link to={{ pathname: "search", state: { destination: { label: "NUS", value: "nus" } } }}>
+            <Link to={{ pathname: "search" }}>
               <IonIcon className="back-button__icon" icon={arrowBack} />
             </Link>
           </div>

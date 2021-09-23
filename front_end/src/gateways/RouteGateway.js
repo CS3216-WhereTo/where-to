@@ -12,11 +12,12 @@ export default class RouteGateway {
         const headers = { 'Content-Type': 'application/json' };
         const loggedIn = await checkUserLoggedIn();
         if (loggedIn) headers['Authorization'] = `Bearer ${getUserToken()}`
-        const response = await axios.get('route/find_routes', {
+        const response = await axios.post('route/find_route', {
             headers: headers,
-            params: locations
+            // params: locations
+            body:locations
         });
-        console.log('GET route/find_routes success');
+        console.log('POST route/find_route success');
         return response.data;
     }
 

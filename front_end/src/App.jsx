@@ -7,6 +7,7 @@ import { mapOutline, starOutline, settingsOutline } from "ionicons/icons";
 
 import Login from "./pages/login/Login";
 import SearchHome from "./pages/search/SearchHome";
+import SearchResult from "./pages/search/SearchResult";
 import Favourites from "./pages/favourites/Favourites";
 import Settings from "./pages/settings/Settings";
 
@@ -36,16 +37,15 @@ import checkUserLoggedIn from "./utils/AuthChecker";
 import { useUserLoggedIn } from "./context/UserContext";
 
 /**
- * @param {{nodes: NodeStore, routes: RouteStore, users: UserStore}} stores 
- * @returns 
+ * @param {{nodes: NodeStore, routes: RouteStore, users: UserStore}} stores
+ * @returns
  */
 const App = (props) => {
   useEffect(() => {
     initialiseGoogleAnalytics();
   }, []);
-  
+
   const { isLoggedIn, setIsLoggedIn } = useUserLoggedIn();
-  console.log(isLoggedIn)
   // checkUserLoggedIn()
   //   .then(res => {
   //     if (res) setLoginState(true);
@@ -64,10 +64,21 @@ const App = (props) => {
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route path="/search"><SearchHome nodes={nodes} routes={routes}/></Route>
-            <Route exact path="/favourites"><Favourites nodes={nodes}/></Route>
-            <Route exact path="/settings"><Settings users={users} /></Route>
-            <Route exact path="/">{landingPage}</Route>
+            <Route path="/search">
+              <SearchHome nodes={nodes} routes={routes} />
+            </Route>
+            <Route path="/search-result">
+              <SearchResult />
+            </Route>
+            <Route exact path="/favourites">
+              <Favourites nodes={nodes} />
+            </Route>
+            <Route exact path="/settings">
+              <Settings users={users} />
+            </Route>
+            <Route exact path="/">
+              {landingPage}
+            </Route>
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
             <IonTabButton tab="search" href="/search">
