@@ -4,12 +4,13 @@ import { IonPage, IonContent, IonSegment, IonSegmentButton, IonLabel } from "@io
 
 import Loading from "../../components/loading/Loading";
 import FavouritesList from "./FavouritesList";
-import { trackPageView, trackFavouritesToRecentsTabEvent, trackRecentsToFavouritesTabEvent } from "../../utils/ReactGa";
+import { trackPageView, trackFavouritesToRecentsTabEvent, trackRecentsToFavouritesTabEvent,trackDismissFavouriteToastEvent } from "../../utils/ReactGa";
 import UnauthenticatedUserScreen from "../../components/sign-in/SignIn";
 import UserStore from "../../stores/UserStore";
 import NodeStore from "../../stores/NodeStore";
 import "./Favourites.css";
 import userTokenExists from "../../utils/AuthChecker";
+import CustomToast from "../../components/custom-toast/CustomToast";
 
 const Mode = Object.freeze({
   FAVOURITES: "Favourites",
@@ -38,6 +39,7 @@ function Favourites(props) {
   const nodes = props.nodes;
 
   const [loading, setLoadingStatus] = useState(true);
+  const [showToast, setShowToast] = useState(false);
   const loggedIn = userTokenExists();
   const mounted = useRef(null);
 
@@ -83,8 +85,6 @@ function Favourites(props) {
   }, [nodes, user]);
 
   const populateFavourites = useCallback(() => {
-    console.log("FAVOURITES: populateFavourites() called");
-
     const data = nodes.getFavourites().map((node) => new Location(node.node_id, node.name, true));
     if (!mounted.current) return;
     setFavourites(data);
@@ -133,12 +133,17 @@ function Favourites(props) {
   function toggleFavourite(i) {
     if (segment === Mode.FAVOURITES) {
       const nodeId = favourites[i].id;
-      nodes.removeFavourite(nodeId);
+      nodes.removeFavourite(nodeId, populateFavourites);
     } else if (segment === Mode.RECENTS) {
       const node = recents[i];
-      if (node.isFav) nodes.removeFavourite(node.id);
-      else nodes.addFavourite(node.id);
+      if (node.isFav) {
+        nodes.removeFavourite(node.id, populateRecents);
+      } else {
+        nodes.addFavourite(node.id, populateRecents);
+      }
     } else throw new Error(ERR_INVALID_STATE);
+
+    setShowToast(true);
   }
 
   if (loading) return <Loading pageName={"Favourites"} />;
@@ -166,6 +171,8 @@ function Favourites(props) {
           isFavouritesTab={segment === "Favourites"}
           toggleFavourite={toggleFavourite}
         />
+
+        <CustomToast showToast={showToast} setShowToast={setShowToast} toastMessage="⭐ Favourites updated." dismissBtnHandler={trackDismissFavouriteToastEvent} />
       </IonContent>
     </IonPage>
   );

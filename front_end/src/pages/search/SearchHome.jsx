@@ -149,7 +149,7 @@ const SearchHome = (props) => {
 
   useEffect(() => {
     if (routeObject.start === undefined || routeObject.start === null) return;
-
+    console.log(routeObject);
     history.push({
       pathname: "/search-result",
       state: routeObject,
@@ -195,6 +195,7 @@ const SearchHome = (props) => {
 
       if (route) {
         // start
+        console.log(route);
         const start_coordinates = start.value.coordinates;
         const route_start_coordinates = route.walk.path[0].coordinates;
 
@@ -215,7 +216,11 @@ const SearchHome = (props) => {
         }
       }
 
-      setRouteObject({ start: start, end: end, ...route });
+      setRouteObject({
+        start: { label: start.label, value: { coordinates: start.value.coordinates, name: start.value.name, nodeId: start.value.node_id } },
+        end: { label: end.label, value: { coordinates: end.value.coordinates, name: end.value.name, nodeId: end.value.node_id } },
+        ...route,
+      });
     };
 
     props.routes.fetchRoutes(start.value.node_id, end.value.node_id, fetchRoutesCallback);

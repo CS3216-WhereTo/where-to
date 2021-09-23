@@ -127,6 +127,13 @@ export const trackFavouritesMapButtonEvent = () => {
   });
 };
 
+export const trackDismissFavouriteToastEvent = () => {
+  ReactGA.event({
+    category: "favourites",
+    action: "dismiss_toast",
+  });
+};
+
 export const trackRecentsToFavouritesTabEvent = () => {
   ReactGA.event({
     category: "recents",
