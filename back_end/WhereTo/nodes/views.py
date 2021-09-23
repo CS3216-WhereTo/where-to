@@ -16,8 +16,7 @@ def list_nodes(request, user):
     return JsonResponse(result, content_type='application/json')   
 
 @require_POST
-@extract_body
-def find_nearest_node(request, body):
-    coordinates = body["coordinates"]
+@extract_body('coordinates')
+def find_nearest_node(request, coordinates):
     result = controller.find_nearest_node(coordinates)
     return JsonResponse(result, content_type='application/json')

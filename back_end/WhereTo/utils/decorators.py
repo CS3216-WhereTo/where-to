@@ -8,16 +8,23 @@ from users.models import User
 from routes.routing_helper import DEFAULT_WALK_SPEED
 
 # decorator to extract parameters from JSON body
-def extract_body(handler):
-    def wrapped_handler(request, **kwargs):
-        try:
-            body = json.loads(request.body)
-        except json.JSONDecodeError:
-            return BAD_REQUEST
+def extract_body(*args):
+    def decorator(handler):
+        def wrapped_handler(request, **kwargs):
+            try:
+                body = json.loads(request.body)
+            except json.JSONDecodeError:
+                return BAD_REQUEST
+            
+            for param in args:
+                if param not in body:
+                    return BAD_REQUEST
+                kwargs[param] = body[param]
 
-        return handler(request, body=body, **kwargs)
-    
-    return wrapped_handler
+            return handler(request, **kwargs)
+        
+        return wrapped_handler
+    return decorator
 
 # helper for authenticated decorator
 def get_user(token):

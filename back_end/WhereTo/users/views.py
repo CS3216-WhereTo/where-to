@@ -12,10 +12,10 @@ def get_speed(request, user):
     return JsonResponse({'speed': result}, content_type='application/json')
 
 @require_POST
-@extract_body
+@extract_body('speed')
 @authenticated()
-def update_speed(request, body, user):
-    result = controller.update_speed(user, body['speed'])
+def update_speed(request, speed, user):
+    result = controller.update_speed(user, speed)
     return JsonResponse({'error': result}, content_type='application/json')
 
 @require_GET
