@@ -4,7 +4,7 @@ import { Redirect } from "react-router";
 import { useGoogleLogout } from "react-google-login";
 import PropTypes from "prop-types"
 
-import Loading from '../../components/loading/Loading';
+import Loading from "../../components/loading/Loading";
 import CustomToast from "../../components/custom-toast/CustomToast";
 import userTokenExists, { signUserOut } from "../../utils/AuthChecker";
 import UnauthenticatedUserScreen from "../../components/sign-in/SignIn";
@@ -34,19 +34,19 @@ function Settings(props) {
 
   const { signOut } = useGoogleLogout({
     clientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
-    onLogoutSuccess: handleLogOut,
+    onLogoutSuccess: () => handleLogOut(),
     onFailure: handleLogOutFailure,
   });
 
   // Showing speed options
   const options = [
-    {label: "Very Slow (0.8 m/s)", val: 0.8},
-    {label: "Slow (1.1 m/s)", val: 1.1},
-    {label: "Average (1.4 m/s)", val: 1.4},
-    {label: "Fast (1.6 m/s)", val: 1.6},
-    {label: "Very Fast (1.9 m/s)", val: 1.9},
+    { label: "Very Slow (0.8 m/s)", val: 0.8 },
+    { label: "Slow (1.1 m/s)", val: 1.1 },
+    { label: "Average (1.4 m/s)", val: 1.4 },
+    { label: "Fast (1.6 m/s)", val: 1.6 },
+    { label: "Very Fast (1.9 m/s)", val: 1.9 },
   ];
-  
+
   const [selectedSpeed, setSelectedSpeed] = useState(0);
   const [showToast, setShowToast] = useState(false);
   const [updating, setUpdateStatus] = useState(false);
@@ -90,7 +90,7 @@ function Settings(props) {
   };
 
   function getSpeedOptions() {
-    const speedOption = ({label, val}, key) => {
+    function speedOption({label, val}, key) {
       const selectionStyle = val === selectedSpeed ? "speed__option--selected" : "speed__option--unselected";
       return (
         <IonChip
@@ -112,7 +112,6 @@ function Settings(props) {
       Sign Out
     </IonButton>
   );
-
 
   if (loading) return (<Loading pageName={"Settings"}/>);
   if (isLoggedOut) return (<Redirect exact to='/'/>);

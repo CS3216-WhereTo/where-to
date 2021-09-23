@@ -6,7 +6,7 @@ import { starOutline, star } from "ionicons/icons";
 import './Option.css'
 
 const Option = (props) => {
-  const [isFavourite, setIsFavourite] = useState(false);
+  const [isFavourite, setIsFavourite] = useState(props.data.value.isFavourite);
 
   // On data retrieval, set isFavourite accordingly
   useEffect(() => {}, []);

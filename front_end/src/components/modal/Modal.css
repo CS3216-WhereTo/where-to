@@ -25,6 +25,9 @@
   margin-bottom: 3px;
   word-break: break-word;
 }
+.directions__icon {
+  width: 32px;
+}
 
 /* ----- DIRECTIONS-DROPDOWN ----- */
 .directions-dropdown {

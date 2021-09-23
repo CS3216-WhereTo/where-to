@@ -149,7 +149,6 @@ function Favourites(props) {
       <div className="page-header">
         <p className="page-header__text">{segment}</p>
       </div>
-      
        {/* -- Segment -- */}
        <IonSegment className="segment" value={segment} onIonChange={handleSegmentChange}>
           <IonSegmentButton className="segment__button" value={Mode.FAVOURITES}>
@@ -159,7 +158,6 @@ function Favourites(props) {
             <IonLabel className="segment__text">{Mode.RECENTS}</IonLabel>
           </IonSegmentButton>
         </IonSegment>
-      
       <IonContent>
         {/* -- List -- */}
         <FavouritesList

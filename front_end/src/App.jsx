@@ -8,6 +8,7 @@ import { mapOutline, starOutline, settingsOutline } from "ionicons/icons";
 
 import Login from "./pages/login/Login";
 import SearchHome from "./pages/search/SearchHome";
+import SearchResult from "./pages/search/SearchResult";
 import Favourites from "./pages/favourites/Favourites";
 import Settings from "./pages/settings/Settings";
 
@@ -31,14 +32,14 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { initialiseGoogleAnalytics } from "./utils/ReactGa";
+import { verifyTokenIfExists } from "./utils/AuthChecker";
 import NodeStore from "./stores/NodeStore";
 import RouteStore from "./stores/RouteStore";
-import { verifyTokenIfExists } from "./utils/AuthChecker";
 import UserStore from "./stores/UserStore";
 
 /**
- * @param {{nodes: NodeStore, routes: RouteStore, users: UserStore}} stores 
- * @returns 
+ * @param {{nodes: NodeStore, routes: RouteStore, users: UserStore}} stores
+ * @returns
  */
 const App = (props) => {
   useEffect(() => {
@@ -69,6 +70,7 @@ const App = (props) => {
           <IonRouterOutlet>
             <Switch>
               <Route path="/search" ><SearchHome nodes={nodes} routes={routes}/></Route>
+              <Route path="/search-result"><SearchResult /></Route>
               <Route exact path="/favourites" ><Favourites nodes={nodes} user={user}/></Route>
               <Route exact path="/settings" ><Settings user={user}/></Route>
               <Route exact path="/">{landingPage}</Route>
