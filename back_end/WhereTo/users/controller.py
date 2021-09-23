@@ -16,7 +16,7 @@ def update_speed(user, speed):
 MAX_RECENTS = 10
 
 def list_recents(user):
-    recents = Recent.objects.filter(user_id=user.id).order_by('-access_time')
+    recents = Recent.objects.filter(user_id=user).order_by('-access_time')
     recents = recents[:MAX_RECENTS].values_list('route', flat=True).all()
     return recents
 
