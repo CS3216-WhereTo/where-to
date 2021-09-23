@@ -1,76 +1,65 @@
-const axios = require('axios').default;
+import axios from "axios";
+import userTokenExists, { getUserToken } from "../utils/AuthChecker";
 
 export default class FavouritesGateway {
+  /**
+   * Sends a GET request for the user's favourited locations.
+   */
+  async get() {
+    const loggedIn = userTokenExists();
+    if (!loggedIn) {
+      throw new Error("User should be logged in to use favourites!");
+    }
+  }
 
-    constructor() {
-        this.token = '';
+  async add(nodeId) {
+    const loggedIn = userTokenExists();
+    if (!loggedIn) {
+      throw new Error("User should be logged in to use favourites!");
     }
 
-    /**
-     * Sends a GET request for the user's favourited locations.
-     */
-    async get() {
-        try {
-            const response = await axios.get('favourites/list_favourites', {
-                headers: { 'Authorization': `Bearer ${this.token}` }
-            });
-            return response.data;
-        } catch (e) {
-            console.error(e);
-            throw e;
-        }
+    const response = await axios.post(
+      "favourites/add_favourite",
+      {
+        node_id: nodeId,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getUserToken()}`,
+        },
+      }
+    );
+    console.log("POST favourites/add_favourite success");
+
+    return response.data;
+  }
+
+  /**
+   * Sends a POST request to remove a location from the user's favourites.
+   *
+   * @param {number} nodeId
+   */
+  async remove(nodeId) {
+    const loggedIn = userTokenExists();
+    if (!loggedIn) {
+      throw new Error("User should be logged in to use favourites!");
     }
 
-    /**
-     * Sends a POST request to add a location to the user's favourites.
-     * 
-     * @param {number} nodeId
-     */
-    async add(nodeId) {
-        try {
-            const response = await axios.post('favourites/add_favourite', {
-                headers: { 
-                    'Authorization': `Bearer ${this.token}`,
-                    'Content-Type': 'application/json' 
-                },
-                data: { node_id: nodeId }
-            })
-            return response.data;
-        } catch (e) {
-            console.error(e);
-            throw e;
-        }
-    }
+    const response = await axios.post(
+      "favourites/remove_favourite",
+      {
+        node_id: nodeId,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getUserToken()}`,
+        },
+      }
+    );
 
-    /**
-     * Sends a POST request to remove a location from the user's favourites.
-     * 
-     * @param {number} nodeId
-     */
-    async remove(nodeId) {
-        try {
-            const response = await axios.post('favourites/remove_favourite', {
-                headers: { 
-                    'Authorization': `Bearer ${this.token}`,
-                    'Content-Type': 'application/json' 
-                },
-                data: { node_id: nodeId }
-            });
-            return response.data;
-        } catch (e) {
-            console.error(e);
-            throw e;
-        }
-        
-    }
-
-    /**
-     * Sets the user token
-     * 
-     * @param {string} userToken 
-     */
-    setToken(userToken) {
-        this.token = userToken;
-    }
-
+    console.log("POST favourites/remove_favourite success");
+    return response.data;
+  }
 }

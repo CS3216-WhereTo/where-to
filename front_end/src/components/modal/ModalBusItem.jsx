@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 import { IonIcon, IonLabel, IonItem } from "@ionic/react";
-import { bus, chevronDownOutline, chevronUpOutline } from "ionicons/icons";
+import { bus } from "ionicons/icons";
 
-import "./ModalItem.css";
-import "./ModalBusItem.css";
+import "./Modal.css";
 
-const ModalBusItem = ({ location, duration }) => {
+const ModalBusItem = ({ location, duration, stops }) => {
   const [showDropDown, setShowDropDown] = useState(false);
 
   const toggleDropDown = () => {
@@ -16,28 +15,22 @@ const ModalBusItem = ({ location, duration }) => {
   return (
     <div>
       <IonItem onClick={toggleDropDown} button="true" detail="false" className="directions" lines={showDropDown ? "none" : "full"}>
-        <IonIcon className="directions__icon" icon={bus} />
+        <div className="directions__container">
+          <IonIcon className="directions__icon" icon={bus} />
+        </div>
+
         <div className="directions__bus-text">
-          <p className="directions__text">Take bus to {location}</p>
-          <div className="directions__dropdown">
-            <p className="directions__dropdown-text">Ride XXX stops</p>
-            <IonIcon className="directions__dropdown-icon" icon={showDropDown ? chevronUpOutline : chevronDownOutline} />
+          <p className="directions__text">{location}</p>
+          <div className="directions-dropdown">
+            <p className="directions-dropdown__text">{`Ride ${stops} stop${stops > 1 ? "s" : ""}`}</p>
           </div>
         </div>
         <IonLabel className="directions__time" slot="end">
           {parseInt(duration)} min
         </IonLabel>
       </IonItem>
-      <IonItem className={"dropdown " + (showDropDown ? "dropdown--visible" : "dropdown--hidden")}>
-        <div className="dropdown__list">
-          <p className="dropdown__text">Test</p>
-          <p className="dropdown__text">Test</p>
-          <p className="dropdown__text">Test</p>
-          <p className="dropdown__text">Test</p>
-        </div>
-      </IonItem>
     </div>
   );
 };
-  
+
 export default ModalBusItem;

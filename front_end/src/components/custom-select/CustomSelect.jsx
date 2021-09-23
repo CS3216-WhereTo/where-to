@@ -3,15 +3,18 @@ import Select from "react-select";
 
 import "./CustomSelect.css";
 
-const CustomSelect = ({ value, onChange, placeholder, options }) => {
+// TODO: https://react-select.com/async
+const CustomSelect = ({ value, onChange, onInputChange, placeholder, options, disabled }) => {
   return (
     <Select
       value={value}
       onChange={onChange}
       options={options}
+      onInputChange={onInputChange}
       isClearable={true}
+      isDisabled={disabled}
       components={{ Option }}
-      placeholder={placeholder}
+      placeholder={disabled ? "Loading..." : placeholder}
       styles={{
         container: (provided, state) => ({
           ...provided,

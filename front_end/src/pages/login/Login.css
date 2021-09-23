@@ -1,6 +1,8 @@
 .login-page {
   padding: 12px;
 }
+
+/* ----- SPLASH ----- */
 .splash {
   position: absolute;
   width: 100%;
@@ -10,9 +12,11 @@
   background-color: #ffffff;
   z-index: 200;
 }
+
 .splash--hide {
   display: none;
 }
+
 .splash__img {
   position: absolute;
   left: 0;
@@ -22,82 +26,90 @@
   margin: auto;
 }
 
-.login {
-}
+/* ----- LOGIN ----- */
 .login__row {
   display: flex;
   align-items: center;
   justify-content: center;
 }
+
 .login__row--top {
   height: 50%;
 }
+
 .login__row--bottom {
   height: 40%;
 }
 
+/* ----- APP-INFO ----- */
 .app-info {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
+
 .app-info__img {
   width: 80%;
-  /* margin: auto; */
 }
+
 .app-info__text {
   text-align: center;
 }
 
-.auth {
-}
-
-.sns-login {
-}
+/* ----- SNS-LOGIN ----- */
 .sns-login__text {
   text-align: center;
 }
-.sns-login__grid {
-}
+
 .sns-login__row {
   width: 80%;
   margin: auto;
 }
+
 .sns-login__col {
   text-align: center;
 }
+
 .sns-login__button {
   height: 60px;
+  --box-shadow: 2px 2px 8px 2px rgba(0, 0, 0, 0.2);
 }
 
+/* ----- BUTTONDIV ----- */
 #buttonDiv {
   margin: auto;
 }
+
 #buttonDiv iframe {
   width: 270px !important;
   height: 48px !important;
   margin: auto !important;
 }
+
 #buttonDiv iframe #container {
   margin: auto !important;
 }
 
+/* ----- AUTH ----- */
 .auth {
   width: 100%;
 }
+
 .auth-divider {
   display: flex;
   align-items: center;
   padding: 10px;
 }
-.auth-divider__div {
+
+.auth-divider__line {
   flex: 1;
   height: 3px;
   background-color: #000;
   margin: 8px;
 }
 
+/* ----- SNS-GUEST-LOGIN ----- */
 .sns-guest-login {
   text-align: center;
 }

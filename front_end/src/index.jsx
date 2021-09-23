@@ -1,29 +1,34 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './App';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import App from "./App";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import reportWebVitals from "./reportWebVitals";
+import axios from "axios";
 
-import NodeGateway from './gateways/NodeGateway';
-import FavouritesGateway from './gateways/FavouritesGateway';
-import RouteGateway from './gateways/RouteGateway';
-import NodeStore from './stores/NodeStore';
-import RouteStore from './stores/RouteStore';
+import NodeGateway from "./gateways/NodeGateway";
+import FavouritesGateway from "./gateways/FavouritesGateway";
+import RouteGateway from "./gateways/RouteGateway";
+import UserGateway from "./gateways/UserGateway";
+import NodeStore from "./stores/NodeStore";
+import RouteStore from "./stores/RouteStore";
+import UserStore from "./stores/UserStore";
 
-const axios = require('axios').default;
-axios.defaults.baseURL = '{insert URL here}/api/v1';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 const nodeGateway = new NodeGateway();
 const favGateway = new FavouritesGateway();
 const routeGateway = new RouteGateway();
+const userGateway = new UserGateway();
+
 const nodeStore = new NodeStore(nodeGateway, favGateway);
 const routeStore = new RouteStore(routeGateway);
+const userStore = new UserStore(userGateway);
 
 ReactDOM.render(
   <React.StrictMode>
-    <App nodes={nodeStore} routes={routeStore}/>
+    <App nodes={nodeStore} routes={routeStore} user={userStore}/>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change

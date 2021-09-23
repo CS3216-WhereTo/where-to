@@ -6,7 +6,9 @@
 
     <base href="/" />
 
-    <meta name="color-scheme" content="light dark" />
+    <meta name="color-scheme" content="light"/>
+    <meta name="theme-color" content="#ffffff"/>
+
     <meta
       name="viewport"
       content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"
@@ -22,6 +24,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="WhereTo?" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/assets/icon/icon.png">    
 
     <meta name="google-signin-client_id" content="28436641618-2lj6kueceg3fh12or970itop8mhfc636.apps.googleusercontent.com" />
 
@@ -52,24 +55,6 @@
   </head>
 
   <body>
-    <script>
-      function handleCredentialResponse(response) {
-        localStorage.setItem("jwtIdToken", response.credential);
-      }
-
-      window.onload = function () {
-        google.accounts.id.initialize({
-          client_id: "28436641618-2lj6kueceg3fh12or970itop8mhfc636.apps.googleusercontent.com",
-          callback: handleCredentialResponse,
-        });
-        google.accounts.id.renderButton(
-          document.getElementById("buttonDiv"),
-          { theme: "filled_blue", size: "large", shape: "pill" } // customization attributes
-        );
-        google.accounts.id.prompt(); // also display the One Tap dialog
-      };
-    </script>
-
     <div id="root"></div>
   </body>
 </html>

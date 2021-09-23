@@ -1,0 +1,17 @@
+.loading-content {
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.loading-content__text {
+  font-size: 20px;
+}
+
+.loading-content__spinner {
+  margin: 30px;
+  transform: scale(2);
+  --color: #002f62e0;
+}

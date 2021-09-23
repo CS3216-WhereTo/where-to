@@ -1,8 +1,8 @@
+/* ----- MODAL ----- */
 .modal {
   background-color: white;
   position: absolute;
   width: 100%;
-  /* bottom: 50px; */
   border-radius: 30px 30px 0px 0px;
   z-index: 20001;
 }
@@ -14,5 +14,53 @@
 
 .modal__list--scroll {
   overflow-y: scroll;
-  /* height: 100vh; */
+}
+
+/* ----- DIRECTIONS ----- */
+.directions__text {
+  flex: 1;
+  margin-top: 3px;
+  margin-left: 14px;
+  margin-right: 4px;
+  margin-bottom: 3px;
+  word-break: break-word;
+}
+.directions__icon {
+  width: 32px;
+}
+
+/* ----- DIRECTIONS-DROPDOWN ----- */
+.directions-dropdown {
+  display: flex;
+  margin-left: 14px;
+}
+
+.directions-dropdown__text {
+  margin: 0;
+  color: grey;
+  padding-bottom: 3px;
+}
+
+.directions-dropdown__icon {
+  padding-left: 5px;
+  color: grey;
+  font-size: 20px;
+}
+
+/* ----- DROPDOWN ----- */
+.dropdown--visible {
+  visibility: visible;
+}
+
+.dropdown--hidden {
+  visibility: collapse;
+  height: 0;
+}
+
+.dropdown__text {
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-left: 42px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }

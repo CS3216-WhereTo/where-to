@@ -1,88 +1,186 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import PropTypes from "prop-types";
+import { IonPage, IonContent, IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";
 
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";
-
+import Loading from "../../components/loading/Loading";
 import FavouritesList from "./FavouritesList";
+import { trackPageView, trackFavouritesToRecentsTabEvent, trackRecentsToFavouritesTabEvent,trackDismissFavouriteToastEvent } from "../../utils/ReactGa";
+import UnauthenticatedUserScreen from "../../components/sign-in/SignIn";
+import UserStore from "../../stores/UserStore";
+import NodeStore from "../../stores/NodeStore";
 import "./Favourites.css";
-import { trackPageView, trackFavouritesToRecentsTabEvent, trackRecentsToFavouritesTabEvent } from "../../utils/ReactGa";
+import userTokenExists from "../../utils/AuthChecker";
+import CustomToast from "../../components/custom-toast/CustomToast";
 
-// TODO: pull to refresh
-const Favourites = (props) => {
-  useEffect(() => {
-    // TODO: some function to fetch favs & recents from server
-  });
+const Mode = Object.freeze({
+  FAVOURITES: "Favourites",
+  RECENTS: "Recents",
+});
+
+class Location {
+  /**
+   * @param {number} id
+   * @param {string} name
+   * @param {boolean} isFav
+   */
+  constructor(id, name, isFav) {
+    this.id = id;
+    this.name = name;
+    this.isFav = isFav;
+  }
+}
+
+const ERR_INVALID_STATE = 'State should only be either "Favourites" or "Recents"!';
+
+function Favourites(props) {
+  /** @type {UserStore} */
+  const user = props.user;
+  /** @type {NodeStore} */
+  const nodes = props.nodes;
+
+  const [loading, setLoadingStatus] = useState(true);
+  const [showToast, setShowToast] = useState(false);
+  const loggedIn = userTokenExists();
+  const mounted = useRef(null);
+
+  //////////////////////////
+  // FAVOURITES OBSERVER
+  //////////////////////////
+
+  /** @type {[ Location, React.Dispatch<React.SetStateAction<Location>> ]} */
+  const [favourites, setFavourites] = useState([]);
+
+  const populateRecents = useCallback(() => {
+    console.log("FAVOURITES: populateRecents() called");
+    const allNodes = {
+      favs: nodes.getFavourites(),
+      nonFavs: nodes.getNonFavourites(),
+    };
+
+    function getDestinationFromRoute(obj) {
+      /** @type {[number]} */
+      const steps = obj.walk.nodes;
+      const lastPos = steps.length - 1;
+      return steps[lastPos];
+    }
+
+    function getNodeDetails(id) {
+      const pred = (node) => node.node_id === id;
+      if (allNodes.favs.some(pred)) {
+        const idx = allNodes.favs.findIndex(pred);
+        const node = allNodes.favs[idx];
+        return Location(node.node_id, node.name, true);
+      } else {
+        const idx = allNodes.nonFavs.findIndex(pred);
+        const node = allNodes.nonFavs[idx];
+        return Location(node.node_id, node.name, false);
+      }
+    }
+
+    const data = user.getRecents().map(getDestinationFromRoute).map(getNodeDetails);
+
+    if (!mounted.current) return;
+    setRecents(data);
+    setLoadingStatus(false);
+  }, [nodes, user]);
+
+  const populateFavourites = useCallback(() => {
+    const data = nodes.getFavourites().map((node) => new Location(node.node_id, node.name, true));
+    if (!mounted.current) return;
+    setFavourites(data);
+
+    if (mounted.current) user.fetchRecents(() => populateRecents());
+  }, [nodes, populateRecents, user]);
+
+  //////////////////////////
+  // RECENTS OBSERVER
+  //////////////////////////
+
+  const [recents, setRecents] = useState([]);
 
   useEffect(() => {
     trackPageView(window.location.pathname);
-  }, []);
+    mounted.current = true;
 
-  const favs = [
-    { nodeId: "1", location: "fav1", isFav: true },
-    { nodeId: "2", location: "fav2", isFav: true },
-    { nodeId: "3", location: "fav3", isFav: true },
-    { nodeId: "4", location: "fav4", isFav: true },
-    { nodeId: "5", location: "fav5", isFav: true },
-  ];
-
-  const recs = [{ nodeId: "6", location: "rec1", isFav: false }];
-
-  const [favourites, setFavourites] = useState(favs);
-  const [recents, setRecents] = useState(recs);
-  const [segment, setSegment] = useState("favourites");
-
-  // a function to handle the segment changes
-  const handleSegmentChange = (e) => {
-    if (e.detail.value === segment) {
+    if (!loggedIn) {
+      setLoadingStatus(false);
       return;
     }
 
-    if (e.detail.value === "favourites") {
-      trackRecentsToFavouritesTabEvent();
-    } else {
-      trackFavouritesToRecentsTabEvent();
-    }
+    nodes.fetchNodes(populateFavourites); /* callback fetches recents */
 
-    setSegment(e.detail.value);
-  };
+    return () => {
+      mounted.current = false;
+    };
+  }, [loggedIn, nodes, populateFavourites]);
 
-  const toggleFavourite = (i) => {
-    // TODO: post unfav/fav to server
-    const isSegmentFav = segment === "favourites";
-    const currentList = isSegmentFav ? favourites : recents;
-    const newList = currentList.slice();
-    newList[i].isFav = !currentList[i].isFav;
+  //////////////////////////
+  // SEGMENT CHANGE OBSERVER
+  //////////////////////////
 
-    isSegmentFav ? setFavourites(newList) : setRecents(newList);
-  };
+  const [segment, setSegment] = useState(Mode.FAVOURITES);
+  function handleSegmentChange(event) {
+    let value = event.detail.value;
+    if (value === segment) return;
+
+    if (value === Mode.FAVOURITES) trackRecentsToFavouritesTabEvent();
+    else if (value === Mode.RECENTS) trackFavouritesToRecentsTabEvent();
+    else throw new Error(ERR_INVALID_STATE);
+
+    setSegment(value);
+  }
+
+  function toggleFavourite(i) {
+    if (segment === Mode.FAVOURITES) {
+      const nodeId = favourites[i].id;
+      nodes.removeFavourite(nodeId, populateFavourites);
+    } else if (segment === Mode.RECENTS) {
+      const node = recents[i];
+      if (node.isFav) {
+        nodes.removeFavourite(node.id, populateRecents);
+      } else {
+        nodes.addFavourite(node.id, populateRecents);
+      }
+    } else throw new Error(ERR_INVALID_STATE);
+
+    setShowToast(true);
+  }
+
+  if (loading) return <Loading pageName={"Favourites"} />;
+  if (!loggedIn) return <UnauthenticatedUserScreen pageName={"Favourites"} />;
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Favourites</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-
+    <IonPage className="page favourites-page">
+      <div className="page-header">
+        <p className="page-header__text">{segment}</p>
+      </div>
       {/* -- Segment -- */}
-      <IonSegment value={segment} onIonChange={(e) => handleSegmentChange(e)}>
-        <IonSegmentButton value="favourites">
-          <IonLabel>Favourites</IonLabel>
+      <IonSegment className="segment" value={segment} onIonChange={handleSegmentChange}>
+        <IonSegmentButton className="segment__button" value={Mode.FAVOURITES}>
+          <IonLabel className="segment__text">{Mode.FAVOURITES}</IonLabel>
         </IonSegmentButton>
-        <IonSegmentButton value="recents">
-          <IonLabel>Recents</IonLabel>
+        <IonSegmentButton className="segment__button" value={Mode.RECENTS}>
+          <IonLabel className="segment__text">{Mode.RECENTS}</IonLabel>
         </IonSegmentButton>
       </IonSegment>
-
       <IonContent>
         {/* -- List -- */}
         <FavouritesList
-          currentList={segment === "favourites" ? favourites : recents}
-          isFavouritesTab={segment === "favourites"}
-          toggleFavourite={(i) => toggleFavourite(i)}
+          className="favourites-list"
+          currentList={segment === Mode.FAVOURITES ? favourites : recents}
+          isFavouritesTab={segment === "Favourites"}
+          toggleFavourite={toggleFavourite}
         />
+
+        <CustomToast showToast={showToast} setShowToast={setShowToast} toastMessage="⭐ Favourites updated." dismissBtnHandler={trackDismissFavouriteToastEvent} />
       </IonContent>
     </IonPage>
   );
+}
+
+Favourites.propTypes = {
+  user: PropTypes.instanceOf(UserStore).isRequired,
+  nodes: PropTypes.instanceOf(NodeStore).isRequired,
 };
 
 export default Favourites;

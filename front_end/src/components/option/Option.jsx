@@ -3,27 +3,40 @@ import { IonIcon } from "@ionic/react";
 import { components } from "react-select";
 import { starOutline, star } from "ionicons/icons";
 
-import './Option.css'
+import "./Option.css";
 
 const Option = (props) => {
-  const [isFavourite, setIsFavourite] = useState(false);
-
-  // On data retrieval, set isFavourite accordingly
-  useEffect(() => {}, []);
-
+  const [isFavourite, setIsFavourite] = useState(props.data.value.isFavourite);
+  // console.log(isFavourite)
   // Function to favourite and unfavourite a location
+  const [performAction, setPerformAction] = useState(false);
+
+  useEffect(() => {
+    if (!performAction) return;
+
+    const toggleFavourite = () => {
+      setIsFavourite(!isFavourite);
+      props.data.value.favouriteCallback();
+    };
+
+    if (isFavourite) {
+      props.data.value.nodes.removeFavourite(props.data.value.node_id, toggleFavourite);
+    } else {
+      props.data.value.nodes.addFavourite(props.data.value.node_id, toggleFavourite);
+    }
+
+    setPerformAction(false);
+  }, [isFavourite, performAction, props.data.value, props.data.value.node_id, props.data.value.nodes, props.nodes]);
+
   const parentClick = (e) => {
     e.stopPropagation();
-
-    setIsFavourite(!isFavourite);
-
-    // API call to favourite/unfavourite
+    setPerformAction(true);
   };
 
   return (
     <components.Option {...props} className="option">
       <div className="option__text">{props.data.label}</div>
-      <IonIcon slot="start" icon={isFavourite ? star : starOutline} size="medium" className="option__icon--favourite" onClick={parentClick} />
+      <IonIcon className="option__icon" slot="start" icon={isFavourite ? star : starOutline} size="medium" onClick={(e) => parentClick(e)} />
     </components.Option>
   );
 };
