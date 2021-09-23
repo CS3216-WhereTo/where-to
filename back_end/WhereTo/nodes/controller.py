@@ -1,6 +1,7 @@
 from favourites.controller import list_favourites
-from routes.controller import get_node_graph
+from routes.graphs import get_node_graph
 from routes.routing_helper import get_distance
+
 
 def list_nodes(user):
 

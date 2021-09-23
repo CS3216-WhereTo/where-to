@@ -1,5 +1,5 @@
 from .models import Favourite
-from routes.controller import get_node_graph
+from routes.graphs import get_node_graph
 
 def list_favourites(user):
 
