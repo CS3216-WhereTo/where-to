@@ -8,7 +8,7 @@ import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-load
 import Modal from "../../components/modal/Modal";
 import "./SearchResult.css";
 import { parseBusRoute, parseWalkRoute } from "../../utils/ParseRoute";
-import { trackPageView, trackSetDirectionTypeToBus, trackSetDirectionTypeToWalk } from "../../utils/ReactGa";
+import { trackPageView, trackSetDirectionTypeToBus, trackSetDirectionTypeToWalk,trackSearchResultBackPressEvent } from "../../utils/ReactGa";
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
 
 // TODO
@@ -40,11 +40,8 @@ const SearchResult = () => {
     trackPageView(window.location.pathname);
   }, []);
 
-  // redirect is state is null or undef
-  // Loading variable
   useEffect(() => {
     const state = redirectProps.state;
-    console.log(state);
     if (!state) return;
 
     setStart(state.start);
@@ -150,7 +147,7 @@ const SearchResult = () => {
         <div className="search-container">
           <div className="back-button">
             <Link to={{ pathname: "search" }}>
-              <IonIcon className="back-button__icon" icon={arrowBack} />
+              <IonIcon className="back-button__icon" icon={arrowBack} onClick={()=>trackSearchResultBackPressEvent()} />
             </Link>
           </div>
           <div className="search-inner-container">

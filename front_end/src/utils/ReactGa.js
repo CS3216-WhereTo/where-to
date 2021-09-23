@@ -93,6 +93,13 @@ export const trackSetDirectionTypeToWalk = () => {
   });
 };
 
+export const trackSearchResultBackPressEvent = () => {
+  ReactGA.event({
+    category: "search",
+    action: "set_direction_type_walk",
+  });
+};
+
 export const trackFavouritesToRecentsTabEvent = () => {
   ReactGA.event({
     category: "favourites",

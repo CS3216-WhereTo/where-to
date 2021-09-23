@@ -50,6 +50,8 @@ export default class FavouritesGateway {
         },
       }
     );
+    console.log("POST favourites/add_favourite success");
+
     return response.data;
   }
 
@@ -78,6 +80,8 @@ export default class FavouritesGateway {
         },
       }
     );
+
+    console.log("POST favourites/remove_favourite success");
     return response.data;
   }
 }

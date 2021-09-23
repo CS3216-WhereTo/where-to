@@ -175,7 +175,6 @@ const SearchHome = (props) => {
     }
 
     props.routes.onChange(() => {
-      console.log("ran");
       const route = props.routes.getRoutes();
 
       if (route) {

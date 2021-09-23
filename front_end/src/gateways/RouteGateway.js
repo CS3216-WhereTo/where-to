@@ -8,7 +8,6 @@ export default class RouteGateway {
    * @param {{start_id: number, end_id: number}} locations
    */
   async getRoutes(locations) {
-    console.log("hi", locations);
     const headers = { "Content-Type": "application/json" };
     const loggedIn = await checkUserLoggedIn();
     if (loggedIn) headers["Authorization"] = `Bearer ${getUserToken()}`;
