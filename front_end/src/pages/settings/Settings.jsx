@@ -3,6 +3,7 @@ import { useHistory } from "react-router";
 import { IonPage, IonContent, IonLabel, IonButton, IonChip } from "@ionic/react";
 import { useGoogleLogout } from "react-google-login";
 
+import Loading from "../../components/loading/Loading";
 import CustomToast from "../../components/custom-toast/CustomToast";
 import UnauthenticatedScreen from "../../components/unauthenticated-screen/UnauthenticatedScreen";
 import checkUserLoggedIn, { signUserOut } from "../../utils/AuthChecker";
@@ -11,11 +12,9 @@ import "./Settings.css";
 import { useUserLoggedIn } from "../../context/UserContext";
 
 // TODO
-// Add API call for changing walking speed
-// Add API call to init walking speed
 // Fix bug where sign out doesn't redirect
 
-const Settings = () => {
+const Settings = ({ users }) => {
   const { isLoggedIn, setIsLoggedIn } = useUserLoggedIn();
 
   // checkUserLoggedIn()
@@ -25,19 +24,8 @@ const Settings = () => {
   //   })
   //   .catch(console.error);
 
-  const options = ["Very Slow (0.8 m/s)", "Slow (1.1 m/s)", "Average (1.4 m/s)", "Fast (1.6 m/s)", "Very Fast (1.9 m/s)"];
-
   // Handling signouts
   const history = useHistory();
-
-  // Showing speed options
-  const [selectedSpeed, setSelectedSpeed] = useState(2);
-  const [loading, setLoading] = useState(false);
-  const [showToast, setShowToast] = useState(false);
-
-  useEffect(() => {
-    trackPageView(window.location.pathname);
-  }, []);
 
   const handleLogOut = () => {
     signUserOut();
@@ -56,29 +44,50 @@ const Settings = () => {
     onFailure: handleLogOutFailure,
   });
 
-  const selectSpeed = (i) => {
-    if (i === selectedSpeed) return;
+  // Showing speed options
+  const options = [
+    { label: "Very Slow (0.8 m/s)", val: 0.8 },
+    { label: "Slow (1.1 m/s)", val: 1.1 },
+    { label: "Average (1.4 m/s)", val: 1.4 },
+    { label: "Fast (1.6 m/s)", val: 1.6 },
+    { label: "Very Fast (1.9 m/s)", val: 1.9 },
+  ];
+
+  const [selectedSpeed, setSelectedSpeed] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+
+  useEffect(() => {
+    trackPageView(window.location.pathname);
+  }, []);
+
+  useEffect(() => {
+    users.onChangeSpeed(() => {
+      const speed = users.getSpeed();
+      setSelectedSpeed(speed);
+      if (loading) setShowToast(true);
+      setLoading(false);
+    });
+
+    users.fetchSpeed();
+  }, [selectedSpeed]);
+
+  const selectSpeed = (val) => {
+    if (val === selectedSpeed) return;
 
     // Trigger api call to set new speed
     setLoading(true);
+    users.setSpeed(val);
 
-    // Mimic API response time
-    setTimeout(() => {
-      setLoading(false);
-      setShowToast(true);
-    }, 2000);
-
-    setSelectedSpeed(i);
     trackUpdateWalkingSpeedEvent();
-    // Should disable all options until API call is complete
   };
 
   const getSpeedOptions = () => {
-    const speedOption = (speed, key) => {
-      const selectionStyle = key === selectedSpeed ? "speed__option--selected" : "speed__option--unselected";
+    const speedOption = ({ label, val }, key) => {
+      const selectionStyle = val === selectedSpeed ? "speed__option--selected" : "speed__option--unselected";
       return (
-        <IonChip key={key} onClick={() => selectSpeed(key)} className={"speed__option " + selectionStyle} disabled={loading}>
-          <IonLabel>{speed}</IonLabel>
+        <IonChip key={key} onClick={() => selectSpeed(val)} className={"speed__option " + selectionStyle} disabled={loading}>
+          <IonLabel>{label}</IonLabel>
         </IonChip>
       );
     };
@@ -92,6 +101,7 @@ const Settings = () => {
     </IonButton>
   );
 
+  if (isLoggedIn === null) return <Loading pageName={"Settings"} />;
   if (!isLoggedIn) return <UnauthenticatedScreen pageName={"Settings"} />;
   return (
     <IonPage className="page settings-page">

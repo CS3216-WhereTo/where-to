@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 
 import { IonPage, IonContent, IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";
 
+import Loading from '../../components/loading/Loading';
 import FavouritesList from "./FavouritesList";
 import "./Favourites.css";
 import { trackPageView, trackFavouritesToRecentsTabEvent, trackRecentsToFavouritesTabEvent } from "../../utils/ReactGa";
@@ -60,6 +61,7 @@ const Favourites = (props) => {
     isSegmentFav ? setFavourites(newList) : setRecents(newList);
   };
 
+  if (isLoggedIn === null) return (<Loading pageName={"Favourites"}/>);
   if (!isLoggedIn) return <UnauthenticatedScreen pageName={"Favourites"} />;
 
   return (

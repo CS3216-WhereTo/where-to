@@ -36,8 +36,8 @@ import checkUserLoggedIn from "./utils/AuthChecker";
 import { useUserLoggedIn } from "./context/UserContext";
 
 /**
- * @param {{nodes: NodeStore, routes: RouteStore}} stores
- * @returns
+ * @param {{nodes: NodeStore, routes: RouteStore, users: UserStore}} stores 
+ * @returns 
  */
 const App = (props) => {
   useEffect(() => {
@@ -57,24 +57,17 @@ const App = (props) => {
 
   const nodes = props.nodes;
   const routes = props.routes;
+  const users = props.users;
 
   return (
     <IonApp>
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route path="/search">
-              <SearchHome nodes={nodes} routes={routes} />
-            </Route>
-            <Route exact path="/favourites">
-              <Favourites nodes={nodes} />
-            </Route>
-            <Route exact path="/settings">
-              <Settings />
-            </Route>
-            <Route exact path="/">
-              {landingPage}
-            </Route>
+            <Route path="/search"><SearchHome nodes={nodes} routes={routes}/></Route>
+            <Route exact path="/favourites"><Favourites nodes={nodes}/></Route>
+            <Route exact path="/settings"><Settings users={users} /></Route>
+            <Route exact path="/">{landingPage}</Route>
           </IonRouterOutlet>
           <IonTabBar slot="bottom">
             <IonTabButton tab="search" href="/search">

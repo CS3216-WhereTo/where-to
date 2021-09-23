@@ -2,6 +2,8 @@ import MicroEmitter from "micro-emitter";
 import { emit, eventNames } from "process";
 import UserGateway from "../gateways/UserGateway";
 
+const DEFAULT_SPEED = 1.4;
+
 const emitter = new MicroEmitter();
 const eventSpeed = "UPDATE_SPEED";
 const eventRecents = "UPDATE_RECENTS";
@@ -19,7 +21,7 @@ export default class UserStore {
    * @param {UserGateway} gateway
    */
   constructor(gateway) {
-    this.#speed = 0;
+    this.#speed = DEFAULT_SPEED;
     this.#recents = [];
     this.gateway = gateway;
 
@@ -47,7 +49,7 @@ export default class UserStore {
 
   _loadSpeedFromStorage() {
     const speed = localStorage.getItem(SPEED_KEY);
-    this.#speed = speed ? JSON.parse(speed) : 0;
+    this.#speed = speed ? JSON.parse(speed) : DEFAULT_SPEED;
     emitter.emit(eventSpeed);
   }
 

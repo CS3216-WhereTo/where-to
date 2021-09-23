@@ -47,12 +47,15 @@ export default class UserGateway {
     async postWalkingSpeed(newSpeed) {
         const loggedIn = await checkUserLoggedIn();
         if (!loggedIn) throw new Error(ERR_SPEED);
-        const response = await axios.post('user/update_speed', {
+        const response = await axios.post('user/update_speed', 
+        { 
+          speed: newSpeed
+        },
+        {  
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${getUserToken()}`
-            },
-            body: { speed: newSpeed }
+            }
         });
         console.log('POST user/update_speed success');
         return response.data;
