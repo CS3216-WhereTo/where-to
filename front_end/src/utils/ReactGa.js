@@ -79,6 +79,20 @@ export const trackDismissSearchToastEvent = () => {
   });
 };
 
+export const trackSetDirectionTypeToBus = () => {
+  ReactGA.event({
+    category: "search",
+    action: "set_direction_type_bus",
+  });
+};
+
+export const trackSetDirectionTypeToWalk = () => {
+  ReactGA.event({
+    category: "search",
+    action: "set_direction_type_walk",
+  });
+};
+
 export const trackFavouritesToRecentsTabEvent = () => {
   ReactGA.event({
     category: "favourites",

@@ -54,9 +54,9 @@ const parseBusSegment = (busSegment) => {
       locationString += " bus ";
     }
 
-    locationString += `${busSegment.services[0].code} (in ${Math.floor(busSegment.services[0].wait_time / 60)} min)`;
+    locationString += `${busSegment.services[i].code} (in ${Math.floor(busSegment.services[i].wait_time / 60)} min)`;
 
-    if (i > 0 && i < busSegment.services.length - 1) {
+    if (busSegment.services.length > 1 && i < busSegment.services.length - 1) {
       locationString += " or ";
     }
   }

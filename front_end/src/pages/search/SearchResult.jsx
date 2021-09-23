@@ -8,6 +8,7 @@ import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-load
 import Modal from "../../components/modal/Modal";
 import "./SearchResult.css";
 import { parseBusRoute, parseWalkRoute } from "../../utils/ParseRoute";
+import { trackPageView, trackSetDirectionTypeToBus, trackSetDirectionTypeToWalk } from "../../utils/ReactGa";
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
 
 // TODO
@@ -34,6 +35,10 @@ const SearchResult = () => {
 
   const [busRoute, setBusRoute] = useState({ totalDistance: 0, totalDuration: 0 });
   const [walkRoute, setWalkRoute] = useState({ totalDistance: 0, totalDuration: 0 });
+
+  useEffect(() => {
+    trackPageView(window.location.pathname);
+  }, []);
 
   // redirect is state is null or undef
   // Loading variable
@@ -165,7 +170,10 @@ const SearchResult = () => {
             <div className="search-options">
               <IonChip
                 className={"search-option " + (dirType === "bus" ? "search-option--selected" : "search-option--unselected")}
-                onClick={() => setDirType("bus")}
+                onClick={() => {
+                  setDirType("bus");
+                  trackSetDirectionTypeToBus();
+                }}
               >
                 <IonIcon className={dirType === "bus" ? "search-option__icon--selected" : "search-option__icon--unselected"} icon={bus} />
                 <IonLabel>{`${Math.floor(busRoute.totalDuration / 60)} min`}</IonLabel>
@@ -173,7 +181,10 @@ const SearchResult = () => {
 
               <IonChip
                 className={"search-option " + (dirType === "walk" ? "search-option--selected" : "search-option--unselected")}
-                onClick={() => setDirType("walk")}
+                onClick={() => {
+                  setDirType("walk");
+                  trackSetDirectionTypeToWalk();
+                }}
               >
                 <IonIcon className={dirType === "walk" ? "search-option__icon--selected" : "search-option__icon--unselected"} icon={walk} />
                 <IonLabel>{`${Math.floor(walkRoute.totalDuration / 60)} min`}</IonLabel>

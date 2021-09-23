@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { IonIcon, IonLabel, IonItem } from "@ionic/react";
-import { bus, chevronDownOutline, chevronUpOutline } from "ionicons/icons";
+import { bus } from "ionicons/icons";
 
 import "./Modal.css";
 
@@ -20,24 +20,15 @@ const ModalBusItem = ({ location, duration, stops }) => {
         </div>
 
         <div className="directions__bus-text">
-          <p className="directions__text">Take bus to {location}</p>
+          <p className="directions__text">{location}</p>
           <div className="directions-dropdown">
             <p className="directions-dropdown__text">{`Ride ${stops} stop${stops > 1 ? "s" : ""}`}</p>
-            {/* <IonIcon className="directions-dropdown__icon" icon={showDropDown ? chevronUpOutline : chevronDownOutline} /> */}
           </div>
         </div>
         <IonLabel className="directions__time" slot="end">
           {parseInt(duration)} min
         </IonLabel>
       </IonItem>
-      {/* <IonItem className={"dropdown " + (showDropDown ? "dropdown--visible" : "dropdown--hidden")}>
-        <div className="dropdown__list">
-          <p className="dropdown__text">Test</p>
-          <p className="dropdown__text">Test</p>
-          <p className="dropdown__text">Test</p>
-          <p className="dropdown__text">Test</p>
-        </div>
-      </IonItem> */}
     </div>
   );
 };
