@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { IonPage, IonContent, IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";
 
+import Loading from '../../components/loading/Loading';
 import FavouritesList from "./FavouritesList";
 import { trackPageView, trackFavouritesToRecentsTabEvent, trackRecentsToFavouritesTabEvent } from "../../utils/ReactGa";
-import UnathenticatedUserScreen from "../../components/sign-in/SignIn";
+import UnauthenticatedUserScreen from "../../components/sign-in/SignIn";
 import UserStore from "../../stores/UserStore";
 import NodeStore from "../../stores/NodeStore";
 import "./Favourites.css";
@@ -37,9 +38,9 @@ function Favourites(props) {
   /** @type {NodeStore} */
   const nodes = props.nodes;
 
-  const [ _ /* hasLoaded */, setLoadingStatus ] = useState(false);
+  const [ loading /* hasLoaded */, setLoadingStatus ] = useState(true);
 
-  const { isLoggedIn, setLoginState } = useAuthContext();
+  const { isLoggedIn } = useAuthContext();
 
   /** @type {[ Location, React.Dispatch<React.SetStateAction<Location>> ]} */
   const [ favourites, setFavourites ] = useState([]);
@@ -82,13 +83,18 @@ function Favourites(props) {
     const data = user.getRecents()
       .map(getDestinationFromRoute)
       .map(getNodeDetails);
+
     setRecents(data);
+    setLoadingStatus(false);
   }
 
   useEffect(() => {
     trackPageView(window.location.pathname);
 
-    if (!isLoggedIn) return;
+    if (!isLoggedIn) {
+      setLoadingStatus(false);
+      return;
+    }
 
     user.onChangeRecents(populateRecents);
     nodes.onChange(populateFavourites);
@@ -120,7 +126,8 @@ function Favourites(props) {
     } else throw new Error(ERR_INVALID_STATE);
   };
 
-  if (!isLoggedIn) return (<UnathenticatedUserScreen pageName={"Favourites"}/>);
+  if (loading) return (<Loading pageName={"Favourites"}/>);
+  if (!isLoggedIn) return (<UnauthenticatedUserScreen pageName={"Favourites"}/>);
 
   return (
     <IonPage className="page favourites-page">

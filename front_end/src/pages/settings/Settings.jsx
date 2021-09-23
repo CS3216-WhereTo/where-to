@@ -3,38 +3,23 @@ import { useHistory } from "react-router";
 import { IonPage, IonContent, IonLabel, IonButton, IonChip } from "@ionic/react";
 import { useGoogleLogout } from "react-google-login";
 
+import Loading from '../../components/loading/Loading';
 import CustomToast from "../../components/custom-toast/CustomToast";
-import UnathenticatedUserScreen from "../../components/sign-in/SignIn";
 import { signUserOut } from "../../utils/AuthChecker";
+import UnauthenticatedUserScreen from "../../components/sign-in/SignIn";
 import { trackPageView, trackUpdateWalkingSpeedEvent, trackDismissSettingsToastEvent, trackGoogleSignOutEvent } from "../../utils/ReactGa";
 import "./Settings.css";
 import { useAuthContext } from "../../utils/Context";
 
-// TODO
-// Add API call for changing walking speed
-// Add API call to init walking speed
-// Fix bug where sign out doesn't redirect
-
 const Settings = () => {
+
+  const [ loading, setLoading ] = useState(true);
   const { isLoggedIn, setLoginState } = useAuthContext();
 
   const history = useHistory();
-
-  const options = ["Very Slow (0.8 m/s)", "Slow (1.1 m/s)", "Average (1.4 m/s)", "Fast (1.6 m/s)", "Very Fast (1.9 m/s)"];
-
-  // Showing speed options
-  const [selectedSpeed, setSelectedSpeed] = useState(2);
-  const [loading, setLoading] = useState(false);
-  const [showToast, setShowToast] = useState(false);
-
-  useEffect(() => {
-    trackPageView(window.location.pathname);
-  }, []);
-
   const handleLogOut = () => {
     signUserOut();
     setLoginState(false);
-    history.push('/');
     trackGoogleSignOutEvent();
   };
 
@@ -48,29 +33,59 @@ const Settings = () => {
     onFailure: handleLogOutFailure,
   });
 
-  const selectSpeed = (i) => {
-    if (i === selectedSpeed) return;
+  // Showing speed options
+  const options = [
+    {label: "Very Slow (0.8 m/s)", val: 0.8},
+    {label: "Slow (1.1 m/s)", val: 1.1},
+    {label: "Average (1.4 m/s)", val: 1.4},
+    {label: "Fast (1.6 m/s)", val: 1.6},
+    {label: "Very Fast (1.9 m/s)", val: 1.9},
+  ];
+  
+  const [selectedSpeed, setSelectedSpeed] = useState(0);
+  const [showToast, setShowToast] = useState(false);
+
+  useEffect(() => {
+    trackPageView(window.location.pathname);
+  }, []);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      setLoading(false);
+      return;
+    }
+
+    users.onChangeSpeed(() => {
+      const speed = users.getSpeed();
+      setSelectedSpeed(speed);
+      if (loading) setShowToast(true);
+      setLoading(false);
+    });
+
+    users.fetchSpeed();
+  }, [selectedSpeed]);
+
+  useEffect(() => {
+    if (isLoggedIn) return;
+    history.replace('/');
+  }, [isLoggedIn])
+
+  function selectSpeed(val) {
+    if (val === selectedSpeed) return;
 
     // Trigger api call to set new speed
     setLoading(true);
+    users.setSpeed(val);
 
-    // Mimic API response time
-    setTimeout(() => {
-      setLoading(false);
-      setShowToast(true);
-    }, 2000);
-
-    setSelectedSpeed(i);
     trackUpdateWalkingSpeedEvent();
-    // Should disable all options until API call is complete
   };
 
-  const getSpeedOptions = () => {
-    const speedOption = (speed, key) => {
-      const selectionStyle = key === selectedSpeed ? "speed__option--selected" : "speed__option--unselected";
+  function getSpeedOptions() {
+    const speedOption = ({label, val}, key) => {
+      const selectionStyle = val === selectedSpeed ? "speed__option--selected" : "speed__option--unselected";
       return (
-        <IonChip key={key} onClick={() => selectSpeed(key)} className={"speed__option " + selectionStyle} disabled={loading}>
-          <IonLabel>{speed}</IonLabel>
+        <IonChip key={key} onClick={() => selectSpeed(val)} className={"speed__option " + selectionStyle} disabled={loading}>
+          <IonLabel>{label}</IonLabel>
         </IonChip>
       );
     };
@@ -84,7 +99,9 @@ const Settings = () => {
     </IonButton>
   );
 
-  if (!isLoggedIn) return <UnathenticatedUserScreen pageName={"Settings"} />;
+
+  if (loading) return (<Loading pageName={"Settings"}/>);
+  if (!isLoggedIn) return (<UnauthenticatedUserScreen pageName={"Settings"}/>);
   return (
     <IonPage className="page settings-page">
       <div className="page-header">

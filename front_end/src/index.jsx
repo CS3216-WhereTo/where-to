@@ -8,6 +8,7 @@ import axios from 'axios';
 import NodeGateway from './gateways/NodeGateway';
 import FavouritesGateway from './gateways/FavouritesGateway';
 import RouteGateway from './gateways/RouteGateway';
+import UserGateway from './gateways/UserGateway';
 import NodeStore from './stores/NodeStore';
 import RouteStore from './stores/RouteStore';
 import UserGateway from './gateways/UserGateway';
@@ -19,6 +20,7 @@ const nodeGateway = new NodeGateway();
 const favGateway = new FavouritesGateway();
 const routeGateway = new RouteGateway();
 const userGateway = new UserGateway();
+
 const nodeStore = new NodeStore(nodeGateway, favGateway);
 const routeStore = new RouteStore(routeGateway);
 const userStore = new UserStore(userGateway);

@@ -38,7 +38,7 @@ import UserStore from "./stores/UserStore";
 import { AuthContext } from "./utils/Context";
 
 /**
- * @param {{nodes: NodeStore, routes: RouteStore}} stores 
+ * @param {{nodes: NodeStore, routes: RouteStore, users: UserStore}} stores 
  * @returns 
  */
 const App = (props) => {
@@ -71,7 +71,7 @@ const App = (props) => {
             <IonRouterOutlet>
               <Route path="/search" ><SearchHome nodes={nodes} routes={routes}/></Route>
               <Route exact path="/favourites" > <Favourites nodes={nodes} user={user}/> </Route>
-              <Route exact path="/settings" ><Settings/> </Route>
+              <Route exact path="/settings" ><Settings users={user}/> </Route>
               <Route exact path="/">{landingPage} </Route>
             </IonRouterOutlet>
             <IonTabBar slot="bottom">
