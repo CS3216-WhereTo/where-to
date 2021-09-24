@@ -18,6 +18,10 @@ another in the Kent Ridge campus.
 ### Contributions
 
 **Liu Shuyang:**
+* Worked on backend
+* Implemented node and route-related endpoints
+* Implemented routing algorithms for route finding
+* Handled generation of raw data required for algorithms, as well as populating models and database
 
 **Ong Ying Gao:**
 
@@ -37,7 +41,7 @@ another in the Kent Ridge campus.
 * Developed custom select with search and ability to favourite
 * Integrated Mapbox and parsed returned route data from server
 * Implemented recents list
-* Integrated Google Analytics and tracked user interacations with UI components
+* Integrated Google Analytics and tracked user interactions with UI components
 
 
 
