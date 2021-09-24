@@ -19,6 +19,11 @@ another in the Kent Ridge campus.
 
 **Ong Ying Gao:**
 
+* Worked on the back end of the web app to decouple view from API
+* Conducted unit tests and integration tests
+* Refactored UI code
+* Migrated the app from dummy data to the API when the server was hosted
+
 **Tan Wei Liang:**
 
 **Teo Jun Xiong:**
