@@ -5,6 +5,7 @@ import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-load
 import { useLocation, useHistory } from "react-router-dom";
 import { geolocated } from "react-geolocated";
 
+import Loading from "../../components/loading/Loading"
 import "./SearchHome.css";
 import CustomToast from "../../components/custom-toast/CustomToast";
 import CustomSelect from "../../components/custom-select/CustomSelect";
@@ -32,6 +33,7 @@ const SearchHome = (props) => {
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [routeObject, setRouteObject] = useState({});
+  const [searchLoading, setSearchLoading] = useState(false);
 
   // Check if there is a Node passed from FavouritesItem
   useEffect(() => {
@@ -204,8 +206,11 @@ const SearchHome = (props) => {
       });
     };
 
+    setSearchLoading(true);
     props.routes.fetchRoutes(start.value.node_id, end.value.node_id, fetchRoutesCallback);
   };
+
+  if (searchLoading) return <Loading pageName="Search"></Loading>
 
   return (
     <IonPage className="page search-home-page">
