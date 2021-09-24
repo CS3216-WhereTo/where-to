@@ -67,42 +67,45 @@ const App = (props) => {
   return (
     <IonApp>
       <IonReactRouter>
-        <IonTabs>
-          <IonRouterOutlet>
-            <Switch>
-              <Route path="/search">
-                <SearchHome nodes={nodes} routes={routes} />
-              </Route>
-              <Route path="/search-result">
-                <SearchResult />
-              </Route>
-              <Route exact path="/favourites">
-                <Favourites nodes={nodes} user={user} />
-              </Route>
-              <Route exact path="/settings">
-                <Settings user={user} />
-              </Route>
-              <Route exact path="/">
-                {/* {landingPage} */}
-                <Login/>
-              </Route>
-            </Switch>
-          </IonRouterOutlet>
-          <IonTabBar slot="bottom">
-            <IonTabButton tab="search" href="/search">
-              <IonIcon icon={mapOutline} />
-              <IonText>Map</IonText>
-            </IonTabButton>
-            <IonTabButton tab="favourites" href="/favourites">
-              <IonIcon icon={starOutline} />
-              <IonText>Favourites</IonText>
-            </IonTabButton>
-            <IonTabButton tab="settings" href="/settings">
-              <IonIcon icon={settingsOutline} />
-              <IonText>Settings</IonText>
-            </IonTabButton>
-          </IonTabBar>
-        </IonTabs>
+        <IonRouterOutlet>
+          <Route exact path="/">
+            {/* {landingPage} */}
+            <Login />
+          </Route>
+
+          <IonTabs>
+            <IonRouterOutlet>
+              <Switch>
+                <Route path="/search">
+                  <SearchHome nodes={nodes} routes={routes} />
+                </Route>
+                <Route path="/search-result">
+                  <SearchResult />
+                </Route>
+                <Route exact path="/favourites">
+                  <Favourites nodes={nodes} user={user} />
+                </Route>
+                <Route exact path="/settings">
+                  <Settings user={user} />
+                </Route>
+              </Switch>
+            </IonRouterOutlet>
+            <IonTabBar slot="bottom">
+              <IonTabButton tab="search" href="/search">
+                <IonIcon icon={mapOutline} />
+                <IonText>Map</IonText>
+              </IonTabButton>
+              <IonTabButton tab="favourites" href="/favourites">
+                <IonIcon icon={starOutline} />
+                <IonText>Favourites</IonText>
+              </IonTabButton>
+              <IonTabButton tab="settings" href="/settings">
+                <IonIcon icon={settingsOutline} />
+                <IonText>Settings</IonText>
+              </IonTabButton>
+            </IonTabBar>
+          </IonTabs>
+        </IonRouterOutlet>
       </IonReactRouter>
     </IonApp>
   );

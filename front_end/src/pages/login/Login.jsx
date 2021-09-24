@@ -9,6 +9,7 @@ import CustomToast from "../../components/custom-toast/CustomToast";
 import { trackPageView, trackGuestSignInEvent, trackDismissLoginToastEvent } from "../../utils/ReactGa";
 import userTokenExists, { signUserIn } from "../../utils/AuthChecker";
 import Logo from "../../assets/logo.svg";
+import SplashAnimation from "../../assets/splash-animation.gif";
 
 const ERR_CON_GOOGLE = "We are unable to connect to Google right now, please try again later";
 const ERR_AUTH_FAIL = "We are unable to authenticate you, please try again!";
@@ -21,14 +22,21 @@ function Login() {
   const redirectToSearch = useCallback(() => history.replace("/search"), [history]);
 
   const [loginError, setLoginError] = useState("");
+  const [showSplash, setShowSplash] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowSplash(false);
+    }, 1500);
+  }, []);
 
   useEffect(() => {
     trackPageView(window.location.pathname);
 
-    // const isLoggedIn = userTokenExists();
-    // if (isLoggedIn) {
-    //   redirectToSearch();
-    // }
+    const isLoggedIn = userTokenExists();
+    if (isLoggedIn) {
+      redirectToSearch();
+    }
   }, [redirectToSearch]);
 
   /**
@@ -52,7 +60,7 @@ function Login() {
   /* Handler for guest logins */
   const handleGuestLogin = () => {
     trackGuestSignInEvent();
-    redirectToSearch();
+    history.push("/search");
   };
 
   const LoginHeaderRow = () => {
@@ -113,6 +121,9 @@ function Login() {
 
   return (
     <IonPage className="page login-page">
+      <div className={"splash " + (!showSplash ? "splash--hide" : "")}>
+        <img src={SplashAnimation} alt="splash-animation" className="splash__img" />
+      </div>
       <IonGrid className="login">
         <LoginHeaderRow />
         <LoginOptionsRow onGoogleSuccess={handleGoogleLoginSuccess} onGoogleFailure={handleGoogleLoginFailure} onGuestLogin={handleGuestLogin} />
