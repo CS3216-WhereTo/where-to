@@ -204,7 +204,7 @@ const SearchHome = (props) => {
         const route_start_coordinates = route.walk.path[0].coordinates;
 
         const end_coordinates = end.value.coordinates;
-        const route_end_coordinates = route.walk.path.at(-1).coordinates;
+        const route_end_coordinates = route.walk.path[route.walk.path.length - 1].coordinates;
 
         if (
           !(

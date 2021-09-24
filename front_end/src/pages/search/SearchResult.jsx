@@ -137,7 +137,8 @@ const SearchResult = () => {
     });
 
     const startCoordinates = dirType === "bus" ? busRoute.coordinates[0] : walkRoute.coordinates[0];
-    const endCoordinates = dirType === "bus" ? busRoute.coordinates.at(-1) : walkRoute.coordinates.at(-1);
+    const endCoordinates =
+      dirType === "bus" ? busRoute.coordinates[busRoute.coordinates.length - 1] : walkRoute.coordinates[walkRoute.coordinates.length - 1];
 
     // Markers for start and end
     new mapboxgl.Marker({ color: "#1B4571" })
