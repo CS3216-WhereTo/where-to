@@ -100,7 +100,7 @@ const SearchResult = () => {
   }, [lng, lat, zoom]);
 
   useEffect(() => {
-    if (mapLoading || !busRoute.coordinates || !walkRoute.coordinates) return;
+    if (mapLoading || !start || !end || !busRoute.coordinates || !walkRoute.coordinates) return;
 
     var mapLayer = map.current.getLayer("route");
 
@@ -146,20 +146,20 @@ const SearchResult = () => {
       .setLngLat(startCoordinates)
       .setPopup(
         new mapboxgl.Popup({ offset: 25 }) // add popups
-          .setHTML(` <p>${start.label}</p>`)
+          .setHTML(` <p>${start?.label}</p>`)
       )
       .addTo(map.current);
     new mapboxgl.Marker({ color: "#b40219" })
       .setLngLat(endCoordinates)
       .setPopup(
         new mapboxgl.Popup({ offset: 25 }) // add popups
-          .setHTML(` <p>${end.label}</p>`)
+          .setHTML(` <p>${end?.label}</p>`)
       )
       .addTo(map.current);
 
     // Centers on start location
     map.current.flyTo({ center: startCoordinates, zoom: zoom });
-  }, [busRoute.coordinates, dirType, end.label, mapLoading, start, walkRoute.coordinates, zoom]);
+  }, [busRoute.coordinates, dirType, end, mapLoading, start, walkRoute.coordinates, zoom]);
 
   return (
     <IonPage className="page search-result-page">

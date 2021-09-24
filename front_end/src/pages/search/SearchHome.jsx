@@ -5,11 +5,12 @@ import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-load
 import { useLocation, useHistory } from "react-router-dom";
 import { geolocated } from "react-geolocated";
 
-import Loading from "../../components/loading/Loading"
+import Loading from "../../components/loading/Loading";
 import "./SearchHome.css";
 import CustomToast from "../../components/custom-toast/CustomToast";
 import CustomSelect from "../../components/custom-select/CustomSelect";
 import { trackPageView, trackDismissSearchToastEvent } from "../../utils/ReactGa";
+import userTokenExists from "../../utils/AuthChecker";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
 
@@ -23,11 +24,10 @@ const SearchHome = (props) => {
 
   const [lng, setLng] = useState(103.7764);
   const [lat, setLat] = useState(1.2956);
-  const [currentMarker, setCurrentMarker] = useState(null);
   const [zoom, setZoom] = useState(17);
   const [start, setStart] = useState(null);
   const [end, setEnd] = useState(null);
-  const [options, setOptions] = useState({});
+  const [options, setOptions] = useState([]);
   const [optionsLoading, setOptionsLoading] = useState(false);
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [showToast, setShowToast] = useState(false);
@@ -38,15 +38,18 @@ const SearchHome = (props) => {
   // Check if there is a Node passed from FavouritesItem
   useEffect(() => {
     if (redirectProps?.state?.destination) {
-      setEnd(redirectProps?.state?.destination);
+      const endFromFavourite = options.find((e) => Number(e.value.node_id) === Number(redirectProps?.state?.destination.nodeId));
+      setEnd(endFromFavourite);
     }
-  }, [redirectProps]);
+  }, [options, redirectProps]);
 
   useEffect(() => {
     trackPageView(window.location.pathname);
   }, []);
 
   const fetchNodes = useCallback(() => {
+    const isLoggedIn = userTokenExists();
+
     const fetchNodesCallback = () => {
       const favourites = props.nodes.getFavourites().map((node) => {
         return {
@@ -56,6 +59,7 @@ const SearchHome = (props) => {
             isFavourite: true,
             nodes: props.nodes,
             favouriteCallback: fetchNodes,
+            isLoggedIn: isLoggedIn,
           },
         };
       });
@@ -68,6 +72,7 @@ const SearchHome = (props) => {
             isFavourite: false,
             nodes: props.nodes,
             favouriteCallback: fetchNodes,
+            isLoggedIn: isLoggedIn,
           },
         };
       });
@@ -210,7 +215,7 @@ const SearchHome = (props) => {
     props.routes.fetchRoutes(start.value.node_id, end.value.node_id, fetchRoutesCallback);
   };
 
-  if (searchLoading) return <Loading pageName="Search"></Loading>
+  if (searchLoading) return <Loading pageName="Search"></Loading>;
 
   return (
     <IonPage className="page search-home-page">

@@ -7,12 +7,13 @@ import "./Option.css";
 
 const Option = (props) => {
   const [isFavourite, setIsFavourite] = useState(props.data.value.isFavourite);
-  // console.log(isFavourite)
-  // Function to favourite and unfavourite a location
+
   const [performAction, setPerformAction] = useState(false);
 
   useEffect(() => {
     if (!performAction) return;
+
+    const value = props.data.value;
 
     const toggleFavourite = () => {
       setIsFavourite(!isFavourite);
@@ -20,9 +21,9 @@ const Option = (props) => {
     };
 
     if (isFavourite) {
-      props.data.value.nodes.removeFavourite(props.data.value.node_id, toggleFavourite);
+      value.nodes.removeFavourite(value.node_id, toggleFavourite);
     } else {
-      props.data.value.nodes.addFavourite(props.data.value.node_id, toggleFavourite);
+      value.nodes.addFavourite(value.node_id, toggleFavourite);
     }
 
     setPerformAction(false);
@@ -36,7 +37,9 @@ const Option = (props) => {
   return (
     <components.Option {...props} className="option">
       <div className="option__text">{props.data.label}</div>
-      <IonIcon className="option__icon" slot="start" icon={isFavourite ? star : starOutline} size="medium" onClick={(e) => parentClick(e)} />
+      {props.data.value.isLoggedIn && (
+        <IonIcon className="option__icon" slot="start" icon={isFavourite ? star : starOutline} size="medium" onClick={(e) => parentClick(e)} />
+      )}
     </components.Option>
   );
 };
