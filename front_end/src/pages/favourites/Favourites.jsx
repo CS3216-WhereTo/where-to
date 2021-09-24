@@ -51,6 +51,20 @@ const Favourites = (props) => {
   /** @type {[ Location, React.Dispatch<React.SetStateAction<Location>> ]} */
   const [favourites, setFavourites] = useState([]);
 
+  const populateFavourites = useCallback(() => {
+    const data = nodes.getFavourites().map((node) => new Location(node.node_id, node.name, true));
+    if (!mounted.current) return;
+    setFavourites(data);
+
+    if (mounted.current) user.fetchRecents(() => populateRecents());
+  }, [nodes, populateRecents, user]);
+
+  //////////////////////////
+  // RECENTS OBSERVER
+  //////////////////////////
+
+  const [recents, setRecents] = useState([]);
+
   const populateRecents = useCallback(() => {
     console.log("FAVOURITES: populateRecents() called");
     const allNodes = {
@@ -60,9 +74,7 @@ const Favourites = (props) => {
 
     const getDestinationFromRoute = (obj) => {
       /** @type {[number]} */
-      const steps = obj.walk.nodes;
-      const lastPos = steps.length - 1;
-      return steps[lastPos];
+      return obj.end_node;
     };
 
     const getNodeDetails = (id) => {
@@ -84,20 +96,6 @@ const Favourites = (props) => {
     setRecents(data);
     setLoadingStatus(false);
   }, [nodes, user]);
-
-  const populateFavourites = useCallback(() => {
-    const data = nodes.getFavourites().map((node) => new Location(node.node_id, node.name, true));
-    if (!mounted.current) return;
-    setFavourites(data);
-
-    if (mounted.current) user.fetchRecents(() => populateRecents());
-  }, [nodes, populateRecents, user]);
-
-  //////////////////////////
-  // RECENTS OBSERVER
-  //////////////////////////
-
-  const [recents, setRecents] = useState([]);
 
   useEffect(() => {
     trackPageView(window.location.pathname);
