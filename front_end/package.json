@@ -27,6 +27,7 @@
     "mapbox-gl": "^2.4.1",
     "micro-emitter": "^1.2.5",
     "react": "^17.0.1",
+    "react-detect-offline": "^2.4.5",
     "react-dom": "^17.0.1",
     "react-draggable": "^4.4.4",
     "react-ga4": "^1.0.6",
