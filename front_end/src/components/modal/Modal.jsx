@@ -1,9 +1,12 @@
 import { IonList, IonItem } from "@ionic/react";
 
+import "./Modal.css";
 import ModalBusItem from "./ModalBusItem";
 import ModalWalkItem from "./ModalWalkItem";
-import "./Modal.css";
 
+/**
+ * Content for react-modal-sheet
+ */
 const Modal = ({ dirType, busDir, walkDir, busDuration, busDistance, walkDuration, walkDistance }) => {
   return (
     <div className="modal">
@@ -16,9 +19,16 @@ const Modal = ({ dirType, busDir, walkDir, busDuration, busDistance, walkDuratio
           {dirType === "bus"
             ? busDir.map((elem, i) => {
                 if (elem.type === "bus") {
-                  return <ModalBusItem key={i} location={elem.location} duration={elem.duration ? Math.floor(elem.duration / 60) : null} stops={elem.stops}/>;
+                  return (
+                    <ModalBusItem
+                      key={i}
+                      location={elem.location}
+                      duration={elem.duration ? Math.floor(elem.duration / 60) : null}
+                      stops={elem.stops}
+                    />
+                  );
                 } else {
-                  return <ModalWalkItem key={i} location={elem.location} duration={elem.duration ? Math.floor(elem.duration / 60) : null}  />;
+                  return <ModalWalkItem key={i} location={elem.location} duration={elem.duration ? Math.floor(elem.duration / 60) : null} />;
                 }
               })
             : walkDir.map((elem, i) => {

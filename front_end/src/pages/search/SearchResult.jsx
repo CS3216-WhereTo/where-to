@@ -1,23 +1,22 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { IonPage, IonChip, IonIcon, IonLabel, IonButton } from "@ionic/react";
 import { ellipseOutline, locationSharp, arrowBack, bus, walk } from "ionicons/icons";
 import Sheet from "react-modal-sheet";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 
-import Modal from "../../components/modal/Modal";
 import "./SearchResult.css";
+import Modal from "../../components/modal/Modal";
 import { parseBusRoute, parseWalkRoute } from "../../utils/ParseRoute";
 import { trackPageView, trackSetDirectionTypeToBus, trackSetDirectionTypeToWalk, trackSearchResultBackPressEvent } from "../../utils/ReactGa";
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
 
-// TODO
-// Add geolocation to track current location
-// Pull route data and plot on map, and add markers for them
-
-// Receive in start and end location
+/**
+ * Component for search results
+ */
 const SearchResult = () => {
   let redirectProps = useLocation();
+  let history = useHistory();
 
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -42,13 +41,16 @@ const SearchResult = () => {
 
   useEffect(() => {
     const state = redirectProps.state;
-    if (!state) return;
+    if (!state) {
+      history.replace("/search");
+      return;
+    }
 
     setStart(state.start);
     setEnd(state.end);
     setWalkRoute(parseWalkRoute(state.walk));
     setBusRoute(parseBusRoute(state.bus));
-  }, [redirectProps]);
+  }, [history, redirectProps]);
 
   useEffect(() => {
     if (map.current) return;
@@ -70,6 +72,9 @@ const SearchResult = () => {
       positionOptions: {
         enableHighAccuracy: true,
       },
+      fitBoundsOptions: {
+        zoom: zoom,
+      },
       showAccuracyCircle: false,
       trackUserLocation: true,
       showUserHeading: true,
@@ -88,13 +93,12 @@ const SearchResult = () => {
     map.current.once("load", () => {
       map.current.resize();
       geolocate.trigger();
+      setTimeout(() => setMapLoading(false), 1500);
     });
-
-    setTimeout(() => setMapLoading(false), 1500);
   }, [lng, lat, zoom]);
 
   useEffect(() => {
-    if (mapLoading) return;
+    if (mapLoading || !start || !end || !busRoute.coordinates || !walkRoute.coordinates) return;
 
     var mapLayer = map.current.getLayer("route");
 
@@ -132,15 +136,29 @@ const SearchResult = () => {
       },
     });
 
-    const start = dirType === "bus" ? busRoute.coordinates[0] : walkRoute.coordinates[0];
-    const end = dirType === "bus" ? busRoute.coordinates.at(-1) : walkRoute.coordinates.at(-1);
+    const startCoordinates = dirType === "bus" ? busRoute.coordinates[0] : walkRoute.coordinates[0];
+    const endCoordinates =
+      dirType === "bus" ? busRoute.coordinates[busRoute.coordinates.length - 1] : walkRoute.coordinates[walkRoute.coordinates.length - 1];
+
     // Markers for start and end
-    new mapboxgl.Marker().setLngLat(start).addTo(map.current);
-    new mapboxgl.Marker().setLngLat(end).addTo(map.current);
+    new mapboxgl.Marker({ color: "#1B4571" })
+      .setLngLat(startCoordinates)
+      .setPopup(
+        new mapboxgl.Popup({ offset: 25 }) // add popups
+          .setHTML(` <p>${start?.label}</p>`)
+      )
+      .addTo(map.current);
+    new mapboxgl.Marker({ color: "#b40219" })
+      .setLngLat(endCoordinates)
+      .setPopup(
+        new mapboxgl.Popup({ offset: 25 }) // add popups
+          .setHTML(` <p>${end?.label}</p>`)
+      )
+      .addTo(map.current);
 
     // Centers on start location
-    map.current.flyTo({ center: start });
-  }, [busRoute.coordinates, dirType, mapLoading, walkRoute.coordinates]);
+    map.current.flyTo({ center: startCoordinates, zoom: zoom });
+  }, [busRoute.coordinates, dirType, end, mapLoading, start, walkRoute.coordinates, zoom]);
 
   return (
     <IonPage className="page search-result-page">
@@ -213,7 +231,7 @@ const SearchResult = () => {
       <div className="directions-button--center">
         <IonButton className="directions-button" shape="round" onClick={() => setOpen(true)}>
           {dirType === "bus"
-            ? `Directions (${busRoute.totalDistance / 1000} km, ${Math.floor(busRoute.totalDuration / 60)} min)`
+            ? `Directions (${busRoute.totalDistance / 1000} km on foot, ${Math.floor(busRoute.totalDuration / 60)} min)`
             : `Directions (${walkRoute.totalDistance / 1000} km, ${Math.floor(walkRoute.totalDuration / 60)} min)`}
         </IonButton>
       </div>

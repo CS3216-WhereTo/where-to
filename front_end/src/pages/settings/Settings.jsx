@@ -4,14 +4,17 @@ import { Redirect } from "react-router";
 import { useGoogleLogout } from "react-google-login";
 import PropTypes from "prop-types";
 
+import "./Settings.css";
 import Loading from "../../components/loading/Loading";
 import CustomToast from "../../components/custom-toast/CustomToast";
 import userTokenExists, { signUserOut } from "../../utils/AuthChecker";
-import UnauthenticatedUserScreen from "../../components/sign-in/SignIn";
+import UnauthenticatedUserScreen from "../../components/unauthenticated-screen/UnauthenticatedScreen";
 import { trackPageView, trackUpdateWalkingSpeedEvent, trackDismissSettingsToastEvent, trackGoogleSignOutEvent } from "../../utils/ReactGa";
-import "./Settings.css";
 import UserStore from "../../stores/UserStore";
 
+/**
+ * Settings component
+ */
 const Settings = (props) => {
   const [loading, setLoading] = useState(true);
   const loggedIn = userTokenExists();
@@ -95,7 +98,7 @@ const Settings = (props) => {
       const selectionStyle = val === selectedSpeed ? "speed__option--selected" : "speed__option--unselected";
 
       return (
-        <IonChip key={key} onClick={() => selectSpeed(val)} className={"speed__option " + selectionStyle} disabled={updating}>
+        <IonChip key={key} onClick={() => selectSpeed(val)} className={"speed__option " + selectionStyle} disabled={updating || !navigator.onLine}>
           <IonLabel>{label}</IonLabel>
         </IonChip>
       );

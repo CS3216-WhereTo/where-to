@@ -3,38 +3,28 @@ import PropTypes from "prop-types";
 import { IonItem, IonIcon } from "@ionic/react";
 import { star, starOutline, mapOutline } from "ionicons/icons";
 
-import {
-  trackFavouritesUnfavouriteEvent,
-  trackFavouritesFavouriteEvent,
-  trackRecentsFavouriteEvent,
-  trackRecentsUnfavouriteEvent,
-  trackFavouritesMapButtonEvent,
-  trackRecentsMapButtonEvent,
-} from "../../utils/ReactGa";
-
 import "./Favourites.css";
+import { trackFavouritesUnfavouriteEvent, trackFavouritesFavouriteEvent, trackFavouritesMapButtonEvent } from "../../utils/ReactGa";
 
-function FavouritesItem(props) {
-
-  const isFavouritesTab = props.isFavouritesTab;
+/**
+ * Favourite item component
+ */
+const FavouritesItem = (props) => {
   const toggleFavourite = props.toggleFavourite;
   const { id, name, isFav } = props.listItem;
 
-  function handleToggleFavourite() {
+  const handleToggleFavourite = () => {
     if (isFav) {
-      if (isFavouritesTab) trackFavouritesUnfavouriteEvent();
-      else trackRecentsUnfavouriteEvent();
+      trackFavouritesUnfavouriteEvent();
     } else {
-      if (isFavouritesTab) trackFavouritesFavouriteEvent();
-      else trackRecentsFavouriteEvent();
+      trackFavouritesFavouriteEvent();
     }
 
     toggleFavourite();
   };
 
-  function handleRedirectToMap() {
-    if (isFavouritesTab) trackFavouritesMapButtonEvent();
-    else trackRecentsMapButtonEvent();
+  const handleRedirectToMap = () => {
+    trackFavouritesMapButtonEvent();
   };
 
   return (
@@ -42,15 +32,12 @@ function FavouritesItem(props) {
       <p className="favourites-item__text">{name}</p>
       <div className="favourites-item__buttons" onClick={handleRedirectToMap}>
         {/* Passes Node data to SearchHome */}
-        <Link
-          className="favourites-item__link"
-          to={{ pathname: "/search", state: { destination: { nodeId: id } } }}
-        >
+        <Link className="favourites-item__link" to={{ pathname: "/search", state: { destination: { nodeId: id } } }}>
           <IonIcon className="favourites-item__icon" icon={mapOutline} />
         </Link>
-        <IonIcon className="favourites-item__icon" 
-          slot="end" onClick={handleToggleFavourite} 
-          icon={isFav ? star : starOutline} />
+        {navigator.onLine && (
+          <IonIcon className="favourites-item__icon" slot="end" onClick={handleToggleFavourite} icon={isFav ? star : starOutline} />
+        )}
       </div>
     </IonItem>
   );
@@ -59,13 +46,12 @@ function FavouritesItem(props) {
 const node = PropTypes.shape({
   id: PropTypes.number,
   name: PropTypes.string,
-  isFav: PropTypes.bool
+  isFav: PropTypes.bool,
 });
 
 FavouritesItem.propTypes = {
   listItem: node.isRequired,
-  isFavouritesTab: PropTypes.bool.isRequired,
-  toggleFavourite: PropTypes.func.isRequired
-}
+  toggleFavourite: PropTypes.func.isRequired,
+};
 
 export default FavouritesItem;

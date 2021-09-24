@@ -6,14 +6,18 @@ import { useLocation, useHistory } from "react-router-dom";
 import { geolocated } from "react-geolocated";
 
 import "./SearchHome.css";
+import Loading from "../../components/loading/Loading";
 import CustomToast from "../../components/custom-toast/CustomToast";
 import CustomSelect from "../../components/custom-select/CustomSelect";
 import { trackPageView, trackDismissSearchToastEvent } from "../../utils/ReactGa";
+import userTokenExists from "../../utils/AuthChecker";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
 
+/**
+ * Component for search
+ */
 const SearchHome = (props) => {
-  // Sets Node passed from FavouritesItem as end point
   let redirectProps = useLocation();
   let history = useHistory();
 
@@ -22,30 +26,43 @@ const SearchHome = (props) => {
 
   const [lng, setLng] = useState(103.7764);
   const [lat, setLat] = useState(1.2956);
-  const [currentMarker, setCurrentMarker] = useState(null);
   const [zoom, setZoom] = useState(17);
-  const [isInitiallyCentered, setIsInitiallyCentered] = useState(false);
   const [start, setStart] = useState(null);
   const [end, setEnd] = useState(null);
-  const [options, setOptions] = useState({});
+  const [options, setOptions] = useState([]);
   const [optionsLoading, setOptionsLoading] = useState(false);
+
+  /* A copy of options to support search in CustomSelect */
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [routeObject, setRouteObject] = useState({});
+  const [searchLoading, setSearchLoading] = useState(false);
 
-  // Check if there is a Node passed from FavouritesItem
+  /**
+   * Check if there is a state passed from Favourites
+   * If so, set it as the end point
+   */
   useEffect(() => {
-    if (redirectProps?.state?.destination) {
-      setEnd(redirectProps?.state?.destination);
+    if (redirectProps?.state?.end) {
+      const endFromFavourite = options.find((e) => Number(e.value.node_id) === Number(redirectProps?.state?.end.nodeId));
+      setEnd(endFromFavourite);
+
+      if (redirectProps?.state?.end) {
+        const startFromRecent = options.find((e) => Number(e.value.node_id) === Number(redirectProps?.state?.start.nodeId));
+        setStart(startFromRecent);
+      }
     }
-  }, [redirectProps]);
+  }, [options, redirectProps]);
 
   useEffect(() => {
     trackPageView(window.location.pathname);
   }, []);
 
+  /* Callback for fetching nodes from NodesStore*/
   const fetchNodes = useCallback(() => {
+    const isLoggedIn = userTokenExists();
+
     const fetchNodesCallback = () => {
       const favourites = props.nodes.getFavourites().map((node) => {
         return {
@@ -55,6 +72,7 @@ const SearchHome = (props) => {
             isFavourite: true,
             nodes: props.nodes,
             favouriteCallback: fetchNodes,
+            isLoggedIn: isLoggedIn,
           },
         };
       });
@@ -67,10 +85,12 @@ const SearchHome = (props) => {
             isFavourite: false,
             nodes: props.nodes,
             favouriteCallback: fetchNodes,
+            isLoggedIn: isLoggedIn,
           },
         };
       });
 
+      /* Show favourites above non-favourites in CustomSelect */
       setOptions([...favourites, ...nonFavourites]);
       setFilteredOptions([...favourites, ...nonFavourites]);
       setOptionsLoading(false);
@@ -84,26 +104,28 @@ const SearchHome = (props) => {
     fetchNodes();
   }, [fetchNodes]);
 
+  /* Initialise Map */
   useEffect(() => {
     if (map.current) return;
 
-    // Initialises new Map
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/outdoors-v11",
       center: [lng, lat],
       maxBounds: [
-        [103.59364428182482, 1.2118245793229845], // Southwest coordinates
-        [104.03997620235008, 1.4679048601977227], // Northeast coordinates
+        [103.59364428182482, 1.2118245793229845],
+        [104.03997620235008, 1.4679048601977227],
       ],
       zoom: zoom,
     });
 
-    // Adds Geolocate control to Map, will be disabled if user blocks location service
-    // Hide if not in bounds?
+    /* Add GeolocateControl for user to drop a marker on their current location */
     const geolocate = new mapboxgl.GeolocateControl({
       positionOptions: {
         enableHighAccuracy: true,
+      },
+      fitBoundsOptions: {
+        zoom: zoom,
       },
       showAccuracyCircle: false,
       trackUserLocation: true,
@@ -112,65 +134,42 @@ const SearchHome = (props) => {
 
     map.current.addControl(geolocate);
 
-    // Adds Navigation control (zoom) to Map
+    /* Add NavigationControl for user to zoom on the map */
     map.current.addControl(
       new mapboxgl.NavigationControl({
         showCompass: false,
       })
     );
 
-    // Bug where it is unresized if it reloads
+    /* Resize the map to fit screen and center on user's current location */
     map.current.once("load", () => {
       map.current.resize();
       geolocate.trigger();
     });
   });
 
-  // useEffect(() => {
-  //   if (!props.coords) return;
-
-  //   if (!isInitiallyCentered) {
-  //     // Center the Map at user's current location, will only be done once
-  //     map.current.flyTo({
-  //       center: [props.coords.longitude, props.coords.latitude],
-  //       essential: true,
-  //     });
-  //     setIsInitiallyCentered(true);
-  //   }
-
-  //   if (currentMarker) {
-  //     currentMarker.setLngLat([props.coords.longitude, props.coords.latitude]);
-  //   } else {
-  //     const marker = new mapboxgl.Marker();
-  //     marker.setLngLat([props.coords.longitude, props.coords.latitude]).addTo(map.current);
-
-  //     setCurrentMarker(marker);
-  //   }
-  // }, [currentMarker, isInitiallyCentered, props.coords]);
-
-  useEffect(() => {
-    if (routeObject.start === undefined || routeObject.start === null) return;
-    console.log(routeObject);
-    history.push({
-      pathname: "/search-result",
-      state: routeObject,
-    });
-  }, [history, routeObject]);
-
+  /* Handle search for CustomSearch */
   const handleInputChange = (input) => {
     const displayOptions = options.filter((option) => {
       const words = option.label.toLowerCase().split(" ");
-      for (const word of words) {
-        if (word.startsWith(input)) {
-          return true;
+      const inputWords = input.toLowerCase().split(" ");
+
+      const reducer = (acc, inputWord) => {
+        for (const word of words) {
+          if (word.startsWith(inputWord) || word.startsWith("(" + inputWord)) {
+            return acc && true;
+          }
         }
+        return acc && false;
       }
-      return false;
+
+      return inputWords.reduce(reducer, true);
     });
 
     setFilteredOptions(displayOptions);
   };
 
+  /* Swap the start and end locations */
   const swapStartEnd = () => {
     const temp = start;
     setStart(end);
@@ -178,6 +177,12 @@ const SearchHome = (props) => {
   };
 
   const submitSearch = () => {
+    if (!navigator.onLine) {
+      setToastMessage("❗ You have no internet connection. Search is disabled.")
+      setShowToast(true);
+      return;
+    }
+
     // Either field is empty
     if (!start || !end) {
       setToastMessage(`⚠️ Please indicate ${!start ? "a start" : "an end"} point.`);
@@ -195,13 +200,11 @@ const SearchHome = (props) => {
       const route = props.routes.getRoutes();
 
       if (route) {
-        // start
-        console.log(route);
         const start_coordinates = start.value.coordinates;
         const route_start_coordinates = route.walk.path[0].coordinates;
 
         const end_coordinates = end.value.coordinates;
-        const route_end_coordinates = route.walk.path.at(-1).coordinates;
+        const route_end_coordinates = route.walk.path[route.walk.path.length - 1].coordinates;
 
         if (
           !(
@@ -224,10 +227,22 @@ const SearchHome = (props) => {
       });
     };
 
+    setSearchLoading(true);
     props.routes.fetchRoutes(start.value.node_id, end.value.node_id, fetchRoutesCallback);
   };
+  /* Pass routeObject to SearchResult */
+  useEffect(() => {
+    if (routeObject.start === undefined || routeObject.start === null) return;
 
-  return (
+    history.push({
+      pathname: "/search-result",
+      state: routeObject,
+    });
+  }, [history, routeObject]);
+
+  return searchLoading ? (
+    <Loading pageName="Search"></Loading>
+  ) : (
     <IonPage className="page search-home-page">
       <div className="search-header">
         <div className="search-container">
@@ -253,6 +268,7 @@ const SearchHome = (props) => {
                 onChange={setEnd}
                 options={options}
                 disabled={optionsLoading}
+                onInputChange={handleInputChange}
                 placeholder="Select a destination"
               />
             </div>

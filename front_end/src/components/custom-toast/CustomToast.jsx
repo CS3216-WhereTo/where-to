@@ -1,5 +1,8 @@
 import { IonToast } from "@ionic/react";
 
+/**
+ * React Wrapper for IonToast
+ */
 const CustomToast = ({ showToast, setShowToast, toastMessage, dismissBtnHandler }) => {
   const dismissBtn = {
     text: "Okay",

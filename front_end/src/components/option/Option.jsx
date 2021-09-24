@@ -5,30 +5,35 @@ import { starOutline, star } from "ionicons/icons";
 
 import "./Option.css";
 
+/**
+ *  Option component for react-select
+ */
 const Option = (props) => {
   const [isFavourite, setIsFavourite] = useState(props.data.value.isFavourite);
-  // console.log(isFavourite)
-  // Function to favourite and unfavourite a location
   const [performAction, setPerformAction] = useState(false);
 
+  /* Toggles a user's favourite from CustomSelect in SearchHome*/
   useEffect(() => {
     if (!performAction) return;
 
+    const value = props.data.value;
+
+    /* Execute callback from SearchHome to trigger update in the options in CustomSelect*/
     const toggleFavourite = () => {
       setIsFavourite(!isFavourite);
       props.data.value.favouriteCallback();
     };
 
     if (isFavourite) {
-      props.data.value.nodes.removeFavourite(props.data.value.node_id, toggleFavourite);
+      value.nodes.removeFavourite(value.node_id, toggleFavourite);
     } else {
-      props.data.value.nodes.addFavourite(props.data.value.node_id, toggleFavourite);
+      value.nodes.addFavourite(value.node_id, toggleFavourite);
     }
 
     setPerformAction(false);
   }, [isFavourite, performAction, props.data.value, props.data.value.node_id, props.data.value.nodes, props.nodes]);
 
-  const parentClick = (e) => {
+  const handleFavouriteIconClick = (e) => {
     e.stopPropagation();
     setPerformAction(true);
   };
@@ -36,7 +41,15 @@ const Option = (props) => {
   return (
     <components.Option {...props} className="option">
       <div className="option__text">{props.data.label}</div>
-      <IonIcon className="option__icon" slot="start" icon={isFavourite ? star : starOutline} size="medium" onClick={(e) => parentClick(e)} />
+      {navigator.onLine && props.data.value.isLoggedIn && (
+        <IonIcon
+          className="option__icon"
+          slot="start"
+          icon={isFavourite ? star : starOutline}
+          size="medium"
+          onClick={(e) => handleFavouriteIconClick(e)}
+        />
+      )}
     </components.Option>
   );
 };

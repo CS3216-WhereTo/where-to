@@ -1,24 +1,26 @@
 import { IonButton, IonPage, IonContent } from "@ionic/react";
 
-import NotSignedIn from '../../assets/not-signed-in.jpg'
+import NotSignedIn from "../../assets/not-signed-in.jpg";
 
-import './SignIn.css';
+import "./SignIn.css";
 
-const SignIn = () => {
-  return (
-    <div className="sign-in">
-      <img className="sign-in__img" alt="notsignedin" src={NotSignedIn}/>
-      <div className="sign-in__text">
-        <p>You are not signed in.</p>
+const UnauthenticatedUserScreen = (props) => {
+  const SignIn = () => {
+    return (
+      <div className="sign-in">
+        <img className="sign-in__img" alt="notsignedin" src={NotSignedIn} />
+        <div className="sign-in__text">
+          <p>You are not signed in.</p>
+        </div>
+        <div className="sign-in__button">
+          <IonButton shape="round" href="./">
+            Sign In
+          </IonButton>
+        </div>
       </div>
-      <div className="sign-in__button">
-        <IonButton shape="round" href="./">Sign In</IonButton>
-      </div>
-    </div>
-  );
-}
-
-function UnauthenticatedUserScreen(props) {
+    );
+  };
+  
   return (
     <IonPage className="page unauthenticated-page">
       <div className="page-header">
