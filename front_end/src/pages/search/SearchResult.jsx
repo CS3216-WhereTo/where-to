@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { IonPage, IonChip, IonIcon, IonLabel, IonButton } from "@ionic/react";
 import { ellipseOutline, locationSharp, arrowBack, bus, walk } from "ionicons/icons";
 import Sheet from "react-modal-sheet";
@@ -18,6 +18,7 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
 // Receive in start and end location
 const SearchResult = () => {
   let redirectProps = useLocation();
+  let history = useHistory();
 
   const mapContainer = useRef(null);
   const map = useRef(null);
@@ -42,13 +43,16 @@ const SearchResult = () => {
 
   useEffect(() => {
     const state = redirectProps.state;
-    if (!state) return;
+    if (!state) {
+      history.replace("/search");
+      return;
+    }
 
     setStart(state.start);
     setEnd(state.end);
     setWalkRoute(parseWalkRoute(state.walk));
     setBusRoute(parseBusRoute(state.bus));
-  }, [redirectProps]);
+  }, [history, redirectProps]);
 
   useEffect(() => {
     if (map.current) return;
@@ -94,7 +98,7 @@ const SearchResult = () => {
   }, [lng, lat, zoom]);
 
   useEffect(() => {
-    if (mapLoading) return;
+    if (mapLoading || !busRoute.coordinates || !walkRoute.coordinates) return;
 
     var mapLayer = map.current.getLayer("route");
 
