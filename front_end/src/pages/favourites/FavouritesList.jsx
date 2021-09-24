@@ -24,6 +24,11 @@ const FavouritesList = (props) => {
   const isFavouritesTab = props.isFavouritesTab;
   const toggleFavourite = props.toggleFavourite;
 
+  if (!list.length) {
+    return (
+      <p className="favourites-list__text">You do not have any {isFavouritesTab ? "favourites" : "recents"}</p>
+    );
+  }
   return (
     <IonList lines="full">
       {list.map(convertElementToView)}
