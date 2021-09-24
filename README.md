@@ -33,6 +33,9 @@ another in the Kent Ridge campus.
 **Teo Jun Xiong:**
 
 **Esmanda Wong:**
+* Worked on the front end development for the application
+* Designed pages for Search Result, Favourites and Settings
+* Implemented pages for Search Result, Favourites and Settings
 
 ## Website
 
