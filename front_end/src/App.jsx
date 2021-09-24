@@ -32,7 +32,7 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { initialiseGoogleAnalytics } from "./utils/ReactGa";
-import { verifyTokenIfExists } from "./utils/AuthChecker";
+import userTokenExists, { signUserOut, verifyTokenIfExists } from "./utils/AuthChecker";
 import NodeStore from "./stores/NodeStore";
 import RouteStore from "./stores/RouteStore";
 import UserStore from "./stores/UserStore";
@@ -51,7 +51,10 @@ const App = (props) => {
   verifyTokenIfExists()
     .then((res) => {
       if (res) setLoginState(true);
-      else setLoginState(false);
+      else {
+        if (userTokenExists()) signUserOut();
+        setLoginState(false);
+      }
     })
     .catch(console.error);
 
