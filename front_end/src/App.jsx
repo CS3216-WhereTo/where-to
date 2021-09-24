@@ -76,6 +76,7 @@ const App = (props) => {
             <Login />
           </Route>
 
+          {/* tabs */}
           <IonTabs>
             <IonRouterOutlet>
               <Switch>

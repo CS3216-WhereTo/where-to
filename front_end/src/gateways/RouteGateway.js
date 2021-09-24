@@ -30,11 +30,10 @@ export default class RouteGateway {
     const headers = { "Content-Type": "application/json" };
     const loggedIn = userTokenExists();
     if (loggedIn) headers["Authorization"] = `Bearer ${getUserToken()}`;
-    const response = axios.get("route/find_walk_route", {
-      headers: headers,
-      params: locations,
+    const response = axios.post("route/find_walk_route", locations, {
+      headers: headers
     });
-    console.log("GET route/find_walk_route success");
+    console.log("POST route/find_walk_route success");
     return response.data;
   }
 
@@ -47,11 +46,10 @@ export default class RouteGateway {
     const headers = { "Content-Type": "application/json" };
     const loggedIn = userTokenExists();
     if (loggedIn) headers["Authorization"] = `Bearer ${getUserToken()}`;
-    const response = await axios.get("route/find_bus_route", {
+    const response = await axios.post("route/find_bus_route", locations, {
       headers: headers,
-      params: locations,
     });
-    console.log("GET route/find_bus_route success");
+    console.log("POST route/find_bus_route success");
     return response.data;
   }
 }

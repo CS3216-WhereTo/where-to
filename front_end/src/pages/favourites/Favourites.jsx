@@ -52,12 +52,22 @@ const Favourites = (props) => {
   /** @type {[ Location, React.Dispatch<React.SetStateAction<Location>> ]} */
   const [favourites, setFavourites] = useState([]);
 
+  const populateFavourites = useCallback(() => {
+    const data = nodes.getFavourites().map((node) => new Location(node.node_id, node.name, true));
+    if (!mounted.current) return;
+    setFavourites(data);
+
+    if (mounted.current) user.fetchRecents(() => populateRecents());
+  }, [nodes, populateRecents, user]);
+
+  //////////////////////////
+  // RECENTS OBSERVER
+  //////////////////////////
+
+  const [recents, setRecents] = useState([]);
+
   const populateRecents = useCallback(() => {
     console.log("FAVOURITES: populateRecents() called");
-    // const allNodes = {
-    //   favs: nodes.getFavourites(),
-    //   nonFavs: nodes.getNonFavourites(),
-    // };
 
     const data = user.getRecents().map((recent) => getDirections(recent));
 
