@@ -14,9 +14,7 @@ export default class RouteGateway {
     const response = await axios({
       method: "post",
       url: "https://backend.cs3216-stuff.link/route/find_route",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: headers,
       data: locations,
     });
     console.log("POST route/find_route success");
