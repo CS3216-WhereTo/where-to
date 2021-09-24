@@ -177,6 +177,12 @@ const SearchHome = (props) => {
   };
 
   const submitSearch = () => {
+    if (!navigator.onLine) {
+      setToastMessage("❗ You have no internet connection. Search is disabled.")
+      setShowToast(true);
+      return;
+    }
+
     // Either field is empty
     if (!start || !end) {
       setToastMessage(`⚠️ Please indicate ${!start ? "a start" : "an end"} point.`);
