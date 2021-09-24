@@ -45,12 +45,12 @@ export const getDirections = (route) => {
 
 const getBusDirections = (busRoute) => {
   const parsedBusRoute = parseBusRoute(busRoute);
-  return { totalDuration: parsedBusRoute.totalDuration , directions: parsedBusRoute.directions };
+  return { totalDuration: parsedBusRoute.totalDuration, directions: parsedBusRoute.directions };
 };
 
 const getWalkDirections = (walkRoute) => {
   const parsedWalkRoute = parseWalkRoute(walkRoute);
-  return { totalDuration: parsedWalkRoute.totalDuration , directions: parsedWalkRoute.directions };
+  return { totalDuration: parsedWalkRoute.totalDuration, directions: parsedWalkRoute.directions };
 };
 
 const parseWalkSegment = (walkSegment) => {
@@ -79,6 +79,6 @@ const parseBusSegment = (busSegment) => {
     }
   }
 
-  locationString += ` to ${busSegment.path.at(-1).name}`;
+  locationString += ` to ${busSegment.path[busSegment.path.length - 1].name}`;
   return [{ location: locationString, type: "bus", duration: busSegment.duration, stops: busSegment.path.length }];
 };
