@@ -1,5 +1,7 @@
 # WhereTo?
 
+![app_icon](https://i.imgur.com/BQCfKEL.png)
+
 WhereTo? is a navigation application that recommends users the best route to get from one place to
 another in the Kent Ridge campus.
 
@@ -22,6 +24,13 @@ another in the Kent Ridge campus.
 **Tan Wei Liang:**
 
 **Teo Jun Xiong:**
+* Designed [UI](https://www.figma.com/file/VbO8SFNmPKuwrHLv0gD5or/Wireframe?node-id=0%3A1), [poster](https://i.imgur.com/DJ2gZ8Q.png), and [splash screen animation](https://i.imgur.com/4m2PT4h.gif) 
+* Developed custom select with search and ability to favourite
+* Integrated Mapbox and parsed returned route data from server
+* Implemented recents list
+* Integrated Google Analytics and tracked user interacations with UI components
+
+
 
 **Esmanda Wong:**
 
