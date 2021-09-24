@@ -230,7 +230,7 @@ const SearchResult = () => {
       <div className="directions-button--center">
         <IonButton className="directions-button" shape="round" onClick={() => setOpen(true)}>
           {dirType === "bus"
-            ? `Directions (${busRoute.totalDistance / 1000} km walking distance, ${Math.floor(busRoute.totalDuration / 60)} min)`
+            ? `Directions (${busRoute.totalDistance / 1000} km on foot, ${Math.floor(busRoute.totalDuration / 60)} min)`
             : `Directions (${walkRoute.totalDistance / 1000} km, ${Math.floor(walkRoute.totalDuration / 60)} min)`}
         </IonButton>
       </div>
