@@ -20,7 +20,8 @@ const CustomSelect = ({ value, onChange, onInputChange, placeholder, options, di
       styles={{
         container: (provided, state) => ({
           ...provided,
-          display: "flex",
+          display: "block",
+          width: "100px",
           flex: 1,
           marginLeft: "8px",
           marginRight: "8px",
