@@ -4,11 +4,7 @@ import { IonItem, IonIcon } from "@ionic/react";
 import { star, starOutline, mapOutline } from "ionicons/icons";
 
 import "./Favourites.css";
-import {
-  trackFavouritesUnfavouriteEvent,
-  trackFavouritesFavouriteEvent,
-  trackFavouritesMapButtonEvent,
-} from "../../utils/ReactGa";
+import { trackFavouritesUnfavouriteEvent, trackFavouritesFavouriteEvent, trackFavouritesMapButtonEvent } from "../../utils/ReactGa";
 
 /**
  * Favourite item component
@@ -39,7 +35,9 @@ const FavouritesItem = (props) => {
         <Link className="favourites-item__link" to={{ pathname: "/search", state: { destination: { nodeId: id } } }}>
           <IonIcon className="favourites-item__icon" icon={mapOutline} />
         </Link>
-        <IonIcon className="favourites-item__icon" slot="end" onClick={handleToggleFavourite} icon={isFav ? star : starOutline} />
+        {navigator.onLine && (
+          <IonIcon className="favourites-item__icon" slot="end" onClick={handleToggleFavourite} icon={isFav ? star : starOutline} />
+        )}
       </div>
     </IonItem>
   );

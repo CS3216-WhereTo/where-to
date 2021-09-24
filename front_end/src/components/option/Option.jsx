@@ -41,7 +41,7 @@ const Option = (props) => {
   return (
     <components.Option {...props} className="option">
       <div className="option__text">{props.data.label}</div>
-      {props.data.value.isLoggedIn && (
+      {navigator.onLine && props.data.value.isLoggedIn && (
         <IonIcon
           className="option__icon"
           slot="start"

@@ -98,7 +98,7 @@ const Settings = (props) => {
       const selectionStyle = val === selectedSpeed ? "speed__option--selected" : "speed__option--unselected";
 
       return (
-        <IonChip key={key} onClick={() => selectSpeed(val)} className={"speed__option " + selectionStyle} disabled={updating}>
+        <IonChip key={key} onClick={() => selectSpeed(val)} className={"speed__option " + selectionStyle} disabled={updating || !navigator.onLine}>
           <IonLabel>{label}</IonLabel>
         </IonChip>
       );
