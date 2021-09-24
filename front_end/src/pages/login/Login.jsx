@@ -19,16 +19,20 @@ const ERR_AUTH_FAIL = "We are unable to authenticate you, please try again!";
  */
 function Login() {
   const history = useHistory();
-  const redirectToSearch = useCallback(() => history.replace("/search"), [history]);
+  const redirectToSearch = useCallback(() => {
+    setShowSplash(true);
+    history.replace("/search");
+  }, [history]);
 
   const [loginError, setLoginError] = useState("");
   const [showSplash, setShowSplash] = useState(true);
 
   useEffect(() => {
+    if (!showSplash) return;
     setTimeout(() => {
       setShowSplash(false);
-    }, 1500);
-  }, []);
+    }, 2000);
+  }, [showSplash]);
 
   useEffect(() => {
     trackPageView(window.location.pathname);
@@ -59,6 +63,7 @@ function Login() {
 
   /* Handler for guest logins */
   const handleGuestLogin = () => {
+    setShowSplash(true);
     trackGuestSignInEvent();
     history.push("/search");
   };
