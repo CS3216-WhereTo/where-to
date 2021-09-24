@@ -18,7 +18,6 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
  * Component for search
  */
 const SearchHome = (props) => {
-  // Sets Node passed from FavouritesItem as end point
   let redirectProps = useLocation();
   let history = useHistory();
 
@@ -32,13 +31,18 @@ const SearchHome = (props) => {
   const [end, setEnd] = useState(null);
   const [options, setOptions] = useState([]);
   const [optionsLoading, setOptionsLoading] = useState(false);
+
+  /* A copy of options to support search in CustomSelect */
   const [filteredOptions, setFilteredOptions] = useState(options);
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [routeObject, setRouteObject] = useState({});
   const [searchLoading, setSearchLoading] = useState(false);
 
-  // Check if there is a Node passed from FavouritesItem
+  /**
+   * Check if there is a state passed from Favourites
+   * If so, set it as the end point
+   */
   useEffect(() => {
     if (redirectProps?.state?.destination) {
       const endFromFavourite = options.find((e) => Number(e.value.node_id) === Number(redirectProps?.state?.destination.nodeId));
@@ -50,6 +54,7 @@ const SearchHome = (props) => {
     trackPageView(window.location.pathname);
   }, []);
 
+  /* Callback for fetching nodes from NodesStore*/
   const fetchNodes = useCallback(() => {
     const isLoggedIn = userTokenExists();
 
@@ -80,6 +85,7 @@ const SearchHome = (props) => {
         };
       });
 
+      /* Show favourites above non-favourites in CustomSelect */
       setOptions([...favourites, ...nonFavourites]);
       setFilteredOptions([...favourites, ...nonFavourites]);
       setOptionsLoading(false);
@@ -93,23 +99,22 @@ const SearchHome = (props) => {
     fetchNodes();
   }, [fetchNodes]);
 
+  /* Initialise Map */
   useEffect(() => {
     if (map.current) return;
 
-    // Initialises new Map
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
       style: "mapbox://styles/mapbox/outdoors-v11",
       center: [lng, lat],
       maxBounds: [
-        [103.59364428182482, 1.2118245793229845], // Southwest coordinates
-        [104.03997620235008, 1.4679048601977227], // Northeast coordinates
+        [103.59364428182482, 1.2118245793229845],
+        [104.03997620235008, 1.4679048601977227],
       ],
       zoom: zoom,
     });
 
-    // Adds Geolocate control to Map, will be disabled if user blocks location service
-    // Hide if not in bounds?
+    /* Add GeolocateControl for user to drop a marker on their current location */
     const geolocate = new mapboxgl.GeolocateControl({
       positionOptions: {
         enableHighAccuracy: true,
@@ -124,29 +129,21 @@ const SearchHome = (props) => {
 
     map.current.addControl(geolocate);
 
-    // Adds Navigation control (zoom) to Map
+    /* Add NavigationControl for user to zoom on the map */
     map.current.addControl(
       new mapboxgl.NavigationControl({
         showCompass: false,
       })
     );
 
-    // Bug where it is unresized if it reloads
+    /* Resize the map to fit screen and center on user's current location */
     map.current.once("load", () => {
       map.current.resize();
       geolocate.trigger();
     });
   });
 
-  useEffect(() => {
-    if (routeObject.start === undefined || routeObject.start === null) return;
-    console.log(routeObject);
-    history.push({
-      pathname: "/search-result",
-      state: routeObject,
-    });
-  }, [history, routeObject]);
-
+  /* Handle search for CustomSearch */
   const handleInputChange = (input) => {
     const displayOptions = options.filter((option) => {
       const words = option.label.toLowerCase().split(" ");
@@ -161,6 +158,7 @@ const SearchHome = (props) => {
     setFilteredOptions(displayOptions);
   };
 
+  /* Swap the start and end locations */
   const swapStartEnd = () => {
     const temp = start;
     setStart(end);
@@ -217,10 +215,19 @@ const SearchHome = (props) => {
     setSearchLoading(true);
     props.routes.fetchRoutes(start.value.node_id, end.value.node_id, fetchRoutesCallback);
   };
+  /* Pass routeObject to SearchResult */
+  useEffect(() => {
+    if (routeObject.start === undefined || routeObject.start === null) return;
 
-  if (searchLoading) return <Loading pageName="Search"></Loading>;
+    history.push({
+      pathname: "/search-result",
+      state: routeObject,
+    });
+  }, [history, routeObject]);
 
-  return (
+  return searchLoading ? (
+    <Loading pageName="Search"></Loading>
+  ) : (
     <IonPage className="page search-home-page">
       <div className="search-header">
         <div className="search-container">

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { GoogleLogin } from "react-google-login";
 import { withRouter, useHistory } from "react-router-dom";
 import { arrowForward } from "ionicons/icons";
@@ -7,7 +7,7 @@ import { IonPage, IonImg, IonText, IonButton, IonGrid, IonRow, IonIcon } from "@
 import "./Login.css";
 import CustomToast from "../../components/custom-toast/CustomToast";
 import { trackPageView, trackGuestSignInEvent, trackDismissLoginToastEvent } from "../../utils/ReactGa";
-import { signUserIn } from "../../utils/AuthChecker";
+import userTokenExists, { signUserIn } from "../../utils/AuthChecker";
 import Logo from "../../assets/logo.svg";
 
 const ERR_CON_GOOGLE = "We are unable to connect to Google right now, please try again later";
@@ -17,14 +17,19 @@ const ERR_AUTH_FAIL = "We are unable to authenticate you, please try again!";
  * Login component
  */
 function Login() {
-  useEffect(() => {
-    trackPageView(window.location.pathname);
-  }, []);
-
   const history = useHistory();
-  const redirectToSearch = () => history.replace("/search");
+  const redirectToSearch = useCallback(() => history.replace("/search"), [history]);
 
   const [loginError, setLoginError] = useState("");
+
+  useEffect(() => {
+    trackPageView(window.location.pathname);
+
+    // const isLoggedIn = userTokenExists();
+    // if (isLoggedIn) {
+    //   redirectToSearch();
+    // }
+  }, [redirectToSearch]);
 
   /**
    * @param {import("react-google-login").GoogleLoginResponse} googleResponse
@@ -44,6 +49,7 @@ function Login() {
     setLoginError(ERR_AUTH_FAIL);
   };
 
+  /* Handler for guest logins */
   const handleGuestLogin = () => {
     trackGuestSignInEvent();
     redirectToSearch();
@@ -64,6 +70,7 @@ function Login() {
     );
   };
 
+  /* Helper function to initialise login buttons */
   const LoginOptionsRow = (props) => {
     const loginButton = (
       <GoogleLogin

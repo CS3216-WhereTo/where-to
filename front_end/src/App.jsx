@@ -55,7 +55,7 @@ const App = (props) => {
     })
     .catch(console.error);
 
-  const landingPage = !isLoggedIn ? <Login /> : <Redirect exact to="/favourites" />;
+  // const landingPage = !isLoggedIn ? <Login /> : <Redirect exact to="/search" />;
 
   /** @type {NodeStore} */
   const nodes = props.nodes;
@@ -83,7 +83,8 @@ const App = (props) => {
                 <Settings user={user} />
               </Route>
               <Route exact path="/">
-                {landingPage}
+                {/* {landingPage} */}
+                <Login/>
               </Route>
             </Switch>
           </IonRouterOutlet>

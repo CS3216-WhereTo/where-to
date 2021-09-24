@@ -10,14 +10,15 @@ import "./Option.css";
  */
 const Option = (props) => {
   const [isFavourite, setIsFavourite] = useState(props.data.value.isFavourite);
-
   const [performAction, setPerformAction] = useState(false);
 
+  /* Toggles a user's favourite from CustomSelect in SearchHome*/
   useEffect(() => {
     if (!performAction) return;
 
     const value = props.data.value;
 
+    /* Execute callback from SearchHome to trigger update in the options in CustomSelect*/
     const toggleFavourite = () => {
       setIsFavourite(!isFavourite);
       props.data.value.favouriteCallback();
@@ -32,7 +33,7 @@ const Option = (props) => {
     setPerformAction(false);
   }, [isFavourite, performAction, props.data.value, props.data.value.node_id, props.data.value.nodes, props.nodes]);
 
-  const parentClick = (e) => {
+  const handleFavouriteIconClick = (e) => {
     e.stopPropagation();
     setPerformAction(true);
   };
@@ -41,7 +42,13 @@ const Option = (props) => {
     <components.Option {...props} className="option">
       <div className="option__text">{props.data.label}</div>
       {props.data.value.isLoggedIn && (
-        <IonIcon className="option__icon" slot="start" icon={isFavourite ? star : starOutline} size="medium" onClick={(e) => parentClick(e)} />
+        <IonIcon
+          className="option__icon"
+          slot="start"
+          icon={isFavourite ? star : starOutline}
+          size="medium"
+          onClick={(e) => handleFavouriteIconClick(e)}
+        />
       )}
     </components.Option>
   );

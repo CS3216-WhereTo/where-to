@@ -16,11 +16,7 @@ import UserStore from "../../stores/UserStore";
 import NodeStore from "../../stores/NodeStore";
 import userTokenExists from "../../utils/AuthChecker";
 import CustomToast from "../../components/custom-toast/CustomToast";
-
-const Mode = Object.freeze({
-  FAVOURITES: "Favourites",
-  RECENTS: "Recents",
-});
+import SegmentType from "../../enums/SegmentType";
 
 class Location {
   /**
@@ -123,23 +119,23 @@ function Favourites(props) {
   // SEGMENT CHANGE OBSERVER
   //////////////////////////
 
-  const [segment, setSegment] = useState(Mode.FAVOURITES);
+  const [segment, setSegment] = useState(SegmentType.FAVOURITES);
   function handleSegmentChange(event) {
     let value = event.detail.value;
     if (value === segment) return;
 
-    if (value === Mode.FAVOURITES) trackRecentsToFavouritesTabEvent();
-    else if (value === Mode.RECENTS) trackFavouritesToRecentsTabEvent();
+    if (value === SegmentType.FAVOURITES) trackRecentsToFavouritesTabEvent();
+    else if (value === SegmentType.RECENTS) trackFavouritesToRecentsTabEvent();
     else throw new Error(ERR_INVALID_STATE);
 
     setSegment(value);
   }
 
   function toggleFavourite(i) {
-    if (segment === Mode.FAVOURITES) {
+    if (segment === SegmentType.FAVOURITES) {
       const nodeId = favourites[i].id;
       nodes.removeFavourite(nodeId, populateFavourites);
-    } else if (segment === Mode.RECENTS) {
+    } else if (segment === SegmentType.RECENTS) {
       const node = recents[i];
       if (node.isFav) {
         nodes.removeFavourite(node.id, populateRecents);
@@ -161,18 +157,18 @@ function Favourites(props) {
       </div>
       {/* -- Segment -- */}
       <IonSegment className="segment" value={segment} onIonChange={handleSegmentChange}>
-        <IonSegmentButton className="segment__button" value={Mode.FAVOURITES}>
-          <IonLabel className="segment__text">{Mode.FAVOURITES}</IonLabel>
+        <IonSegmentButton className="segment__button" value={SegmentType.FAVOURITES}>
+          <IonLabel className="segment__text">{SegmentType.FAVOURITES}</IonLabel>
         </IonSegmentButton>
-        <IonSegmentButton className="segment__button" value={Mode.RECENTS}>
-          <IonLabel className="segment__text">{Mode.RECENTS}</IonLabel>
+        <IonSegmentButton className="segment__button" value={SegmentType.RECENTS}>
+          <IonLabel className="segment__text">{SegmentType.RECENTS}</IonLabel>
         </IonSegmentButton>
       </IonSegment>
       <IonContent>
         {/* -- List -- */}
         <FavouritesList
           className="favourites-list"
-          currentList={segment === Mode.FAVOURITES ? favourites : recents}
+          currentList={segment === SegmentType.FAVOURITES ? favourites : recents}
           isFavouritesTab={segment === "Favourites"}
           toggleFavourite={toggleFavourite}
         />
