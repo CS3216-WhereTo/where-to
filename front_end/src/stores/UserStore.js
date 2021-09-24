@@ -6,7 +6,6 @@ export const SPEED_KEY = "userSpeed";
 export const RECENTS_KEY = "recents";
 
 export default class UserStore {
-
   #speed;
   #recents;
 
@@ -26,7 +25,9 @@ export default class UserStore {
   fetchRecents(callback) {
     return this.gateway
       .getRecents()
-      .then((res) => this._setRecents(res, callback))
+      .then((res) => {
+        this._setRecents(res.recents, callback);
+      })
       .catch((e) => {
         console.error(e);
         this._loadRecentsFromStorage(callback);
@@ -41,17 +42,18 @@ export default class UserStore {
   }
 
   _setRecents(recents, callback) {
-    this.#recents = recents.routes;
+    this.#recents = recents;
     callback();
     this._updateLocalRecents();
   }
 
+  // limit to 5?
   _updateLocalRecents() {
     localStorage.setItem(RECENTS_KEY, JSON.stringify(this.#recents));
   }
 
   getRecents() {
-    return [...this.#recents];
+    return this.#recents;
   }
 
   ////////////////////////////////
@@ -99,5 +101,4 @@ export default class UserStore {
       })
       .catch(console.error);
   }
-
 }

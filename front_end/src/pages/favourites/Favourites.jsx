@@ -17,6 +17,7 @@ import NodeStore from "../../stores/NodeStore";
 import userTokenExists from "../../utils/AuthChecker";
 import CustomToast from "../../components/custom-toast/CustomToast";
 import SegmentType from "../../enums/SegmentType";
+import { getDirections } from "../../utils/ParseRoute";
 
 class Location {
   /**
@@ -53,44 +54,24 @@ const Favourites = (props) => {
 
   const populateRecents = useCallback(() => {
     console.log("FAVOURITES: populateRecents() called");
-    const allNodes = {
-      favs: nodes.getFavourites(),
-      nonFavs: nodes.getNonFavourites(),
-    };
+    // const allNodes = {
+    //   favs: nodes.getFavourites(),
+    //   nonFavs: nodes.getNonFavourites(),
+    // };
 
-    const getDestinationFromRoute = (obj) => {
-      /** @type {[number]} */
-      const steps = obj.walk.nodes;
-      const lastPos = steps.length - 1;
-      return steps[lastPos];
-    };
-
-    const getNodeDetails = (id) => {
-      const pred = (node) => node.node_id === id;
-      if (allNodes.favs.some(pred)) {
-        const idx = allNodes.favs.findIndex(pred);
-        const node = allNodes.favs[idx];
-        return Location(node.node_id, node.name, true);
-      } else {
-        const idx = allNodes.nonFavs.findIndex(pred);
-        const node = allNodes.nonFavs[idx];
-        return Location(node.node_id, node.name, false);
-      }
-    };
-
-    const data = user.getRecents().map(getDestinationFromRoute).map(getNodeDetails);
+    const data = user.getRecents().map((recent) => getDirections(recent));
 
     if (!mounted.current) return;
     setRecents(data);
     setLoadingStatus(false);
-  }, [nodes, user]);
+  }, [user]);
 
   const populateFavourites = useCallback(() => {
     const data = nodes.getFavourites().map((node) => new Location(node.node_id, node.name, true));
     if (!mounted.current) return;
     setFavourites(data);
 
-    if (mounted.current) user.fetchRecents(() => populateRecents());
+    if (mounted.current) user.fetchRecents(populateRecents);
   }, [nodes, populateRecents, user]);
 
   //////////////////////////

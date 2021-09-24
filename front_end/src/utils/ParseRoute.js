@@ -35,6 +35,24 @@ export const parseWalkRoute = (walkRoute) => {
   return parsedData;
 };
 
+export const getDirections = (route) => {
+  return {
+    start: route.start_node,
+    end: route.end_node,
+    parsedRoute: { bus: getBusDirections(route.route.bus), walk: getWalkDirections(route.route.walk) },
+  };
+};
+
+const getBusDirections = (busRoute) => {
+  const parsedBusRoute = parseBusRoute(busRoute);
+  return { totalDuration: parsedBusRoute.totalDuration , directions: parsedBusRoute.directions };
+};
+
+const getWalkDirections = (walkRoute) => {
+  const parsedWalkRoute = parseWalkRoute(walkRoute);
+  return { totalDuration: parsedWalkRoute.totalDuration , directions: parsedWalkRoute.directions };
+};
+
 const parseWalkSegment = (walkSegment) => {
   const directions = [];
 

@@ -7,35 +7,28 @@ import "./Favourites.css";
 import {
   trackFavouritesUnfavouriteEvent,
   trackFavouritesFavouriteEvent,
-  trackRecentsFavouriteEvent,
-  trackRecentsUnfavouriteEvent,
   trackFavouritesMapButtonEvent,
-  trackRecentsMapButtonEvent,
 } from "../../utils/ReactGa";
 
 /**
  * Favourite item component
  */
 const FavouritesItem = (props) => {
-  const isFavouritesTab = props.isFavouritesTab;
   const toggleFavourite = props.toggleFavourite;
   const { id, name, isFav } = props.listItem;
 
   const handleToggleFavourite = () => {
     if (isFav) {
-      if (isFavouritesTab) trackFavouritesUnfavouriteEvent();
-      else trackRecentsUnfavouriteEvent();
+      trackFavouritesUnfavouriteEvent();
     } else {
-      if (isFavouritesTab) trackFavouritesFavouriteEvent();
-      else trackRecentsFavouriteEvent();
+      trackFavouritesFavouriteEvent();
     }
 
     toggleFavourite();
   };
 
   const handleRedirectToMap = () => {
-    if (isFavouritesTab) trackFavouritesMapButtonEvent();
-    else trackRecentsMapButtonEvent();
+    trackFavouritesMapButtonEvent();
   };
 
   return (
@@ -60,7 +53,6 @@ const node = PropTypes.shape({
 
 FavouritesItem.propTypes = {
   listItem: node.isRequired,
-  isFavouritesTab: PropTypes.bool.isRequired,
   toggleFavourite: PropTypes.func.isRequired,
 };
 

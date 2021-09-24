@@ -48,6 +48,9 @@
 }
 
 /* ----- DROPDOWN ----- */
+.dropdown-container {
+  flex-direction: column;
+}
 .dropdown--visible {
   visibility: visible;
 }
@@ -63,4 +66,5 @@
   margin-left: 42px;
   padding-top: 8px;
   padding-bottom: 8px;
+  border-bottom: 1px solid #DDDDDD;
 }

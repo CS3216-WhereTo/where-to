@@ -44,9 +44,14 @@ const SearchHome = (props) => {
    * If so, set it as the end point
    */
   useEffect(() => {
-    if (redirectProps?.state?.destination) {
-      const endFromFavourite = options.find((e) => Number(e.value.node_id) === Number(redirectProps?.state?.destination.nodeId));
+    if (redirectProps?.state?.end) {
+      const endFromFavourite = options.find((e) => Number(e.value.node_id) === Number(redirectProps?.state?.end.nodeId));
       setEnd(endFromFavourite);
+
+      if (redirectProps?.state?.end) {
+        const startFromRecent = options.find((e) => Number(e.value.node_id) === Number(redirectProps?.state?.start.nodeId));
+        setStart(startFromRecent);
+      }
     }
   }, [options, redirectProps]);
 
@@ -183,8 +188,6 @@ const SearchHome = (props) => {
       const route = props.routes.getRoutes();
 
       if (route) {
-        // start
-        console.log(route);
         const start_coordinates = start.value.coordinates;
         const route_start_coordinates = route.walk.path[0].coordinates;
 
