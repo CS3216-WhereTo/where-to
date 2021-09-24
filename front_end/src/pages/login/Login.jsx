@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { GoogleLogin } from "react-google-login";
 import { withRouter, useHistory } from "react-router-dom";
 import { arrowForward } from "ionicons/icons";
@@ -7,22 +7,41 @@ import { IonPage, IonImg, IonText, IonButton, IonGrid, IonRow, IonIcon } from "@
 import "./Login.css";
 import CustomToast from "../../components/custom-toast/CustomToast";
 import { trackPageView, trackGuestSignInEvent, trackDismissLoginToastEvent } from "../../utils/ReactGa";
-import { signUserIn } from "../../utils/AuthChecker";
+import userTokenExists, { signUserIn } from "../../utils/AuthChecker";
 import Logo from "../../assets/logo.svg";
+import SplashAnimation from "../../assets/splash-animation.gif";
 
 const ERR_CON_GOOGLE = "We are unable to connect to Google right now, please try again later";
 const ERR_AUTH_FAIL = "We are unable to authenticate you, please try again!";
 
-const Login = () => {
+/**
+ * Login component
+ */
+ const Login = () => {
+  const history = useHistory();
+  const redirectToSearch = useCallback(() => {
+    setShowSplash(true);
+    history.replace("/search");
+  }, [history]);
+
+  const [loginError, setLoginError] = useState("");
+  const [showSplash, setShowSplash] = useState(true);
+
+  useEffect(() => {
+    if (!showSplash) return;
+    setTimeout(() => {
+      setShowSplash(false);
+    }, 2000);
+  }, [showSplash]);
 
   useEffect(() => {
     trackPageView(window.location.pathname);
-  }, []);
 
-  const history = useHistory();
-  const redirectToSearch = () => history.replace("/search");
-  
-  const [loginError, setLoginError] = useState("");
+    const isLoggedIn = userTokenExists();
+    if (isLoggedIn) {
+      redirectToSearch();
+    }
+  }, [redirectToSearch]);
 
   /**
    * @param {import("react-google-login").GoogleLoginResponse} googleResponse
@@ -42,9 +61,11 @@ const Login = () => {
     setLoginError(ERR_AUTH_FAIL);
   };
 
+  /* Handler for guest logins */
   const handleGuestLogin = () => {
+    setShowSplash(true);
     trackGuestSignInEvent();
-    redirectToSearch();
+    history.push("/search");
   };
 
   const LoginHeaderRow = () => {
@@ -62,6 +83,7 @@ const Login = () => {
     );
   };
 
+  /* Helper function to initialise login buttons */
   const LoginOptionsRow = (props) => {
     const loginButton = (
       <GoogleLogin
@@ -74,8 +96,8 @@ const Login = () => {
 
     const guestLoginButton = (
       <IonButton className="sns-login__button" shape="round" onClick={props.onGuestLogin}>
-       <IonText className="sns-login__text">Continue as a guest</IonText>
-        <IonIcon className="sns-login__next" slot="end" icon={arrowForward} size="large"/>
+        <IonText className="sns-login__text">Continue as a guest</IonText>
+        <IonIcon className="sns-login__next" slot="end" icon={arrowForward} size="large" />
       </IonButton>
     );
 
@@ -104,13 +126,12 @@ const Login = () => {
 
   return (
     <IonPage className="page login-page">
+      <div className={"splash " + (!showSplash ? "splash--hide" : "")}>
+        <img src={SplashAnimation} alt="splash-animation" className="splash__img" />
+      </div>
       <IonGrid className="login">
         <LoginHeaderRow />
-        <LoginOptionsRow
-          onGoogleSuccess={handleGoogleLoginSuccess}
-          onGoogleFailure={handleGoogleLoginFailure}
-          onGuestLogin={handleGuestLogin}
-        />
+        <LoginOptionsRow onGoogleSuccess={handleGoogleLoginSuccess} onGoogleFailure={handleGoogleLoginFailure} onGuestLogin={handleGuestLogin} />
       </IonGrid>
       <CustomToast
         showToast={loginError !== ""}
@@ -120,6 +141,6 @@ const Login = () => {
       />
     </IonPage>
   );
-};
+}
 
 export default withRouter(Login);

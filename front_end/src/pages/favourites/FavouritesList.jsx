@@ -3,11 +3,13 @@ import PropTypes from "prop-types";
 
 import FavouritesItem from "./FavouritesItem";
 
-const FavouritesList = (props) => {
-
+/**
+ * FavouritesList component
+ */
+ const FavouritesList = (props) => {
   /**
-   * @param {Location} element 
-   * @param {number} index 
+   * @param {Location} element
+   * @param {number} index
    */
    const convertElementToView = (element, index) => {
     const item = { id: element.id, name: element.name, isFav: element.isFav }
@@ -39,12 +41,12 @@ const FavouritesList = (props) => {
 const node = PropTypes.shape({
   id: PropTypes.number,
   name: PropTypes.string,
-  isFav: PropTypes.bool
+  isFav: PropTypes.bool,
 });
 FavouritesList.propTypes = {
   currentList: PropTypes.arrayOf(node).isRequired,
   isFavouritesTab: PropTypes.bool.isRequired,
-  toggleFavourite: PropTypes.func.isRequired
-}
+  toggleFavourite: PropTypes.func.isRequired,
+};
 
 export default FavouritesList;
