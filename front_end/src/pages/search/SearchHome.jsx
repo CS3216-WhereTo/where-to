@@ -147,12 +147,18 @@ const SearchHome = (props) => {
   const handleInputChange = (input) => {
     const displayOptions = options.filter((option) => {
       const words = option.label.toLowerCase().split(" ");
-      for (const word of words) {
-        if (word.startsWith(input)) {
-          return true;
+      const inputWords = input.toLowerCase().split(" ");
+
+      const reducer = (acc, inputWord) => {
+        for (const word of words) {
+          if (word.startsWith(inputWord) || word.startsWith("(" + inputWord)) {
+            return acc && true;
+          }
         }
+        return acc && false;
       }
-      return false;
+
+      return inputWords.reduce(reducer, true);
     });
 
     setFilteredOptions(displayOptions);
@@ -243,6 +249,7 @@ const SearchHome = (props) => {
                 onChange={setEnd}
                 options={options}
                 disabled={optionsLoading}
+                onInputChange={handleInputChange}
                 placeholder="Select a destination"
               />
             </div>
