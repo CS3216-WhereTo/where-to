@@ -32,7 +32,7 @@ class Location {
 
 const ERR_INVALID_STATE = 'State should only be either "Favourites" or "Recents"!';
 
-function Favourites(props) {
+const Favourites = (props) => {
   /** @type {UserStore} */
   const user = props.user;
   /** @type {NodeStore} */
@@ -57,14 +57,14 @@ function Favourites(props) {
       nonFavs: nodes.getNonFavourites(),
     };
 
-    function getDestinationFromRoute(obj) {
+    const getDestinationFromRoute = (obj) => {
       /** @type {[number]} */
       const steps = obj.walk.nodes;
       const lastPos = steps.length - 1;
       return steps[lastPos];
     }
 
-    function getNodeDetails(id) {
+    const getNodeDetails = (id) => {
       const pred = (node) => node.node_id === id;
       if (allNodes.favs.some(pred)) {
         const idx = allNodes.favs.findIndex(pred);
@@ -119,7 +119,7 @@ function Favourites(props) {
   //////////////////////////
 
   const [segment, setSegment] = useState(Mode.FAVOURITES);
-  function handleSegmentChange(event) {
+  const handleSegmentChange = (event) => {
     let value = event.detail.value;
     if (value === segment) return;
 
@@ -130,7 +130,7 @@ function Favourites(props) {
     setSegment(value);
   }
 
-  function toggleFavourite(i) {
+  const toggleFavourite = (i) => {
     if (segment === Mode.FAVOURITES) {
       const nodeId = favourites[i].id;
       nodes.removeFavourite(nodeId, populateFavourites);

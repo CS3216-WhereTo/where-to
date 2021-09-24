@@ -18,7 +18,7 @@ const SignIn = () => {
   );
 }
 
-function UnauthenticatedUserScreen(props) {
+const UnauthenticatedUserScreen = (props) => {
   return (
     <IonPage className="page unauthenticated-page">
       <div className="page-header">

@@ -14,7 +14,7 @@ import Logo from "../../assets/logo.svg";
 const ERR_CON_GOOGLE = "We are unable to connect to Google right now, please try again later";
 const ERR_AUTH_FAIL = "We are unable to authenticate you, please try again!";
 
-function Login() {
+const Login = () => {
 
   useEffect(() => {
     trackPageView(window.location.pathname);

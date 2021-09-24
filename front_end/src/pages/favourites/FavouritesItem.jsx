@@ -14,13 +14,13 @@ import {
 
 import "./Favourites.css";
 
-function FavouritesItem(props) {
+const FavouritesItem = (props) => {
 
   const isFavouritesTab = props.isFavouritesTab;
   const toggleFavourite = props.toggleFavourite;
   const { id, name, isFav } = props.listItem;
 
-  function handleToggleFavourite() {
+  const handleToggleFavourite = () => {
     if (isFav) {
       if (isFavouritesTab) trackFavouritesUnfavouriteEvent();
       else trackRecentsUnfavouriteEvent();
@@ -32,7 +32,7 @@ function FavouritesItem(props) {
     toggleFavourite();
   };
 
-  function handleRedirectToMap() {
+  const handleRedirectToMap = () => {
     if (isFavouritesTab) trackFavouritesMapButtonEvent();
     else trackRecentsMapButtonEvent();
   };

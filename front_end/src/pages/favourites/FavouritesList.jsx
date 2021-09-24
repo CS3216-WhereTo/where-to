@@ -3,13 +3,13 @@ import PropTypes from "prop-types";
 
 import FavouritesItem from "./FavouritesItem";
 
-function FavouritesList(props) {
+const FavouritesList = (props) => {
 
   /**
    * @param {Location} element 
    * @param {number} index 
    */
-  function convertElementToView(element, index) {
+   const convertElementToView = (element, index) => {
     const item = { id: element.id, name: element.name, isFav: element.isFav }
     return (
       <FavouritesItem
