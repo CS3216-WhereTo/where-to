@@ -17,7 +17,7 @@ const ERR_AUTH_FAIL = "We are unable to authenticate you, please try again!";
 /**
  * Login component
  */
-function Login() {
+ const Login = () => {
   const history = useHistory();
   const redirectToSearch = useCallback(() => {
     setShowSplash(true);

@@ -4,7 +4,7 @@ const STORAGE_KEY = 'jwtIdToken';
 
 const gateway = new UserGateway();
 
-function clearLocalToken() {
+const clearLocalToken = () => {
     localStorage.removeItem(STORAGE_KEY);
 }
 
@@ -18,7 +18,7 @@ export default function userTokenExists() {
     return (token != null);
 }
 
-export function getUserToken() {
+export const getUserToken = () => {
     return localStorage.getItem(STORAGE_KEY);
 }
 
@@ -27,7 +27,7 @@ export function getUserToken() {
  * @param {string} token 
  * @param {function} onSuccess
  */
-export function signUserIn(token, onSuccess, onFailure, onError) {
+export const signUserIn = (token, onSuccess, onFailure, onError) => {
     localStorage.setItem(STORAGE_KEY, token);
     return verifyTokenIfExists()
         .then((valid) => {
@@ -44,6 +44,6 @@ export function signUserIn(token, onSuccess, onFailure, onError) {
         });
 }
 
-export function signUserOut() {
+export const signUserOut = () => {
     clearLocalToken();
 }

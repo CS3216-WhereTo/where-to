@@ -16,12 +16,12 @@ import {
 /**
  * Favourite item component
  */
-function FavouritesItem(props) {
+const FavouritesItem = (props) => {
   const isFavouritesTab = props.isFavouritesTab;
   const toggleFavourite = props.toggleFavourite;
   const { id, name, isFav } = props.listItem;
 
-  function handleToggleFavourite() {
+  const handleToggleFavourite = () => {
     if (isFav) {
       if (isFavouritesTab) trackFavouritesUnfavouriteEvent();
       else trackRecentsUnfavouriteEvent();
@@ -31,12 +31,12 @@ function FavouritesItem(props) {
     }
 
     toggleFavourite();
-  }
+  };
 
-  function handleRedirectToMap() {
+  const handleRedirectToMap = () => {
     if (isFavouritesTab) trackFavouritesMapButtonEvent();
     else trackRecentsMapButtonEvent();
-  }
+  };
 
   return (
     <IonItem className="favourites-item">
@@ -50,7 +50,7 @@ function FavouritesItem(props) {
       </div>
     </IonItem>
   );
-}
+};
 
 const node = PropTypes.shape({
   id: PropTypes.number,

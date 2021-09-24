@@ -33,7 +33,7 @@ class Location {
 
 const ERR_INVALID_STATE = 'State should only be either "Favourites" or "Recents"!';
 
-function Favourites(props) {
+const Favourites = (props) => {
   /** @type {UserStore} */
   const user = props.user;
   /** @type {NodeStore} */
@@ -58,14 +58,14 @@ function Favourites(props) {
       nonFavs: nodes.getNonFavourites(),
     };
 
-    function getDestinationFromRoute(obj) {
+    const getDestinationFromRoute = (obj) => {
       /** @type {[number]} */
       const steps = obj.walk.nodes;
       const lastPos = steps.length - 1;
       return steps[lastPos];
-    }
+    };
 
-    function getNodeDetails(id) {
+    const getNodeDetails = (id) => {
       const pred = (node) => node.node_id === id;
       if (allNodes.favs.some(pred)) {
         const idx = allNodes.favs.findIndex(pred);
@@ -76,7 +76,7 @@ function Favourites(props) {
         const node = allNodes.nonFavs[idx];
         return Location(node.node_id, node.name, false);
       }
-    }
+    };
 
     const data = user.getRecents().map(getDestinationFromRoute).map(getNodeDetails);
 
@@ -120,7 +120,7 @@ function Favourites(props) {
   //////////////////////////
 
   const [segment, setSegment] = useState(SegmentType.FAVOURITES);
-  function handleSegmentChange(event) {
+  const handleSegmentChange = (event) => {
     let value = event.detail.value;
     if (value === segment) return;
 
@@ -129,9 +129,9 @@ function Favourites(props) {
     else throw new Error(ERR_INVALID_STATE);
 
     setSegment(value);
-  }
+  };
 
-  function toggleFavourite(i) {
+  const toggleFavourite = (i) => {
     if (segment === SegmentType.FAVOURITES) {
       const nodeId = favourites[i].id;
       nodes.removeFavourite(nodeId, populateFavourites);
@@ -145,7 +145,7 @@ function Favourites(props) {
     } else throw new Error(ERR_INVALID_STATE);
 
     setShowToast(true);
-  }
+  };
 
   if (loading) return <Loading pageName={"Favourites"} />;
   if (!loggedIn) return <UnauthenticatedUserScreen pageName={"Favourites"} />;
@@ -182,7 +182,7 @@ function Favourites(props) {
       </IonContent>
     </IonPage>
   );
-}
+};
 
 Favourites.propTypes = {
   user: PropTypes.instanceOf(UserStore).isRequired,
