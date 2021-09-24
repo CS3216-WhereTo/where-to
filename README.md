@@ -47,6 +47,7 @@ another in the Kent Ridge campus.
 
 **Esmanda Wong:**
 * Worked on the front end development for the application
+* Developed dropdown and modal for viewing directions
 * Designed pages for Search Result, Favourites and Settings
 * Implemented pages for Search Result, Favourites and Settings
 
