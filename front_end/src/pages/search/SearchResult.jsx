@@ -173,7 +173,7 @@ const SearchResult = () => {
             <div className="search-inner-container__content">
               <IonIcon className="search-inner-container__icon" slot="start" icon={ellipseOutline} size="medium" />
               <div className="search-box">
-                <p className="search-box__text">{start ? start.label : "Loading..."}</p>
+                <p className="search-box__text">asdasdasd asdasdasds asdasdasds asdasd plz</p>
               </div>
             </div>
             <div className="search-inner-container__content">
