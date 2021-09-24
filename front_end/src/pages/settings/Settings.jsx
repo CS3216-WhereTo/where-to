@@ -4,14 +4,17 @@ import { Redirect } from "react-router";
 import { useGoogleLogout } from "react-google-login";
 import PropTypes from "prop-types";
 
+import "./Settings.css";
 import Loading from "../../components/loading/Loading";
 import CustomToast from "../../components/custom-toast/CustomToast";
 import userTokenExists, { signUserOut } from "../../utils/AuthChecker";
 import UnauthenticatedUserScreen from "../../components/unauthenticated-screen/UnauthenticatedScreen";
 import { trackPageView, trackUpdateWalkingSpeedEvent, trackDismissSettingsToastEvent, trackGoogleSignOutEvent } from "../../utils/ReactGa";
-import "./Settings.css";
 import UserStore from "../../stores/UserStore";
 
+/**
+ * Settings component
+ */
 const Settings = (props) => {
   const [loading, setLoading] = useState(true);
   const loggedIn = userTokenExists();

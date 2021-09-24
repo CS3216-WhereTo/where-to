@@ -5,6 +5,9 @@ import { starOutline, star } from "ionicons/icons";
 
 import "./Option.css";
 
+/**
+ *  Option component for react-select
+ */
 const Option = (props) => {
   const [isFavourite, setIsFavourite] = useState(props.data.value.isFavourite);
 

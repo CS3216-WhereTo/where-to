@@ -1,10 +1,12 @@
 import { useState } from "react";
-
 import { IonIcon, IonLabel, IonItem } from "@ionic/react";
 import { bus } from "ionicons/icons";
 
 import "./Modal.css";
 
+/**
+ * Modal item for Modal to display bus navigation information
+ */
 const ModalBusItem = ({ location, duration, stops }) => {
   const [showDropDown, setShowDropDown] = useState(false);
 
@@ -25,6 +27,7 @@ const ModalBusItem = ({ location, duration, stops }) => {
             <p className="directions-dropdown__text">{`Ride ${stops} stop${stops > 1 ? "s" : ""}`}</p>
           </div>
         </div>
+
         <IonLabel className="directions__time" slot="end">
           {parseInt(duration)} min
         </IonLabel>

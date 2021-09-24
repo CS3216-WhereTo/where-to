@@ -1,9 +1,11 @@
-import Option from "../option/Option";
 import Select from "react-select";
 
 import "./CustomSelect.css";
+import Option from "../option/Option";
 
-// TODO: https://react-select.com/async
+/**
+ * React Wrapper for react-select
+ */
 const CustomSelect = ({ value, onChange, onInputChange, placeholder, options, disabled }) => {
   return (
     <Select

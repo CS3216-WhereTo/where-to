@@ -5,17 +5,15 @@ import { ellipseOutline, locationSharp, arrowBack, bus, walk } from "ionicons/ic
 import Sheet from "react-modal-sheet";
 import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 
-import Modal from "../../components/modal/Modal";
 import "./SearchResult.css";
+import Modal from "../../components/modal/Modal";
 import { parseBusRoute, parseWalkRoute } from "../../utils/ParseRoute";
 import { trackPageView, trackSetDirectionTypeToBus, trackSetDirectionTypeToWalk, trackSearchResultBackPressEvent } from "../../utils/ReactGa";
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
 
-// TODO
-// Add geolocation to track current location
-// Pull route data and plot on map, and add markers for them
-
-// Receive in start and end location
+/**
+ * Component for search results
+ */
 const SearchResult = () => {
   let redirectProps = useLocation();
   let history = useHistory();

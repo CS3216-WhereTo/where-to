@@ -5,8 +5,8 @@ import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-load
 import { useLocation, useHistory } from "react-router-dom";
 import { geolocated } from "react-geolocated";
 
-import Loading from "../../components/loading/Loading";
 import "./SearchHome.css";
+import Loading from "../../components/loading/Loading";
 import CustomToast from "../../components/custom-toast/CustomToast";
 import CustomSelect from "../../components/custom-select/CustomSelect";
 import { trackPageView, trackDismissSearchToastEvent } from "../../utils/ReactGa";
@@ -14,6 +14,9 @@ import userTokenExists from "../../utils/AuthChecker";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_KEY;
 
+/**
+ * Component for search
+ */
 const SearchHome = (props) => {
   // Sets Node passed from FavouritesItem as end point
   let redirectProps = useLocation();

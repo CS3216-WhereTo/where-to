@@ -2,13 +2,18 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import PropTypes from "prop-types";
 import { IonPage, IonContent, IonSegment, IonSegmentButton, IonLabel } from "@ionic/react";
 
+import "./Favourites.css";
 import Loading from "../../components/loading/Loading";
 import FavouritesList from "./FavouritesList";
-import { trackPageView, trackFavouritesToRecentsTabEvent, trackRecentsToFavouritesTabEvent,trackDismissFavouriteToastEvent } from "../../utils/ReactGa";
+import {
+  trackPageView,
+  trackFavouritesToRecentsTabEvent,
+  trackRecentsToFavouritesTabEvent,
+  trackDismissFavouriteToastEvent,
+} from "../../utils/ReactGa";
 import UnauthenticatedUserScreen from "../../components/unauthenticated-screen/UnauthenticatedScreen";
 import UserStore from "../../stores/UserStore";
 import NodeStore from "../../stores/NodeStore";
-import "./Favourites.css";
 import userTokenExists from "../../utils/AuthChecker";
 import CustomToast from "../../components/custom-toast/CustomToast";
 
@@ -172,7 +177,12 @@ function Favourites(props) {
           toggleFavourite={toggleFavourite}
         />
 
-        <CustomToast showToast={showToast} setShowToast={setShowToast} toastMessage="⭐ Favourites updated." dismissBtnHandler={trackDismissFavouriteToastEvent} />
+        <CustomToast
+          showToast={showToast}
+          setShowToast={setShowToast}
+          toastMessage="⭐ Favourites updated."
+          dismissBtnHandler={trackDismissFavouriteToastEvent}
+        />
       </IonContent>
     </IonPage>
   );

@@ -3,6 +3,9 @@ import { walk } from "ionicons/icons";
 
 import "./Modal.css";
 
+/**
+ * Modal item for Modal to display walk navigation information
+ */
 const ModalWalkItem = ({ location, duration }) => {
   return (
     <IonItem className="directions">

@@ -13,15 +13,17 @@ import Logo from "../../assets/logo.svg";
 const ERR_CON_GOOGLE = "We are unable to connect to Google right now, please try again later";
 const ERR_AUTH_FAIL = "We are unable to authenticate you, please try again!";
 
+/**
+ * Login component
+ */
 function Login() {
-
   useEffect(() => {
     trackPageView(window.location.pathname);
   }, []);
 
   const history = useHistory();
   const redirectToSearch = () => history.replace("/search");
-  
+
   const [loginError, setLoginError] = useState("");
 
   /**
@@ -74,8 +76,8 @@ function Login() {
 
     const guestLoginButton = (
       <IonButton className="sns-login__button" shape="round" onClick={props.onGuestLogin}>
-       <IonText className="sns-login__text">Continue as a guest</IonText>
-        <IonIcon className="sns-login__next" slot="end" icon={arrowForward} size="large"/>
+        <IonText className="sns-login__text">Continue as a guest</IonText>
+        <IonIcon className="sns-login__next" slot="end" icon={arrowForward} size="large" />
       </IonButton>
     );
 
@@ -106,11 +108,7 @@ function Login() {
     <IonPage className="page login-page">
       <IonGrid className="login">
         <LoginHeaderRow />
-        <LoginOptionsRow
-          onGoogleSuccess={handleGoogleLoginSuccess}
-          onGoogleFailure={handleGoogleLoginFailure}
-          onGuestLogin={handleGuestLogin}
-        />
+        <LoginOptionsRow onGoogleSuccess={handleGoogleLoginSuccess} onGoogleFailure={handleGoogleLoginFailure} onGuestLogin={handleGuestLogin} />
       </IonGrid>
       <CustomToast
         showToast={loginError !== ""}
@@ -120,6 +118,6 @@ function Login() {
       />
     </IonPage>
   );
-};
+}
 
 export default withRouter(Login);
