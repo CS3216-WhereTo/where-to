@@ -74,6 +74,9 @@ const SearchResult = () => {
       positionOptions: {
         enableHighAccuracy: true,
       },
+      fitBoundsOptions: {
+        zoom: zoom,
+      },
       showAccuracyCircle: false,
       trackUserLocation: true,
       showUserHeading: true,
@@ -92,9 +95,8 @@ const SearchResult = () => {
     map.current.once("load", () => {
       map.current.resize();
       geolocate.trigger();
+      setTimeout(() => setMapLoading(false), 1500);
     });
-
-    setTimeout(() => setMapLoading(false), 1500);
   }, [lng, lat, zoom]);
 
   useEffect(() => {
@@ -136,15 +138,28 @@ const SearchResult = () => {
       },
     });
 
-    const start = dirType === "bus" ? busRoute.coordinates[0] : walkRoute.coordinates[0];
-    const end = dirType === "bus" ? busRoute.coordinates.at(-1) : walkRoute.coordinates.at(-1);
+    const startCoordinates = dirType === "bus" ? busRoute.coordinates[0] : walkRoute.coordinates[0];
+    const endCoordinates = dirType === "bus" ? busRoute.coordinates.at(-1) : walkRoute.coordinates.at(-1);
+
     // Markers for start and end
-    new mapboxgl.Marker().setLngLat(start).addTo(map.current);
-    new mapboxgl.Marker().setLngLat(end).addTo(map.current);
+    new mapboxgl.Marker({ color: "#1B4571" })
+      .setLngLat(startCoordinates)
+      .setPopup(
+        new mapboxgl.Popup({ offset: 25 }) // add popups
+          .setHTML(` <p>${start.label}</p>`)
+      )
+      .addTo(map.current);
+    new mapboxgl.Marker({ color: "#b40219" })
+      .setLngLat(endCoordinates)
+      .setPopup(
+        new mapboxgl.Popup({ offset: 25 }) // add popups
+          .setHTML(` <p>${end.label}</p>`)
+      )
+      .addTo(map.current);
 
     // Centers on start location
-    map.current.flyTo({ center: start });
-  }, [busRoute.coordinates, dirType, mapLoading, walkRoute.coordinates]);
+    map.current.flyTo({ center: startCoordinates, zoom: zoom });
+  }, [busRoute.coordinates, dirType, end.label, mapLoading, start, walkRoute.coordinates, zoom]);
 
   return (
     <IonPage className="page search-result-page">

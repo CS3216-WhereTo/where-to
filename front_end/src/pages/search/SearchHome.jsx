@@ -24,7 +24,6 @@ const SearchHome = (props) => {
   const [lat, setLat] = useState(1.2956);
   const [currentMarker, setCurrentMarker] = useState(null);
   const [zoom, setZoom] = useState(17);
-  const [isInitiallyCentered, setIsInitiallyCentered] = useState(false);
   const [start, setStart] = useState(null);
   const [end, setEnd] = useState(null);
   const [options, setOptions] = useState({});
@@ -105,6 +104,9 @@ const SearchHome = (props) => {
       positionOptions: {
         enableHighAccuracy: true,
       },
+      fitBoundsOptions: {
+        zoom: zoom,
+      },
       showAccuracyCircle: false,
       trackUserLocation: true,
       showUserHeading: true,
@@ -125,28 +127,6 @@ const SearchHome = (props) => {
       geolocate.trigger();
     });
   });
-
-  // useEffect(() => {
-  //   if (!props.coords) return;
-
-  //   if (!isInitiallyCentered) {
-  //     // Center the Map at user's current location, will only be done once
-  //     map.current.flyTo({
-  //       center: [props.coords.longitude, props.coords.latitude],
-  //       essential: true,
-  //     });
-  //     setIsInitiallyCentered(true);
-  //   }
-
-  //   if (currentMarker) {
-  //     currentMarker.setLngLat([props.coords.longitude, props.coords.latitude]);
-  //   } else {
-  //     const marker = new mapboxgl.Marker();
-  //     marker.setLngLat([props.coords.longitude, props.coords.latitude]).addTo(map.current);
-
-  //     setCurrentMarker(marker);
-  //   }
-  // }, [currentMarker, isInitiallyCentered, props.coords]);
 
   useEffect(() => {
     if (routeObject.start === undefined || routeObject.start === null) return;
