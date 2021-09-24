@@ -5,7 +5,7 @@ import { IonPage, IonContent, IonSegment, IonSegmentButton, IonLabel } from "@io
 import Loading from "../../components/loading/Loading";
 import FavouritesList from "./FavouritesList";
 import { trackPageView, trackFavouritesToRecentsTabEvent, trackRecentsToFavouritesTabEvent,trackDismissFavouriteToastEvent } from "../../utils/ReactGa";
-import UnauthenticatedUserScreen from "../../components/sign-in/SignIn";
+import UnauthenticatedUserScreen from "../../components/unauthenticated-screen/UnauthenticatedScreen";
 import UserStore from "../../stores/UserStore";
 import NodeStore from "../../stores/NodeStore";
 import "./Favourites.css";

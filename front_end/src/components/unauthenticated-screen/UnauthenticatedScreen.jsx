@@ -1,6 +1,7 @@
 import { IonButton, IonPage, IonContent } from "@ionic/react";
 
 import NotSignedIn from "../../assets/not-signed-in.jpg";
+import { ReactComponent as NotSignedInSvg } from "../../assets/not-signed-in.svg";
 
 import "./UnauthenticatedScreen.css";
 
@@ -8,15 +9,14 @@ const UnauthenticatedScreen = (props) => {
   const SignIn = () => {
     return (
       <div className="sign-in">
-        <img className="sign-in__img" alt="not-signed-in" src={NotSignedIn} />
+        {/* <img className="sign-in__img" alt="not-signed-in" src={NotSignedIn} /> */}
+        <NotSignedInSvg className="sign-in__img" />
         <div className="sign-in__text">
           <p>You are not signed in.</p>
         </div>
-        <div className="sign-in__button">
-          <IonButton shape="round" href="./">
-            Sign In
-          </IonButton>
-        </div>
+        <IonButton shape="round" href="./" className="sign-in__button">
+          Sign In
+        </IonButton>
       </div>
     );
   };

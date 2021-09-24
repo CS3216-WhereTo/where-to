@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import Loading from "../../components/loading/Loading";
 import CustomToast from "../../components/custom-toast/CustomToast";
 import userTokenExists, { signUserOut } from "../../utils/AuthChecker";
-import UnauthenticatedUserScreen from "../../components/sign-in/SignIn";
+import UnauthenticatedUserScreen from "../../components/unauthenticated-screen/UnauthenticatedScreen";
 import { trackPageView, trackUpdateWalkingSpeedEvent, trackDismissSettingsToastEvent, trackGoogleSignOutEvent } from "../../utils/ReactGa";
 import "./Settings.css";
 import UserStore from "../../stores/UserStore";
