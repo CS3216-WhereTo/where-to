@@ -10,6 +10,7 @@ const clearLocalToken = () => {
 
 export async function verifyTokenIfExists() {
     if (!userTokenExists()) return false;
+    if (!navigator.online) return true;
     return await gateway.isValidToken();
 }
 
